@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>每日一句學英語 | Daily English Global AI Platform</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'Microsoft JhengHei', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .voice-dropdown-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .voice-dropdown-scroll::-webkit-scrollbar-thumb {
+            background: rgba(156, 163, 175, 0.4);
+            border-radius: 4px;
+        }
+        .voice-dropdown-scroll::-webkit-scrollbar-thumb:hover {
+            background: rgba(107, 114, 128, 0.7);
+        }
+    </style>
+</head>
+<body class="h-full flex flex-col text-slate-800 antialiased selection:bg-brand-500 selection:text-white pb-20 md:pb-0">
+
+    <header class="sticky top-0 z-30 glass-card border-b border-slate-200 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between gap-2">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-600 via-indigo-600 to-purple-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20 shrink-0">
+                    <i class="fa-solid fa-wand-magic-sparkles text-lg"></i>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <h1 id="appTitle" class="font-bold text-base sm:text-lg leading-tight tracking-tight text-slate-900">每日一句學英語</h1>
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-gradient-to-r from-purple-600 to-indigo-600 text-white uppercase tracking-wider shadow-sm hidden sm:inline-block">Gemini AI</span>
+                    </div>
+                    <p id="appSubTitle" class="text-xs text-slate-500 font-medium hidden sm:block">AI-Powered Global English Hub</p>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-1.5 sm:space-x-3">
+                <!-- UI Language Selector Dropdown -->
+                <div class="relative">
+                    <button onclick="toggleUiLangMenu()" title="切換介面語言 / Change UI Language" class="flex items-center space-x-1 px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition border border-slate-200">
+                        <i class="fa-solid fa-globe text-brand-600"></i>
+                        <span id="currentUiLangTag">🇹🇼 繁體中文</span>
+                        <i class="fa-solid fa-chevron-down text-[10px] opacity-60"></i>
+                    </button>
+
+                    <!-- UI Language Popup Menu -->
+                    <div id="uiLangMenu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-2xl border border-slate-200 py-2 z-50 text-xs voice-dropdown-scroll max-h-80 overflow-y-auto">
+                        <div class="px-3 py-1 font-bold text-slate-400 uppercase tracking-wider text-[10px] border-b border-slate-100 mb-1">介面語言 / UI Language</div>
+                        <button onclick="setUiLanguage('zh-TW')" class="w-full text-left px-3 py-2 hover:bg-brand-50 hover:text-brand-600 font-medium flex items-center space-x-2"><span>🇹🇼</span><span>繁體中文</span></button>
+                        <button onclick="setUiLanguage('en-US')" class="w-full text-left px-3 py-2 hover:bg-brand-50 hover:text-brand-600 font-medium flex items-center space-x-2"><span>🇺🇸</span><span>English</span></button>
+                        <button onclick="setUiLanguage('ja-JP')" class="w-full text-left px-3 py-2 hover:bg-brand-50 hover:text-brand-600 font-medium flex items-center space-x-2"><span>🇯🇵</span><span>日本語</span></button>
+                        <button onclick="setUiLanguage('ko-KR')" class="w-full text-left px-3 py-2 hover:bg-brand-50 hover:text-brand-600 font-medium flex items-center space-x-2"><span>🇰🇷</span><span>한국어</span></button>
+                        <button onclick="setUiLanguage('es-ES')" class="w-full text-left px-3 py-2 hover:bg-brand-50 hover:text-brand-600 font-medium flex items-center space-x-2"><span>🇪🇸</span><span>Español</span></button>
+                        <button onclick="setUiLanguage('fr-FR')" class="w-full text-left px-3 py-2 hover:bg-brand-50 hover:text-brand-600 font-medium flex items-center space-x-2"><span>🇫🇷</span><span>Français</span></button>
+                        <button onclick="setUiLanguage('de-DE')" class="w-full text-left px-3 py-2 hover:bg-brand-50 hover:text-brand-600 font-medium flex items-center space-x-2"><span>🇩🇪</span><span>Deutsch</span></button>
+                        <button onclick="setUiLanguage('vi-VN')" class="w-full text-left px-3 py-2 hover:bg-brand-50 hover:text-brand-600 font-medium flex items-center space-x-2"><span>🇻🇳</span><span>Tiếng Việt</span></button>
+                        <button onclick="setUiLanguage('th-TH')" class="w-full text-left px-3 py-2 hover:bg-brand-50 hover:text-brand-600 font-medium flex items-center space-x-2"><span>🇹🇭</span><span>ไทย</span></button>
+                        <button onclick="setUiLanguage('id-ID')" class="w-full text-left px-3 py-2 hover:bg-brand-50 hover:text-brand-600 font-medium flex items-center space-x-2"><span>🇮🇩</span><span>Bahasa Indonesia</span></button>
+                        <button onclick="setUiLanguage('zh-CN')" class="w-full text-left px-3 py-2 hover:bg-brand-50 hover:text-brand-600 font-medium flex items-center space-x-2"><span>🇨🇳</span><span>简体中文</span></button>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-1 bg-amber-50 text-amber-700 border border-amber-200/80 px-2.5 py-1.5 rounded-full text-xs font-semibold shadow-sm">
+                    <i class="fa-solid fa-fire text-amber-500 text-sm animate-bounce"></i>
+                    <span id="streakCount">5</span> <span id="lblStreakDays">天打卡</span>
+                </div>
+                <button onclick="openSettingsModal()" title="API Key 設定" class="p-2 text-slate-600 hover:text-brand-600 hover:bg-slate-100 rounded-xl transition relative">
+                    <i class="fa-solid fa-gear text-lg"></i>
+                    <span id="apiKeyBadge" class="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-white"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-6xl w-full mx-auto px-4 py-6">
+        
+        <!-- Desktop Tab Navigation -->
+        <div class="hidden md:flex space-x-2 mb-6 bg-slate-200/60 p-1.5 rounded-2xl w-fit">
+            <button onclick="switchTab('today')" id="tab-btn-today" class="tab-btn px-4 py-2.5 rounded-xl font-semibold text-sm transition bg-white text-brand-600 shadow-sm font-bold">
+                <i class="fa-solid fa-sparkles mr-2 text-amber-500"></i><span id="navTabToday">今日金句</span>
+            </button>
+            <button onclick="switchTab('translate')" id="tab-btn-translate" class="tab-btn px-4 py-2.5 rounded-xl font-semibold text-sm transition text-slate-600 hover:text-slate-900">
+                <i class="fa-solid fa-language mr-2 text-blue-500"></i><span id="navTabTranslate">多國翻譯與發音</span>
+            </button>
+            <button onclick="switchTab('aichat')" id="tab-btn-aichat" class="tab-btn px-4 py-2.5 rounded-xl font-semibold text-sm transition text-slate-600 hover:text-slate-900">
+                <i class="fa-solid fa-robot mr-2 text-purple-500"></i><span id="navTabAichat">AI 實戰對話</span>
+            </button>
+            <button onclick="switchTab('archive')" id="tab-btn-archive" class="tab-btn px-4 py-2.5 rounded-xl font-semibold text-sm transition text-slate-600 hover:text-slate-900">
+                <i class="fa-solid fa-book-open mr-2 text-indigo-500"></i><span id="navTabArchive">金句圖書館</span>
+            </button>
+            <button onclick="switchTab('practice')" id="tab-btn-practice" class="tab-btn px-4 py-2.5 rounded-xl font-semibold text-sm transition text-slate-600 hover:text-slate-900">
+                <i class="fa-solid fa-circle-check mr-2 text-emerald-500"></i><span id="navTabPractice">互動測驗</span>
+            </button>
+        </div>
+
+        <!-- Notification Toast -->
+        <div id="toast" class="fixed top-20 right-4 z-50 transform translate-y-[-100px] opacity-0 transition-all duration-300 bg-slate-900/95 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center space-x-3 pointer-events-none backdrop-blur-md border border-slate-700">
+            <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+            <span id="toastMsg" class="text-sm font-medium">已處理！</span>
+        </div>
+
+        <section id="tab-today" class="tab-content space-y-6">
+            
+            <!-- AI Generation Control Bar -->
+            <div class="flex flex-wrap items-center justify-between gap-3 bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm">
+                <div class="flex items-center space-x-2 text-xs font-semibold text-slate-600">
+                    <i class="fa-solid fa-sliders text-brand-600"></i>
+                    <span id="lblCategoryTheme">AI 金句主題：</span>
+                    <select id="aiCategorySelect" class="bg-slate-100 border border-slate-200 rounded-lg px-2.5 py-1 text-slate-800 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        <option value="Daily Colloquial Expressions & Idioms">日常道地俚語</option>
+                        <option value="Business & Workplace Communication">職場商務溝通</option>
+                        <option value="Travel & Dining Out">旅遊與餐飲短句</option>
+                        <option value="Social & Small Talk">社交聚會閒聊</option>
+                        <option value="Technology & Future Trends">科技與現代趨勢</option>
+                    </select>
+                </div>
+                <button onclick="generateAIPhrase()" id="genAiBtn" class="px-4 py-2 bg-gradient-to-r from-brand-600 to-purple-600 hover:from-brand-700 hover:to-purple-700 text-white rounded-xl text-xs font-bold shadow-md transition flex items-center space-x-2 active:scale-95">
+                    <i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i>
+                    <span id="btnGenAi">✨ AI 智慧生成新金句</span>
+                </button>
+            </div>
+
+            <!-- Main Daily Hero Card -->
+            <div id="heroCard" class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white p-6 sm:p-8 shadow-2xl border border-slate-800 transition-all duration-300">
+                <div class="absolute -right-12 -bottom-12 w-60 h-60 bg-brand-500/20 rounded-full blur-3xl"></div>
+                <div class="absolute -left-12 -top-12 w-60 h-60 bg-purple-500/15 rounded-full blur-3xl"></div>
+                
+                <div class="relative z-10">
+                    <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+                        <span id="cardDateTag" class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-brand-500/30 text-brand-200 border border-brand-400/30">
+                            <i class="fa-regular fa-calendar-check mr-1.5"></i> Today's Pick • 2026-08-17
+                        </span>
+                        
+                        <!-- Voice Control Bar & Voice Select Menu -->
+                        <div class="flex items-center space-x-2 flex-wrap gap-y-2">
+                            
+                            <div class="relative">
+                                <button onclick="toggleVoiceDropdown()" id="currentVoiceBtn" class="px-3 py-1 rounded-xl text-xs bg-slate-800/90 hover:bg-slate-700 text-slate-200 border border-slate-700 flex items-center space-x-2 shadow-sm font-medium">
+                                    <i class="fa-solid fa-microphone text-brand-400"></i>
+                                    <span id="selectedVoiceNameDisplay">✨ Gemini Zephyr (明亮女聲)</span>
+                                    <i class="fa-solid fa-chevron-down text-[10px] opacity-70"></i>
+                                </button>
+
+                                <div id="voiceDropdownList" class="hidden absolute right-0 mt-2 w-80 bg-white/95 text-slate-900 rounded-2xl shadow-2xl border border-slate-200 z-50 overflow-hidden backdrop-blur-md">
+                                    <div class="p-2 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
+                                        <span class="text-[11px] font-bold text-slate-500 uppercase tracking-wider px-2">發音聲線與國家口音選單</span>
+                                        <span class="text-[10px] text-brand-600 bg-brand-50 px-2 py-0.5 rounded font-semibold">Gemini + 多國系統</span>
+                                    </div>
+                                    
+                                    <div class="voice-dropdown-scroll max-h-72 overflow-y-auto p-1 divide-y divide-slate-100 text-xs">
+                                        <div class="py-1">
+                                            <div class="px-3 py-1 font-bold text-purple-600 flex items-center space-x-1 bg-purple-50/50 rounded-lg mb-1">
+                                                <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i>
+                                                <span>✨ Gemini AI 超自然語音</span>
+                                            </div>
+                                            <button onclick="selectVoice('gemini:Zephyr', 'Gemini Zephyr (明亮女聲)')" class="voice-opt-btn w-full text-left px-3 py-1.5 hover:bg-indigo-50 rounded-lg flex items-center justify-between font-medium text-slate-800">
+                                                <span>Gemini Zephyr (明亮女聲)</span>
+                                                <span class="text-[10px] text-indigo-500 font-bold bg-indigo-100/60 px-1.5 py-0.5 rounded">AI 高質感</span>
+                                            </button>
+                                            <button onclick="selectVoice('gemini:Kore', 'Gemini Kore (沉穩女聲)')" class="voice-opt-btn w-full text-left px-3 py-1.5 hover:bg-indigo-50 rounded-lg flex items-center justify-between font-medium text-slate-800">
+                                                <span>Gemini Kore (沉穩女聲)</span>
+                                                <span class="text-[10px] text-indigo-500 font-bold bg-indigo-100/60 px-1.5 py-0.5 rounded">AI 高質感</span>
+                                            </button>
+                                            <button onclick="selectVoice('gemini:Puck', 'Gemini Puck (活潑男聲)')" class="voice-opt-btn w-full text-left px-3 py-1.5 hover:bg-indigo-50 rounded-lg flex items-center justify-between font-medium text-slate-800">
+                                                <span>Gemini Puck (活潑男聲)</span>
+                                                <span class="text-[10px] text-indigo-500 font-bold bg-indigo-100/60 px-1.5 py-0.5 rounded">AI 高質感</span>
+                                            </button>
+                                            <button onclick="selectVoice('gemini:Fenrir', 'Gemini Fenrir (豪邁男聲)')" class="voice-opt-btn w-full text-left px-3 py-1.5 hover:bg-indigo-50 rounded-lg flex items-center justify-between font-medium text-slate-800">
+                                                <span>Gemini Fenrir (豪邁男聲)</span>
+                                                <span class="text-[10px] text-indigo-500 font-bold bg-indigo-100/60 px-1.5 py-0.5 rounded">AI 高質感</span>
+                                            </button>
+                                        </div>
+
+                                        <div class="py-1">
+                                            <div class="px-3 py-1 font-bold text-slate-600 flex items-center space-x-1 bg-slate-100/80 rounded-lg my-1">
+                                                <i class="fa-solid fa-globe text-blue-500"></i>
+                                                <span>🌐 瀏覽器系統語音 (國家/地區)</span>
+                                            </div>
+                                            <div id="webSystemVoiceList" class="space-y-0.5">
+                                                <!-- Dynamic System Voice items filled by JS -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center space-x-1 bg-slate-800/80 px-2 py-1 rounded-xl border border-slate-700">
+                                <span class="text-[10px] text-slate-400 font-medium" id="lblSpeed">語速:</span>
+                                <button onclick="setSpeed(1.0)" id="speed10" class="px-1.5 py-0.5 rounded text-[11px] bg-brand-600 font-bold text-white">1.0x</button>
+                                <button onclick="setSpeed(0.75)" id="speed075" class="px-1.5 py-0.5 rounded text-[11px] bg-slate-800 text-slate-300 hover:bg-slate-700">0.75x</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <div class="flex items-center justify-between gap-4">
+                            <h2 id="mainPhrase" class="text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
+                                "Let's play it by ear."
+                            </h2>
+                            <button onclick="playPhraseAudio()" title="點擊發音" class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-brand-500 to-indigo-500 hover:from-brand-600 hover:to-indigo-600 text-white flex items-center justify-center shadow-lg transition active:scale-95 group shrink-0 border border-white/20">
+                                <i id="ttsIcon" class="fa-solid fa-volume-high text-xl group-hover:scale-110 transition-transform"></i>
+                            </button>
+                        </div>
+                        
+                        <div class="mt-3 flex flex-wrap items-center gap-3 text-slate-300 text-sm font-mono">
+                            <span id="mainIpa" class="bg-slate-800/80 px-3 py-1 rounded-lg border border-slate-700/60 text-emerald-300">🗣️ /lɛts pleɪ ɪt baɪ ɪr/</span>
+                            <span id="linkingTip" class="text-xs text-brand-300 font-sans">連音: play it → "play-it"</span>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-white/10 backdrop-blur-md border border-white/10 mb-6">
+                        <p id="lblCoreMeaningHeader" class="text-xs font-bold uppercase tracking-wider text-brand-300 mb-1">核心含意與中文解釋</p>
+                        <p id="mainMeaning" class="text-lg sm:text-xl font-bold text-slate-100">
+                            我們隨機應變吧！ / 到時候再看著辦。
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs sm:text-sm">
+                        <div class="p-4 rounded-2xl bg-slate-800/60 border border-slate-700/50">
+                            <h4 id="lblOriginHeader" class="font-bold text-slate-200 mb-1 flex items-center">
+                                <i class="fa-solid fa-lightbulb text-amber-400 mr-2"></i>語源與文化背景
+                            </h4>
+                            <p id="mainOrigin" class="text-slate-300 leading-relaxed">
+                                來自音樂界！指樂手不看樂譜 (sheet music)，憑藉聽力 (by ear) 順著感覺彈奏。後來延伸為「不照預定計畫、順應情況發展隨機應變」。
+                            </p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-slate-800/60 border border-slate-700/50">
+                            <h4 id="lblContextHeader" class="font-bold text-slate-200 mb-1 flex items-center">
+                                <i class="fa-solid fa-circle-info text-blue-400 mr-2"></i>最佳使用場景
+                            </h4>
+                            <p id="mainContext" class="text-slate-300 leading-relaxed">
+                                行程安排尚未完全確定，或受天氣影響需視狀況決定時使用。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dialogues Container -->
+            <div class="bg-white p-6 rounded-3xl border border-slate-200/80 shadow-sm space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+                    <h3 id="lblDialogueHeader" class="font-bold text-lg text-slate-900 flex items-center">
+                        <i class="fa-solid fa-comments text-brand-600 mr-2"></i>實戰雙情境對話 (Dialogues)
+                    </h3>
+                </div>
+                <div id="dialoguesContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Dynamic rendering via JS -->
+                </div>
+            </div>
+
+            <!-- AI Practice Card -->
+            <div class="bg-gradient-to-r from-slate-900 via-indigo-900 to-slate-900 text-white p-6 rounded-3xl shadow-xl border border-slate-800 space-y-4">
+                <div class="flex items-center space-x-2 text-amber-400 font-bold text-sm">
+                    <i class="fa-solid fa-pen-ruler"></i>
+                    <span id="lblPracticeHeader">每日造句測驗 (AI 批改)</span>
+                </div>
+                <p id="practicePromptText" class="text-slate-200 text-sm font-medium">
+                    「我們還沒決定晚餐要吃什麼，就到時候看著辦吧！」
+                </p>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <input type="text" id="practiceInput" placeholder="請將上方中文翻譯成包含當日金句的英文..." class="flex-1 px-4 py-3 bg-white/10 rounded-xl text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-brand-400 border border-white/10">
+                    <button onclick="evaluateUserPractice()" id="practiceSubmitBtn" class="px-6 py-3 bg-brand-500 hover:bg-brand-600 text-white rounded-xl text-sm font-bold shadow-md transition flex items-center justify-center space-x-2 shrink-0 active:scale-95">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        <span id="btnSubmitPractice">送出批改</span>
+                    </button>
+                </div>
+                <div id="practiceResult" class="hidden p-5 rounded-2xl text-sm font-medium backdrop-blur-md"></div>
+            </div>
+        </section>
+
+        <section id="tab-translate" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80 space-y-6">
+                <div class="flex items-center justify-between pb-4 border-b border-slate-200">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-cyan-500 text-white flex items-center justify-center font-bold text-lg shadow-md">
+                            <i class="fa-solid fa-language"></i>
+                        </div>
+                        <div>
+                            <h2 id="lblTranslatorStudioTitle" class="text-xl font-bold text-slate-900">多國語言即時翻譯與原音發音</h2>
+                            <p id="lblTranslatorStudioSub" class="text-xs text-slate-500">支援任意國家語言雙向互譯、母語者發音拼音、口語/商務多種語調切換</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center bg-slate-50 p-4 rounded-2xl border border-slate-200/80">
+                    <div class="sm:col-span-5">
+                        <label id="lblSourceLang" class="block text-[11px] font-bold text-slate-500 mb-1 uppercase tracking-wider">來源國家/語言</label>
+                        <select id="srcLangSelect" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
+                            <option value="auto" selected>✨ 自動偵測語言 (Auto Detect)</option>
+                            <option value="en-US">🇺🇸 英語 (English - US)</option>
+                            <option value="zh-TW">🇹🇼 繁體中文 (Traditional Chinese)</option>
+                            <option value="ja-JP">🇯🇵 日語 (Japanese)</option>
+                            <option value="ko-KR">🇰🇷 韓語 (Korean)</option>
+                            <option value="es-ES">🇪🇸 西班牙語 (Spanish)</option>
+                            <option value="fr-FR">🇫🇷 法語 (French)</option>
+                            <option value="de-DE">🇩🇪 德語 (German)</option>
+                            <option value="vi-VN">🇻🇳 越南語 (Vietnamese)</option>
+                            <option value="th-TH">🇹🇭 泰語 (Thai)</option>
+                            <option value="id-ID">🇮🇩 印尼語 (Indonesian)</option>
+                            <option value="zh-CN">🇨🇳 簡體中文 (Simplified Chinese)</option>
+                        </select>
+                    </div>
+
+                    <div class="sm:col-span-2 flex justify-center pt-2 sm:pt-4">
+                        <button onclick="swapLanguages()" title="對調國家語言" class="w-10 h-10 rounded-full bg-white border border-slate-300 hover:bg-blue-50 text-blue-600 flex items-center justify-center shadow-sm transition active:scale-95 hover:rotate-180 duration-300">
+                            <i class="fa-solid fa-arrow-right-arrow-left"></i>
+                        </button>
+                    </div>
+
+                    <div class="sm:col-span-5">
+                        <label id="lblTargetLang" class="block text-[11px] font-bold text-slate-500 mb-1 uppercase tracking-wider">目標翻譯國家/語言</label>
+                        <select id="tgtLangSelect" class="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-sm font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm">
+                            <option value="en-US" selected>🇺🇸 英語 (English - US)</option>
+                            <option value="zh-TW">🇹🇼 繁體中文 (Traditional Chinese)</option>
+                            <option value="ja-JP">🇯🇵 日語 (Japanese)</option>
+                            <option value="ko-KR">🇰🇷 韓語 (Korean)</option>
+                            <option value="es-ES">🇪🇸 西班牙語 (Spanish)</option>
+                            <option value="fr-FR">🇫🇷 法語 (French)</option>
+                            <option value="de-DE">🇩🇪 德語 (German)</option>
+                            <option value="vi-VN">🇻🇳 越南語 (Vietnamese)</option>
+                            <option value="th-TH">🇹🇭 泰語 (Thai)</option>
+                            <option value="id-ID">🇮🇩 印尼語 (Indonesian)</option>
+                            <option value="zh-CN">🇨🇳 簡體中文 (Simplified Chinese)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200/80 flex flex-col justify-between space-y-4">
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <span id="lblInputPrompt" class="text-xs font-bold text-slate-600"><i class="fa-solid fa-pen-nib mr-1 text-blue-500"></i>請輸入要翻譯的字詞或長句</span>
+                                <button onclick="speakSourceText()" class="text-xs text-slate-500 hover:text-blue-600 flex items-center space-x-1 font-semibold">
+                                    <i class="fa-solid fa-volume-high"></i>
+                                    <span id="btnSpeakSource">原文發音</span>
+                                </button>
+                            </div>
+                            <textarea id="translateInput" rows="5" placeholder="輸入任何文字、文章段落，或貼上想翻譯的內容..." class="w-full p-3 bg-white rounded-xl border border-slate-200 text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none shadow-inner"></textarea>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-2 border-t border-slate-200/60">
+                            <button onclick="clearTranslateInput()" class="text-xs text-slate-400 hover:text-rose-500 font-semibold flex items-center">
+                                <i class="fa-solid fa-trash-can mr-1"></i> <span id="btnClearInput">清空</span>
+                            </button>
+                            <button onclick="executeTranslation()" id="translateBtn" class="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white rounded-xl text-sm font-bold shadow-md transition flex items-center space-x-2 active:scale-95">
+                                <i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i>
+                                <span id="btnTranslateExec">立即翻譯與分析</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="translateResultCard" class="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl p-5 border border-slate-800 flex flex-col justify-between shadow-lg relative overflow-hidden min-h-[220px]">
+                        <div class="relative z-10 space-y-4">
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                                <span id="detectedLangTag" class="text-xs font-bold px-2.5 py-1 bg-blue-500/20 text-blue-300 rounded-lg border border-blue-400/30">
+                                    ✨ 智慧翻譯成果
+                                </span>
+                                <button onclick="speakTargetText()" title="播放發音" class="px-3 py-1 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white rounded-lg text-xs font-bold shadow transition flex items-center space-x-1">
+                                    <i class="fa-solid fa-volume-high"></i>
+                                    <span id="btnListenTarget">聆聽發音</span>
+                                </button>
+                            </div>
+
+                            <div id="translatedOutputArea" class="space-y-3">
+                                <p class="text-slate-400 text-sm italic">翻譯結果將顯示於此，點擊「聆聽發音」即可聽到母語者等級真人朗讀...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="translationDetailsBox" class="hidden grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-slate-200">
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">🗣️ 口語自然講法 (Casual)</span>
+                            <button onclick="speakToneCasual()" class="text-slate-400 hover:text-emerald-600 p-1">
+                                <i class="fa-solid fa-volume-high text-xs"></i>
+                            </button>
+                        </div>
+                        <p id="toneCasual" class="text-sm font-semibold text-slate-800 mt-1">-</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="text-xs font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">💼 職場禮貌講法 (Formal)</span>
+                            <button onclick="speakToneFormal()" class="text-slate-400 hover:text-indigo-600 p-1">
+                                <i class="fa-solid fa-volume-high text-xs"></i>
+                            </button>
+                        </div>
+                        <p id="toneFormal" class="text-sm font-semibold text-slate-800 mt-1">-</p>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
+                        <span class="text-xs font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded">💡 語感解析 (Nuance)</span>
+                        <p id="toneNuance" class="text-xs text-slate-600 leading-relaxed mt-2">-</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-aichat" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80 flex flex-col h-[650px]">
+                <div class="flex items-center justify-between pb-4 border-b border-slate-200">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-2xl bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-lg">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <div>
+                            <h3 id="lblChatCoachTitle" class="font-bold text-slate-900 text-base">Gemini 英語口語陪練教練</h3>
+                            <p id="lblChatCoachSub" class="text-xs text-slate-500">練習在對話中使用當日金句，獲得即時文法修飾建議！</p>
+                        </div>
+                    </div>
+                    <button onclick="clearChatHistory()" class="text-xs text-slate-400 hover:text-rose-500 flex items-center space-x-1">
+                        <i class="fa-solid fa-rotate-right"></i>
+                        <span id="btnResetChat">重置對話</span>
+                    </button>
+                </div>
+
+                <div id="chatMessages" class="flex-1 overflow-y-auto py-4 space-y-4 px-1 hide-scrollbar">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 rounded-xl bg-purple-600 text-white flex items-center justify-center text-xs shrink-0 font-bold">AI</div>
+                        <div class="bg-slate-100 text-slate-800 p-4 rounded-2xl rounded-tl-none max-w-[85%] text-sm space-y-2">
+                            <p>Hi there! 👋 I'm your Gemini English Speaking Coach.</p>
+                            <p>Let's practice using today's phrase: <strong class="text-brand-600" id="chatTargetPhrase">"Let's play it by ear"</strong>!</p>
+                            <p class="text-xs text-slate-500 pt-1 border-t border-slate-200">提示：試著用這句話回答我，或用它跟我聊天，我會隨時協助你修正表達！</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-3 border-t border-slate-200 flex items-center gap-2">
+                    <input type="text" id="chatInput" onkeydown="if(event.key==='Enter') sendChatMessage()" placeholder="用英文跟我對話..." class="flex-1 px-4 py-3 bg-slate-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-purple-500">
+                    <button onclick="sendChatMessage()" id="chatSendBtn" class="px-5 py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl text-sm transition shadow-md active:scale-95 flex items-center space-x-1">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-archive" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/80">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h2 id="lblLibraryTitle" class="text-xl font-bold text-slate-900">金句圖書館 (Library)</h2>
+                        <p id="lblLibrarySub" class="text-xs text-slate-500">瀏覽歷史金句或搜尋特定關鍵字</p>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row gap-2">
+                        <div class="relative">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-sm"></i>
+                            <input type="text" id="searchInput" oninput="filterPhrases()" placeholder="搜尋關鍵字..." class="pl-10 pr-4 py-2 bg-slate-100 rounded-xl text-sm w-full sm:w-60 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                        </div>
+                        <select id="categoryFilter" onchange="filterPhrases()" class="px-3 py-2 bg-slate-100 rounded-xl text-sm text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <option value="all">全部分類</option>
+                            <option value="social">日常社交</option>
+                            <option value="idioms">習慣俚語</option>
+                            <option value="work">職場商務</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="phrasesGrid" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- Dynamic rendering via JS -->
+                </div>
+            </div>
+        </section>
+
+        <section id="tab-practice" class="tab-content hidden space-y-6">
+            <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80">
+                <div class="max-w-xl mx-auto">
+                    <div class="text-center mb-8">
+                        <span class="px-3 py-1 bg-brand-50 text-brand-600 rounded-full text-xs font-bold">測驗關卡</span>
+                        <h2 id="lblQuizTitle" class="text-2xl font-bold text-slate-900 mt-2">每日片語快問快答</h2>
+                        <p id="lblQuizSub" class="text-xs text-slate-500 mt-1">測試你的理解度，累積 XP 提升等級！</p>
+                    </div>
+
+                    <div id="quizContainer" class="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 shadow-inner">
+                        <!-- Dynamic content filled by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 glass-card border-t border-slate-200 z-40 px-4 py-2">
+        <div class="flex items-center justify-around">
+            <button onclick="switchTab('today')" id="mobile-tab-today" class="flex flex-col items-center py-1 text-brand-600 font-bold">
+                <i class="fa-solid fa-sparkles text-lg"></i>
+                <span id="mNavTabToday" class="text-[10px] font-medium mt-1">今日金句</span>
+            </button>
+            <button onclick="switchTab('translate')" id="mobile-tab-translate" class="flex flex-col items-center py-1 text-slate-400">
+                <i class="fa-solid fa-language text-lg"></i>
+                <span id="mNavTabTranslate" class="text-[10px] font-medium mt-1">多國翻譯</span>
+            </button>
+            <button onclick="switchTab('aichat')" id="mobile-tab-aichat" class="flex flex-col items-center py-1 text-slate-400">
+                <i class="fa-solid fa-robot text-lg"></i>
+                <span id="mNavTabAichat" class="text-[10px] font-medium mt-1">AI 陪練</span>
+            </button>
+            <button onclick="switchTab('archive')" id="mobile-tab-archive" class="flex flex-col items-center py-1 text-slate-400">
+                <i class="fa-solid fa-book-open text-lg"></i>
+                <span id="mNavTabArchive" class="text-[10px] font-medium mt-1">圖書館</span>
+            </button>
+            <button onclick="switchTab('practice')" id="mobile-tab-practice" class="flex flex-col items-center py-1 text-slate-400">
+                <i class="fa-solid fa-circle-check text-lg"></i>
+                <span id="mNavTabPractice" class="text-[10px] font-medium mt-1">測驗</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-100">
+                <h3 class="font-bold text-lg text-slate-900 flex items-center">
+                    <i class="fa-solid fa-key text-brand-600 mr-2"></i>Gemini API 設定
+                </h3>
+                <button onclick="closeSettingsModal()" class="text-slate-400 hover:text-slate-600 p-1">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <div class="py-4 space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 mb-1">Gemini API Key</label>
+                    <input type="password" id="apiKeyInput" placeholder="請貼上您的 API Key..." class="w-full px-3.5 py-2.5 bg-slate-100 rounded-xl text-xs font-mono text-slate-800 focus:outline-none focus:ring-2 focus:ring-brand-500">
+                </div>
+            </div>
+            <div class="flex items-center justify-end space-x-2 pt-3 border-t border-slate-100">
+                <button onclick="closeSettingsModal()" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-100">取消</button>
+                <button onclick="saveApiKey()" class="px-5 py-2 rounded-xl text-xs font-bold bg-brand-600 text-white hover:bg-brand-700 shadow-sm">儲存設定</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const DEFAULT_API_KEY = "AQ.Ab8RN6LBYkpDjsYdkORA-Jq3422iyMCEGGRmvJd2Pu-uUVi0Sg";
+        
+        function getApiKey() {
+            return localStorage.getItem('gemini_api_key') || DEFAULT_API_KEY;
+        }
+
+        const UI_I18N = {
+            "zh-TW": {
+                flag: "🇹🇼 繁體中文", appTitle: "每日一句學英語", appSubTitle: "AI 驅動 全球英語學習平台",
+                navTabToday: "今日金句", navTabTranslate: "多國翻譯與發音", navTabAichat: "AI 實戰對話",
+                navTabArchive: "金句圖書館", navTabPractice: "互動測驗", lblStreakDays: "天打卡"
+            },
+            "en-US": {
+                flag: "🇺🇸 English", appTitle: "Daily English Hub", appSubTitle: "AI-Powered Global English Hub",
+                navTabToday: "Daily Phrase", navTabTranslate: "Multi-Lang Translator", navTabAichat: "AI Coach",
+                navTabArchive: "Phrase Library", navTabPractice: "Interactive Quiz", lblStreakDays: "Days Streak"
+            },
+            "ja-JP": {
+                flag: "🇯🇵 日本語", appTitle: "每日英語ラーニング", appSubTitle: "AI駆動 グローバル英語学習プラットフォーム",
+                navTabToday: "今日のフレーズ", navTabTranslate: "多言語翻譯與發音", navTabAichat: "AI会話コーチ",
+                navTabArchive: "フレーズライブラリ", navTabPractice: "クイズ練習", lblStreakDays: "日連続"
+            }
+        };
+
+        let currentUiLang = localStorage.getItem('app_ui_lang') || 'zh-TW';
+        let currentVoiceKey = 'gemini:Zephyr';
+        let currentVoiceName = 'Gemini Zephyr (明亮女聲)';
+
+        let PHRASES_DATA = [
+            {
+                id: 1,
+                phrase: "Let's play it by ear.",
+                ipa: "/lɛts pleɪ ɪt baɪ ɪr/",
+                chinese: "我們隨機應變吧！/ 到時候再看著辦。",
+                category: "social",
+                date: "2026-08-17",
+                origin: "來自音樂界，指不看樂譜順著感覺彈奏。延伸為順應情況隨機應變。",
+                context: "行程安排尚未完全確定，或受天氣影響需視狀況決定時使用。",
+                dialogue1: {
+                    a: "What time should we meet for the movie tomorrow?",
+                    a_zh: "我們明天幾點去看電影？",
+                    b: "I'm not sure. Let me know when you're ready, and we can just play it by ear.",
+                    b_zh: "我不確定。你準備好時告訴我，我們到時候看情況決定。"
+                },
+                dialogue2: {
+                    a: "Do we have a backup plan if it rains during the event?",
+                    a_zh: "如果活動下雨，我們有備案嗎？",
+                    b: "We have umbrellas ready, but let's play it by ear based on the weather.",
+                    b_zh: "我們準備了雨傘，其他行程就視天氣狀況隨機應變吧。"
+                },
+                practicePrompt: "「我們還沒決定晚餐要吃什麼，就到時候看著辦吧！」",
+                bookmarked: false
+            },
+            {
+                id: 2,
+                phrase: "Hit the nail on the head.",
+                ipa: "/hɪt ðə neɪl ɑn ðə hɛd/",
+                chinese: "一針見血 / 一語中的。",
+                category: "idioms",
+                date: "2026-08-16",
+                origin: "木工釘釘子時正好擊中釘子頭，表示講話非常準確到位。",
+                context: "分析問題極精準、切中要害時。",
+                dialogue1: {
+                    a: "I think our sales dropped because our website is too complicated.",
+                    a_zh: "我覺得我們銷量下滑是因為網站太複雜了。",
+                    b: "You hit the nail on the head! That's exactly what customers complain about.",
+                    b_zh: "你一針見血！這正是顧客抱怨的點。"
+                },
+                dialogue2: {
+                    a: "He said we need better team communication.",
+                    a_zh: "他說我們需要更好的團隊溝通。",
+                    b: "His feedback really hit the nail on the head.",
+                    b_zh: "他的反饋真的非常一語中的。"
+                },
+                practicePrompt: "「你剛才對問題的分析真是一針見血！」",
+                bookmarked: false
+            }
+        ];
+
+        let currentTodayPhrase = PHRASES_DATA[0];
+        let currentSpeed = 1.0;
+        let streak = parseInt(localStorage.getItem('english_streak') || '5');
+        let quizIndex = 0;
+        let score = 0;
+        let systemVoicesList = [];
+        let currentAudioElement = null;
+
+        const synth = window.speechSynthesis;
+
+        window.onload = function() {
+            applyUiLanguage(currentUiLang);
+            populateSystemVoices();
+            renderHeroCard(currentTodayPhrase);
+            renderArchive();
+            initQuiz();
+            document.getElementById('streakCount').textContent = streak;
+            document.getElementById('apiKeyInput').value = getApiKey();
+
+            if (synth && synth.onvoiceschanged !== undefined) {
+                synth.onvoiceschanged = populateSystemVoices;
+            }
+
+            // Unlock browser audio context on user touch/click
+            document.body.addEventListener('click', function unlockAudio() {
+                if (synth && synth.paused) synth.resume();
+                document.body.removeEventListener('click', unlockAudio);
+            }, { once: true });
+        };
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById(`tab-${tabName}`);
+            if (target) target.classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = "tab-btn px-4 py-2.5 rounded-xl font-semibold text-sm transition text-slate-600 hover:text-slate-900";
+            });
+            const activeDesktopBtn = document.getElementById(`tab-btn-${tabName}`);
+            if (activeDesktopBtn) {
+                activeDesktopBtn.className = "tab-btn px-4 py-2.5 rounded-xl font-semibold text-sm transition bg-white text-brand-600 shadow-sm font-bold";
+            }
+
+            const mobileTabs = ['today', 'translate', 'aichat', 'archive', 'practice'];
+            mobileTabs.forEach(t => {
+                const mBtn = document.getElementById(`mobile-tab-${t}`);
+                if (mBtn) {
+                    if (t === tabName) {
+                        mBtn.className = "flex flex-col items-center py-1 text-brand-600 font-bold";
+                    } else {
+                        mBtn.className = "flex flex-col items-center py-1 text-slate-400";
+                    }
+                }
+            });
+        }
+
+        function populateSystemVoices() {
+            if (!synth) return;
+            systemVoicesList = synth.getVoices();
+            const container = document.getElementById('webSystemVoiceList');
+            if (!container) return;
+
+            if (systemVoicesList.length === 0) {
+                container.innerHTML = `<div class="px-3 py-1.5 text-slate-400 italic text-[11px]">載入系統語音中 (點擊畫面解鎖)...</div>`;
+                return;
+            }
+
+            container.innerHTML = systemVoicesList.map((v, idx) => {
+                let flag = "🌐";
+                const l = v.lang.toLowerCase();
+                if (l.includes("en-us")) flag = "🇺🇸";
+                else if (l.includes("en-gb")) flag = "🇬🇧";
+                else if (l.includes("ja")) flag = "🇯🇵";
+                else if (l.includes("ko")) flag = "🇰🇷";
+                else if (l.includes("es")) flag = "🇪🇸";
+                else if (l.includes("fr")) flag = "🇫🇷";
+                else if (l.includes("de")) flag = "🇩🇪";
+                else if (l.includes("zh-tw") || l.includes("zh-hk")) flag = "🇹🇼";
+                else if (l.includes("zh")) flag = "🇨🇳";
+                else if (l.includes("vi")) flag = "🇻🇳";
+                else if (l.includes("th")) flag = "🇹🇭";
+                else if (l.includes("id")) flag = "🇮🇩";
+
+                return `
+                    <button onclick="selectVoice('web:${idx}', '${flag} ${v.name}')" class="voice-opt-btn w-full text-left px-3 py-1.5 hover:bg-slate-100 rounded-lg flex items-center justify-between text-slate-700 text-xs">
+                        <span class="truncate max-w-[200px]">${flag} ${v.name}</span>
+                        <span class="text-[10px] text-slate-400 font-mono">${v.lang}</span>
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function toggleVoiceDropdown() {
+            document.getElementById('voiceDropdownList')?.classList.toggle('hidden');
+        }
+
+        function selectVoice(key, displayName) {
+            currentVoiceKey = key;
+            currentVoiceName = displayName;
+            document.getElementById('selectedVoiceNameDisplay').textContent = displayName;
+            document.getElementById('voiceDropdownList').classList.add('hidden');
+            showToast(`已切換發音：${displayName}`);
+        }
+
+        function toggleUiLangMenu() {
+            document.getElementById('uiLangMenu')?.classList.toggle('hidden');
+        }
+
+        function setUiLanguage(langCode) {
+            currentUiLang = langCode;
+            localStorage.setItem('app_ui_lang', langCode);
+            applyUiLanguage(langCode);
+            document.getElementById('uiLangMenu').classList.add('hidden');
+            showToast(`已切換介面語言 / UI Language Updated`);
+        }
+
+        function applyUiLanguage(langCode) {
+            const dict = UI_I18N[langCode] || UI_I18N["zh-TW"];
+            if (document.getElementById('currentUiLangTag')) {
+                document.getElementById('currentUiLangTag').textContent = dict.flag;
+            }
+            for (const key in dict) {
+                const el = document.getElementById(key);
+                if (el) el.textContent = dict[key];
+            }
+        }
+
+        function base64ToArrayBuffer(base64) {
+            const binaryString = atob(base64);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+            return bytes.buffer;
+        }
+
+        function pcmToWav(pcm16Data, sampleRate = 24000) {
+            const numChannels = 1;
+            const bitsPerSample = 16;
+            const byteRate = sampleRate * numChannels * (bitsPerSample / 8);
+            const blockAlign = numChannels * (bitsPerSample / 8);
+            const dataSize = pcm16Data.length * 2;
+            const buffer = new ArrayBuffer(44 + dataSize);
+            const view = new DataView(buffer);
+
+            writeString(view, 0, 'RIFF');
+            view.setUint32(4, 36 + dataSize, true);
+            writeString(view, 8, 'WAVE');
+            writeString(view, 12, 'fmt ');
+            view.setUint32(16, 16, true);
+            view.setUint16(20, 1, true);
+            view.setUint16(22, numChannels, true);
+            view.setUint32(24, sampleRate, true);
+            view.setUint32(28, byteRate, true);
+            view.setUint16(32, blockAlign, true);
+            view.setUint16(34, bitsPerSample, true);
+            writeString(view, 36, 'data');
+            view.setUint32(40, dataSize, true);
+
+            let offset = 44;
+            for (let i = 0; i < pcm16Data.length; i++, offset += 2) {
+                view.setInt16(offset, pcm16Data[i], true);
+            }
+
+            return new Blob([buffer], { type: 'audio/wav' });
+        }
+
+        function writeString(view, offset, string) {
+            for (let i = 0; i < string.length; i++) {
+                view.setUint8(offset + i, string.charCodeAt(i));
+            }
+        }
+
+        async function speakText(text, langCode = 'en-US') {
+            if (!text || !text.trim()) return;
+
+            const ttsBtnIcon = document.getElementById('ttsIcon');
+            if (ttsBtnIcon) ttsBtnIcon.classList.add('animate-bounce', 'text-amber-300');
+
+            function clearIconState() {
+                if (ttsBtnIcon) ttsBtnIcon.classList.remove('animate-bounce', 'text-amber-300');
+            }
+
+            if (currentAudioElement) {
+                currentAudioElement.pause();
+                currentAudioElement = null;
+            }
+
+            // Gemini AI Audio Voice Synthesis
+            if (currentVoiceKey.startsWith('gemini:')) {
+                const voiceName = currentVoiceKey.split(':')[1] || 'Zephyr';
+                try {
+                    const apiKey = getApiKey();
+                    const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key=${apiKey}`;
+                    
+                    const payload = {
+                        contents: [{
+                            parts: [{ text: text }]
+                        }],
+                        generationConfig: {
+                            responseModalities: ["AUDIO"],
+                            speechConfig: {
+                                voiceConfig: {
+                                    prebuiltVoiceConfig: { voiceName: voiceName }
+                                }
+                            }
+                        }
+                    };
+
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+
+                    if (!response.ok) throw new Error("Gemini TTS API request failed");
+                    
+                    const result = await response.json();
+                    const part = result?.candidates?.[0]?.content?.parts?.[0];
+                    const audioData = part?.inlineData?.data;
+                    const mimeType = part?.inlineData?.mimeType || "audio/L16;rate=24000";
+
+                    if (audioData) {
+                        let sampleRate = 24000;
+                        const match = mimeType.match(/rate=(\d+)/);
+                        if (match && match[1]) sampleRate = parseInt(match[1], 10);
+
+                        const pcmBuffer = base64ToArrayBuffer(audioData);
+                        const pcm16 = new Int16Array(pcmBuffer);
+                        const wavBlob = pcmToWav(pcm16, sampleRate);
+                        const audioUrl = URL.createObjectURL(wavBlob);
+
+                        currentAudioElement = new Audio(audioUrl);
+                        currentAudioElement.playbackRate = currentSpeed;
+                        currentAudioElement.onended = clearIconState;
+                        currentAudioElement.onerror = () => {
+                            clearIconState();
+                            speakWebSpeech(text, langCode, clearIconState);
+                        };
+                        
+                        await currentAudioElement.play();
+                        return;
+                    }
+                } catch (err) {
+                    console.warn("Gemini TTS fallback to WebSpeech:", err);
+                }
+            }
+
+            // Web Speech Synthesis Fallback Engine
+            speakWebSpeech(text, langCode, clearIconState);
+        }
+
+        function speakWebSpeech(text, langCode = 'en-US', onEndCallback = null) {
+            if (!('speechSynthesis' in window)) {
+                showToast("您的瀏覽器不支援語音功能，請使用 Chrome / Safari", "error");
+                if (onEndCallback) onEndCallback();
+                return;
+            }
+
+            const synth = window.speechSynthesis;
+            if (synth.paused) synth.resume();
+            
+            // Safely interrupt previous speech queue
+            try { synth.cancel(); } catch(e) {}
+
+            setTimeout(() => {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = currentSpeed;
+                utterance.lang = langCode;
+
+                const voices = synth.getVoices();
+                if (voices && voices.length > 0) {
+                    let matchedVoice = null;
+                    if (currentVoiceKey.startsWith('web:')) {
+                        const voiceIdx = parseInt(currentVoiceKey.split(':')[1], 10);
+                        if (voices[voiceIdx]) matchedVoice = voices[voiceIdx];
+                    }
+                    if (!matchedVoice) {
+                        const shortLang = langCode.split('-')[0].toLowerCase();
+                        matchedVoice = voices.find(v => v.lang.toLowerCase() === langCode.toLowerCase()) ||
+                                       voices.find(v => v.lang.toLowerCase().startsWith(shortLang));
+                    }
+                    if (matchedVoice) utterance.voice = matchedVoice;
+                }
+
+                utterance.onend = () => { if (onEndCallback) onEndCallback(); };
+                utterance.onerror = (e) => {
+                    // Filter out expected cancellation/interruption events during rapid clicks
+                    if (e.error === 'canceled' || e.error === 'interrupted') {
+                        if (onEndCallback) onEndCallback();
+                        return;
+                    }
+                    console.warn("Web Speech API notice:", e.error || "playback restricted");
+                    // Dynamic fallback audio player for restricted/sandbox iFrames
+                    playFallbackAudio(text, langCode, onEndCallback);
+                };
+
+                try {
+                    synth.speak(utterance);
+                } catch (err) {
+                    console.warn("SpeechSynthesis exception:", err);
+                    playFallbackAudio(text, langCode, onEndCallback);
+                }
+            }, 80);
+        }
+
+        function playFallbackAudio(text, langCode = 'en-US', onEndCallback = null) {
+            try {
+                const cleanLang = langCode.split('-')[0];
+                const audioUrl = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=${cleanLang}&client=tw-ob`;
+                const audio = new Audio(audioUrl);
+                audio.playbackRate = currentSpeed;
+                audio.onended = () => { if (onEndCallback) onEndCallback(); };
+                audio.onerror = () => {
+                    if (onEndCallback) onEndCallback();
+                };
+                audio.play().catch(e => {
+                    console.warn("Fallback audio play notice:", e);
+                    if (onEndCallback) onEndCallback();
+                });
+            } catch (e) {
+                if (onEndCallback) onEndCallback();
+            }
+        }
+
+        function playPhraseAudio() {
+            speakText(currentTodayPhrase.phrase, 'en-US');
+        }
+
+        function setSpeed(speed) {
+            currentSpeed = speed;
+            document.getElementById('speed10').className = speed === 1.0 ? 'px-1.5 py-0.5 rounded text-[11px] bg-brand-600 font-bold text-white' : 'px-1.5 py-0.5 rounded text-[11px] bg-slate-800 text-slate-300 hover:bg-slate-700';
+            document.getElementById('speed075').className = speed === 0.75 ? 'px-1.5 py-0.5 rounded text-[11px] bg-brand-600 font-bold text-white' : 'px-1.5 py-0.5 rounded text-[11px] bg-slate-800 text-slate-300 hover:bg-slate-700';
+            showToast(`語速已設為 ${speed}x`);
+        }
+
+        function renderHeroCard(item) {
+            document.getElementById('cardDateTag').innerHTML = `<i class="fa-regular fa-calendar-check mr-1.5"></i> Today's Pick • ${item.date}`;
+            document.getElementById('mainPhrase').textContent = `"${item.phrase}"`;
+            document.getElementById('mainIpa').textContent = `🗣️ ${item.ipa}`;
+            document.getElementById('mainMeaning').textContent = item.chinese;
+            document.getElementById('mainOrigin').textContent = item.origin;
+            document.getElementById('mainContext').textContent = item.context;
+            document.getElementById('practicePromptText').textContent = item.practicePrompt;
+
+            const dContainer = document.getElementById('dialoguesContainer');
+            if (dContainer) {
+                dContainer.innerHTML = `
+                    <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/60">
+                        <span class="text-xs font-bold text-brand-600 bg-brand-50 px-2.5 py-1 rounded-lg mb-3 inline-block">情境 1</span>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-slate-800 font-medium"><strong>A:</strong> ${item.dialogue1.a}</p>
+                            <p class="text-xs text-slate-500">${item.dialogue1.a_zh}</p>
+                            <p class="text-slate-800 font-medium pt-2 border-t border-slate-200"><strong>B:</strong> ${item.dialogue1.b}</p>
+                            <p class="text-xs text-slate-500">${item.dialogue1.b_zh}</p>
+                        </div>
+                    </div>
+                    <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200/60">
+                        <span class="text-xs font-bold text-purple-600 bg-purple-50 px-2.5 py-1 rounded-lg mb-3 inline-block">情境 2</span>
+                        <div class="space-y-2 text-sm">
+                            <p class="text-slate-800 font-medium"><strong>A:</strong> ${item.dialogue2.a}</p>
+                            <p class="text-xs text-slate-500">${item.dialogue2.a_zh}</p>
+                            <p class="text-slate-800 font-medium pt-2 border-t border-slate-200"><strong>B:</strong> ${item.dialogue2.b}</p>
+                            <p class="text-xs text-slate-500">${item.dialogue2.b_zh}</p>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        async function callGeminiApi(payload) {
+            const apiKey = getApiKey();
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            if (!response.ok) throw new Error("API Error");
+            return await response.json();
+        }
+
+        async function generateAIPhrase() {
+            const btn = document.getElementById('genAiBtn');
+            const category = document.getElementById('aiCategorySelect').value;
+            const originalText = btn.innerHTML;
+            
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i><span>Gemini 生成中...</span>`;
+
+            const prompt = `Generate an authentic English daily phrase for category "${category}". Return JSON:
+{
+    "phrase": "English Phrase",
+    "ipa": "/IPA/",
+    "chinese": "繁體中文翻譯",
+    "category": "${category}",
+    "origin": "典故說明 (繁體中文)",
+    "context": "使用場景 (繁體中文)",
+    "dialogue1": { "a": "A En", "a_zh": "A Zh", "b": "B En", "b_zh": "B Zh" },
+    "dialogue2": { "a": "A En", "a_zh": "A Zh", "b": "B En", "b_zh": "B Zh" },
+    "practicePrompt": "造句題目 (繁體中文)"
+}`;
+
+            try {
+                const res = await callGeminiApi({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json" } });
+                const jsonText = res?.candidates?.[0]?.content?.parts?.[0]?.text;
+                if (!jsonText) throw new Error("無內容");
+
+                const newPhraseObj = JSON.parse(jsonText);
+                newPhraseObj.id = Date.now();
+                newPhraseObj.date = new Date().toISOString().split('T')[0];
+
+                currentTodayPhrase = newPhraseObj;
+                PHRASES_DATA.unshift(newPhraseObj);
+                renderHeroCard(newPhraseObj);
+                renderArchive();
+                showToast("✨ AI 新金句生成成功！");
+            } catch (err) {
+                console.error(err);
+                showToast("生成失敗，請確認 API Key", "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+            }
+        }
+
+        async function executeTranslation() {
+            const text = document.getElementById('translateInput').value.trim();
+            const tgtLangCode = document.getElementById('tgtLangSelect').value;
+            const btn = document.getElementById('translateBtn');
+
+            if (!text) {
+                showToast("請先輸入翻譯內容", "warn");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i><span>翻譯中...</span>`;
+
+            const prompt = `Translate this text into language ${tgtLangCode}: "${text}".
+Return JSON:
+{
+    "detectedLang": "Detected Language",
+    "translatedText": "Translated result",
+    "casualVersion": "Spoken casual version",
+    "formalVersion": "Polite formal version",
+    "nuanceTip": "Brief usage note"
+}`;
+
+            try {
+                const res = await callGeminiApi({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json" } });
+                const result = JSON.parse(res?.candidates?.[0]?.content?.parts?.[0]?.text);
+
+                document.getElementById('detectedLangTag').innerHTML = `✨ 偵測: ${result.detectedLang} ➔ ${tgtLangCode}`;
+                document.getElementById('translatedOutputArea').innerHTML = `
+                    <h3 class="text-2xl font-bold text-white tracking-tight select-all">"${result.translatedText}"</h3>
+                `;
+                document.getElementById('toneCasual').textContent = result.casualVersion || result.translatedText;
+                document.getElementById('toneFormal').textContent = result.formalVersion || result.translatedText;
+                document.getElementById('toneNuance').textContent = result.nuanceTip || '適合普遍情境使用。';
+                document.getElementById('translationDetailsBox').classList.remove('hidden');
+
+                showToast("✨ 翻譯完成！");
+            } catch (err) {
+                console.error(err);
+                showToast("翻譯發生錯誤", "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles text-amber-300"></i><span>立即翻譯與分析</span>`;
+            }
+        }
+
+        function speakTargetText() {
+            const output = document.querySelector('#translatedOutputArea h3')?.textContent?.replace(/"/g, '');
+            const tgtLangCode = document.getElementById('tgtLangSelect').value;
+            if (output) speakText(output, tgtLangCode);
+        }
+
+        function speakSourceText() {
+            const input = document.getElementById('translateInput').value.trim();
+            const srcLangCode = document.getElementById('srcLangSelect').value;
+            if (input) speakText(input, srcLangCode === 'auto' ? 'en-US' : srcLangCode);
+        }
+
+        function speakToneCasual() {
+            const text = document.getElementById('toneCasual')?.textContent;
+            const tgtLangCode = document.getElementById('tgtLangSelect').value;
+            if (text && text !== '-') speakText(text, tgtLangCode);
+        }
+
+        function speakToneFormal() {
+            const text = document.getElementById('toneFormal')?.textContent;
+            const tgtLangCode = document.getElementById('tgtLangSelect').value;
+            if (text && text !== '-') speakText(text, tgtLangCode);
+        }
+
+        function clearTranslateInput() {
+            document.getElementById('translateInput').value = '';
+            document.getElementById('translatedOutputArea').innerHTML = `<p class="text-slate-400 text-sm italic">翻譯結果將顯示於此...</p>`;
+            document.getElementById('translationDetailsBox').classList.add('hidden');
+        }
+
+        function swapLanguages() {
+            const src = document.getElementById('srcLangSelect');
+            const tgt = document.getElementById('tgtLangSelect');
+            if (src.value === 'auto') { src.value = tgt.value; tgt.value = 'zh-TW'; }
+            else { const tmp = src.value; src.value = tgt.value; tgt.value = tmp; }
+            showToast("已對調國家語言！");
+        }
+
+        async function evaluateUserPractice() {
+            const userText = document.getElementById('practiceInput').value.trim();
+            const resBox = document.getElementById('practiceResult');
+            const btn = document.getElementById('practiceSubmitBtn');
+
+            if (!userText) { showToast("請先輸入造句英文", "warn"); return; }
+
+            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i><span>AI 評分中...</span>`;
+
+            const prompt = `Target phrase: "${currentTodayPhrase.phrase}". Evaluate user translation: "${userText}".
+Return JSON:
+{
+    "score": 90,
+    "feedback": "即時點評建議 (繁體中文)",
+    "betterVersion": "更自然流利的講法"
+}`;
+
+            try {
+                const res = await callGeminiApi({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json" } });
+                const result = JSON.parse(res?.candidates?.[0]?.content?.parts?.[0]?.text);
+
+                resBox.className = "p-5 rounded-2xl text-sm font-medium backdrop-blur-md bg-white/10 border border-white/20 text-white block mt-4 space-y-2";
+                resBox.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold text-amber-300">得分：${result.score} / 100</span>
+                    </div>
+                    <p class="text-slate-200">${result.feedback}</p>
+                    <p class="text-xs text-brand-200">✨ 推薦表達: "${result.betterVersion}"</p>
+                `;
+                showToast("批改完成！+10 XP 🎉");
+            } catch (err) {
+                showToast("批改過程發生錯誤", "error");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i><span>送出批改</span>`;
+            }
+        }
+
+        async function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const msgContainer = document.getElementById('chatMessages');
+            msgContainer.innerHTML += `
+                <div class="flex items-start space-x-3 justify-end">
+                    <div class="bg-purple-600 text-white p-4 rounded-2xl rounded-tr-none max-w-[85%] text-sm">
+                        ${text}
+                    </div>
+                </div>
+            `;
+            input.value = '';
+            msgContainer.scrollTop = msgContainer.scrollHeight;
+
+            const prompt = `Act as an English speaking coach. The user says: "${text}". Practice target phrase: "${currentTodayPhrase.phrase}". Provide a short friendly response, gentle grammar check if needed.`;
+
+            try {
+                const res = await callGeminiApi({ contents: [{ parts: [{ text: prompt }] }] });
+                const aiReply = res?.candidates?.[0]?.content?.parts?.[0]?.text || "Great job!";
+
+                msgContainer.innerHTML += `
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 rounded-xl bg-purple-600 text-white flex items-center justify-center text-xs shrink-0 font-bold">AI</div>
+                        <div class="bg-slate-100 text-slate-800 p-4 rounded-2xl rounded-tl-none max-w-[85%] text-sm">
+                            ${aiReply}
+                        </div>
+                    </div>
+                `;
+                msgContainer.scrollTop = msgContainer.scrollHeight;
+            } catch (err) {
+                showToast("AI 回應失敗", "error");
+            }
+        }
+
+        function clearChatHistory() {
+            document.getElementById('chatMessages').innerHTML = `
+                <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 rounded-xl bg-purple-600 text-white flex items-center justify-center text-xs shrink-0 font-bold">AI</div>
+                    <div class="bg-slate-100 text-slate-800 p-4 rounded-2xl rounded-tl-none max-w-[85%] text-sm space-y-2">
+                        <p>Hi there! 👋 Let's practice using today's phrase: <strong class="text-brand-600">"${currentTodayPhrase.phrase}"</strong>!</p>
+                    </div>
+                </div>
+            `;
+            showToast("對話紀錄已重置");
+        }
+
+        function renderArchive(phrases = PHRASES_DATA) {
+            const grid = document.getElementById('phrasesGrid');
+            if (!grid) return;
+            grid.innerHTML = phrases.map(item => `
+                <div class="p-5 rounded-2xl bg-slate-50 border border-slate-200 hover:border-brand-300 transition flex flex-col justify-between space-y-3">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-bold text-brand-600 bg-brand-50 px-2 py-0.5 rounded-md">${item.date}</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-900">"${item.phrase}"</h3>
+                        <p class="text-xs text-slate-500 font-mono mb-2">${item.ipa}</p>
+                        <p class="text-sm font-semibold text-slate-700">${item.chinese}</p>
+                    </div>
+                    <div class="flex items-center justify-between pt-3 border-t border-slate-200">
+                        <button onclick="selectPhraseFromArchive(${item.id})" class="text-xs text-brand-600 hover:underline font-bold">
+                            查看詳細 <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                        <button onclick="speakText('${item.phrase.replace(/'/g, "\\'")}')" class="text-slate-500 hover:text-brand-600 p-1">
+                            <i class="fa-solid fa-volume-high"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterPhrases() {
+            const query = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
+            const cat = document.getElementById('categoryFilter')?.value || 'all';
+            let filtered = PHRASES_DATA.filter(p => {
+                const matchesQuery = p.phrase.toLowerCase().includes(query) || p.chinese.includes(query);
+                const matchesCat = (cat === 'all') || (p.category === cat);
+                return matchesQuery && matchesCat;
+            });
+            renderArchive(filtered);
+        }
+
+        function selectPhraseFromArchive(id) {
+            const p = PHRASES_DATA.find(x => x.id === id);
+            if (p) {
+                currentTodayPhrase = p;
+                renderHeroCard(p);
+                switchTab('today');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        const QUIZ_QUESTIONS = [
+            { q: "當朋友問你明天幾點出門，但你還不確定時，最適合使用哪一句？", options: ["Let's play it by ear.", "Hit the nail on the head.", "Call it a day."], answer: 0 },
+            { q: "『Hit the nail on the head』最道地的翻譯是？", options: ["一針見血 / 一語中的", "打草驚蛇", "船到橋頭自然直"], answer: 0 }
+        ];
+
+        function initQuiz() {
+            const container = document.getElementById('quizContainer');
+            if (!container) return;
+            const q = QUIZ_QUESTIONS[quizIndex];
+
+            container.innerHTML = `
+                <div class="mb-4 flex items-center justify-between text-xs text-slate-500 font-bold">
+                    <span>題目 ${quizIndex + 1} / ${QUIZ_QUESTIONS.length}</span>
+                    <span>得分: ${score} XP</span>
+                </div>
+                <h3 class="font-bold text-slate-900 text-base mb-6">${q.q}</h3>
+                <div class="space-y-3 mb-6">
+                    ${q.options.map((opt, i) => `
+                        <button onclick="submitQuizAnswer(${i})" class="w-full text-left p-4 rounded-xl border border-slate-200 bg-white hover:border-brand-500 hover:bg-brand-50 transition text-sm font-medium text-slate-800 shadow-sm">
+                            ${opt}
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function submitQuizAnswer(selected) {
+            if (selected === QUIZ_QUESTIONS[quizIndex].answer) { score += 10; showToast("答對了！+10 XP 🎉"); }
+            else { showToast("再接再勵！", "warn"); }
+            quizIndex++;
+            if (quizIndex < QUIZ_QUESTIONS.length) initQuiz();
+            else {
+                document.getElementById('quizContainer').innerHTML = `
+                    <div class="text-center py-6">
+                        <i class="fa-solid fa-trophy text-amber-400 text-5xl mb-3 animate-bounce"></i>
+                        <h3 class="text-xl font-bold text-slate-900 mb-1">完成今日複習！</h3>
+                        <p class="text-sm text-slate-500 mb-4">獲得總分: ${score} XP</p>
+                        <button onclick="quizIndex=0;score=0;initQuiz()" class="px-6 py-2.5 bg-brand-600 text-white rounded-xl text-sm font-bold">再測驗一次</button>
+                    </div>
+                `;
+            }
+        }
+
+        function openSettingsModal() { document.getElementById('settingsModal')?.classList.remove('hidden'); }
+        function closeSettingsModal() { document.getElementById('settingsModal')?.classList.add('hidden'); }
+        function saveApiKey() {
+            const key = document.getElementById('apiKeyInput').value.trim();
+            if (key) localStorage.setItem('gemini_api_key', key);
+            else localStorage.removeItem('gemini_api_key');
+            showToast("API Key 已更新儲存！");
+            closeSettingsModal();
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            if (!toast) return;
+            document.getElementById('toastMsg').textContent = msg;
+            toast.classList.remove('opacity-0', 'translate-y-[-100px]');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-[-100px]');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

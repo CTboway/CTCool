@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>陳柏瑋 Po-Wei Chen | 跨產業經營管理與數據分析專家</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', '"Noto Sans TC"', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#0284c7',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        },
+                        dark: {
+                            900: '#0f172a',
+                            800: '#1e293b',
+                            700: '#334155',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .dark .glass-card {
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(51, 65, 85, 0.8);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #0284c7 0%, #2563eb 50%, #4f46e5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans antialiased selection:bg-brand-500 selection:text-white transition-colors duration-300">
+
+    <!-- Navigation Bar -->
+    <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300" id="main-header">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 my-2">
+            <div class="glass-card rounded-2xl shadow-sm px-4 py-2.5 flex items-center justify-between">
+                <!-- Logo / Title -->
+                <a href="#hero" class="flex items-center gap-3 group">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-600 text-white flex items-center justify-center font-bold text-lg shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
+                        PW
+                    </div>
+                    <div>
+                        <span class="font-bold text-slate-900 dark:text-white text-base sm:text-lg block leading-tight">陳柏瑋</span>
+                        <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">Po-Wei Chen</span>
+                    </div>
+                </a>
+
+                <!-- Desktop Navigation Links -->
+                <div class="hidden md:flex items-center gap-1 lg:gap-2">
+                    <a href="#about" class="px-3 py-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-slate-100/80 dark:hover:bg-slate-800/80 rounded-lg transition-colors">關於我</a>
+                    <a href="#projects" class="px-3 py-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-slate-100/80 dark:hover:bg-slate-800/80 rounded-lg transition-colors">重點專案</a>
+                    <a href="#skills" class="px-3 py-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-slate-100/80 dark:hover:bg-slate-800/80 rounded-lg transition-colors">專業技能</a>
+                    <a href="#timeline" class="px-3 py-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-slate-100/80 dark:hover:bg-slate-800/80 rounded-lg transition-colors">職涯歷練</a>
+                    <a href="#simulator" class="px-3 py-2 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:text-brand-600 dark:hover:text-brand-400 hover:bg-slate-100/80 dark:hover:bg-slate-800/80 rounded-lg transition-colors">效益試算</a>
+                </div>
+
+                <!-- Desktop Controls & Actions -->
+                <div class="flex items-center gap-2">
+                    <!-- Music Switch Button -->
+                    <button id="music-btn" onclick="toggleMusic()" class="p-2 sm:px-3 sm:py-2 text-xs font-bold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-all border border-slate-200 dark:border-slate-700 flex items-center gap-1.5 shadow-sm" title="背景音樂播放/暫停">
+                        <i class="fa-solid fa-music text-slate-500 dark:text-slate-400" id="music-icon"></i>
+                        <span id="music-text" class="hidden lg:inline">背景音樂</span>
+                    </button>
+
+                    <!-- Theme Toggle Button -->
+                    <button id="theme-btn" onclick="toggleTheme()" class="p-2 sm:px-3 sm:py-2 text-xs font-bold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-xl transition-all border border-slate-200 dark:border-slate-700 flex items-center gap-1.5 shadow-sm" title="切換深淺色彩模式">
+                        <i class="fa-solid fa-moon text-indigo-500 dark:text-amber-400 text-sm" id="theme-icon"></i>
+                        <span id="theme-text" class="hidden lg:inline">模式</span>
+                    </button>
+
+                    <button onclick="copyProfileText()" class="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 text-xs font-bold text-brand-700 dark:text-brand-300 bg-brand-50 dark:bg-brand-950/60 hover:bg-brand-100 dark:hover:bg-brand-900/60 rounded-xl transition-all border border-brand-200 dark:border-brand-800 shadow-sm">
+                        <i class="fa-regular fa-copy"></i>
+                        一鍵複製簡介
+                    </button>
+                    <a href="#contact" class="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 text-xs font-bold text-white bg-slate-900 dark:bg-brand-600 hover:bg-brand-600 dark:hover:bg-brand-500 rounded-xl shadow-md transition-all">
+                        <i class="fa-solid fa-paper-plane"></i>
+                        聯絡洽談
+                    </a>
+                    
+                    <!-- Mobile Menu Toggle Button -->
+                    <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden p-2 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 focus:outline-none">
+                        <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Drawer Menu -->
+            <div id="mobile-menu" class="hidden md:hidden mt-2 glass-card rounded-2xl shadow-xl p-4 border border-slate-200 dark:border-slate-800 transition-all">
+                <div class="flex flex-col gap-2">
+                    <a href="#about" onclick="toggleMobileMenu()" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-600"><i class="fa-solid fa-user w-6"></i> 關於我</a>
+                    <a href="#projects" onclick="toggleMobileMenu()" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-600"><i class="fa-solid fa-diagram-project w-6"></i> 重點專案</a>
+                    <a href="#skills" onclick="toggleMobileMenu()" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-600"><i class="fa-solid fa-list-check w-6"></i> 專業技能</a>
+                    <a href="#timeline" onclick="toggleMobileMenu()" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-600"><i class="fa-solid fa-briefcase w-6"></i> 職涯歷練</a>
+                    <a href="#simulator" onclick="toggleMobileMenu()" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-600"><i class="fa-solid fa-calculator w-6"></i> 專案效益模擬</a>
+                    <a href="#contact" onclick="toggleMobileMenu()" class="px-4 py-2.5 rounded-xl text-sm font-semibold text-slate-700 dark:text-slate-200 hover:bg-brand-50 dark:hover:bg-slate-800 hover:text-brand-600"><i class="fa-solid fa-envelope w-6"></i> 聯絡我</a>
+                    <hr class="my-2 border-slate-200 dark:border-slate-800">
+                    <button onclick="copyProfileText(); toggleMobileMenu();" class="w-full text-center py-2.5 text-sm font-bold text-brand-700 dark:text-brand-300 bg-brand-50 dark:bg-brand-950/60 rounded-xl border border-brand-200 dark:border-brand-800">
+                        <i class="fa-regular fa-copy mr-1"></i> 一鍵複製簡介
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="hero" class="pt-28 pb-16 md:pt-36 md:pb-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative overflow-hidden">
+        <div class="absolute top-12 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-gradient-to-tr from-brand-500/10 to-indigo-500/10 blur-3xl -z-10 rounded-full"></div>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div class="lg:col-span-7 text-center lg:text-left">
+                <!-- Tag -->
+                <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-50 dark:bg-brand-950/60 border border-brand-200/80 dark:border-brand-800 text-brand-700 dark:text-brand-300 text-xs font-bold mb-6 shadow-sm">
+                    <span class="w-2 h-2 rounded-full bg-brand-500 animate-ping"></span>
+                    7 年跨產業經營管理實務經驗
+                </div>
+                
+                <!-- Main Title -->
+                <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 dark:text-white tracking-tight leading-tight mb-4">
+                    跨產業經營管理實戰者 <br class="hidden sm:inline">
+                    <span class="gradient-text">數據分析・AI專案・營運優化</span>
+                </h1>
+                
+                <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 font-normal leading-relaxed mb-8 max-w-2xl mx-auto lg:mx-0">
+                    我是 <strong class="text-slate-900 dark:text-white font-bold">陳柏瑋</strong>。橫跨 <span class="text-brand-600 dark:text-brand-400 font-semibold">半導體、零售、運動</span> 三大產業，擅長擔任業務痛點與技術開發之間的數據橋樑（Bridge），專注於 BI 轉 AI 戰情室架構建置、標案財務模型試算與跨部門流程賦能。
+                </p>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3 sm:gap-4 mb-10">
+                    <a href="#projects" class="px-6 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-lg shadow-brand-500/25 transition-all flex items-center gap-2 hover:-translate-y-0.5">
+                        <i class="fa-solid fa-diagram-project"></i> 瀏覽亮點專案
+                    </a>
+                    <a href="https://sites.google.com/view/ctboy" target="_blank" rel="noopener noreferrer" class="px-6 py-3.5 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-300 dark:border-slate-700 font-bold text-sm shadow-sm transition-all flex items-center gap-2 hover:-translate-y-0.5">
+                        <i class="fa-solid fa-globe text-brand-600 dark:text-brand-400"></i> 作品集網站
+                    </a>
+                    <a href="https://www.linkedin.com/in/ctboway" target="_blank" rel="noopener noreferrer" class="px-6 py-3.5 rounded-xl bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 dark:hover:bg-slate-700 text-white font-bold text-sm shadow-sm transition-all flex items-center gap-2 hover:-translate-y-0.5">
+                        <i class="fa-brands fa-linkedin text-brand-400"></i> LinkedIn 檔案
+                    </a>
+                </div>
+
+                <!-- Advantage Pills -->
+                <div class="pt-6 border-t border-slate-200/80 dark:border-slate-800 flex flex-wrap items-center justify-center lg:justify-start gap-x-6 gap-y-3 text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400">
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-emerald-500"></i> BI 轉 AI 架構與專案管理</span>
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-emerald-500"></i> 運動場館標案財務試算</span>
+                    <span class="flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-emerald-500"></i> 跨部門溝通與 PM 賦能</span>
+                </div>
+            </div>
+
+            <!-- Profile Headshot Card -->
+            <div class="lg:col-span-5">
+                <div class="glass-card rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden border border-slate-200/80 dark:border-slate-800">
+                    <div class="absolute -top-10 -right-10 w-40 h-40 bg-brand-400/20 rounded-full blur-2xl"></div>
+                    
+                    <div class="flex flex-col items-center text-center pb-6 border-b border-slate-100 dark:border-slate-800 mb-6">
+                        <div class="relative mb-4 group">
+                            <div class="absolute -inset-1 bg-gradient-to-r from-brand-500 to-indigo-600 rounded-full blur opacity-75 group-hover:opacity-100 transition duration-300"></div>
+                            <img src="https://duk.tw/Bemnp6.png" 
+                                 alt="陳柏瑋 Po-Wei Chen 大頭照" 
+                                 onerror="this.src='https://placehold.co/300x300/0284c7/ffffff?text=Po-Wei+Chen'" 
+                                 class="relative w-32 h-32 sm:w-36 sm:h-36 rounded-full object-cover border-4 border-white dark:border-slate-900 shadow-xl">
+                        </div>
+                        <h3 class="font-bold text-xl text-slate-900 dark:text-white">陳柏瑋</h3>
+                        <p class="text-xs font-semibold text-brand-600 dark:text-brand-400 mt-0.5">跨產業經營管理與數據分析專家</p>
+                        <span class="mt-2 px-3 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 font-bold text-xs border border-emerald-200 dark:border-emerald-800">
+                            7 年跨產業營運實務經驗
+                        </span>
+
+                        <!-- Social & Portfolio Icons -->
+                        <div class="flex items-center gap-3 mt-4">
+                            <a href="https://www.linkedin.com/in/ctboway" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-brand-600 hover:text-white dark:hover:bg-brand-500 text-slate-600 dark:text-slate-300 flex items-center justify-center transition-all shadow-sm hover:scale-105" title="LinkedIn 個人頁面">
+                                <i class="fa-brands fa-linkedin-in text-base"></i>
+                            </a>
+                            <a href="https://sites.google.com/view/ctboy" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-brand-600 hover:text-white dark:hover:bg-brand-500 text-slate-600 dark:text-slate-300 flex items-center justify-center transition-all shadow-sm hover:scale-105" title="個人作品集網站">
+                                <i class="fa-solid fa-globe text-base"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3 mb-6">
+                        <div class="bg-slate-50 dark:bg-slate-800/60 rounded-2xl p-4 border border-slate-100 dark:border-slate-700/60 hover:border-brand-200 transition-colors">
+                            <div class="text-2xl font-black text-slate-900 dark:text-white mb-0.5">7<span class="text-brand-600 dark:text-brand-400 text-lg">+</span> 年</div>
+                            <div class="text-xs font-semibold text-slate-500 dark:text-slate-400">跨產業經營管理</div>
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-800/60 rounded-2xl p-4 border border-slate-100 dark:border-slate-700/60 hover:border-brand-200 transition-colors">
+                            <div class="text-2xl font-black text-slate-900 dark:text-white mb-0.5">3 大</div>
+                            <div class="text-xs font-semibold text-slate-500 dark:text-slate-400">半導體・零售・運動</div>
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-800/60 rounded-2xl p-4 border border-slate-100 dark:border-slate-700/60 hover:border-brand-200 transition-colors">
+                            <div class="text-2xl font-black text-slate-900 dark:text-white mb-0.5">近 6 年</div>
+                            <div class="text-xs font-semibold text-slate-500 dark:text-slate-400">零售事業體深耕</div>
+                        </div>
+                        <div class="bg-slate-50 dark:bg-slate-800/60 rounded-2xl p-4 border border-slate-100 dark:border-slate-700/60 hover:border-brand-200 transition-colors">
+                            <div class="text-2xl font-black text-slate-900 dark:text-white mb-0.5">100%</div>
+                            <div class="text-xs font-semibold text-slate-500 dark:text-slate-400">跨部門規格轉譯</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-slate-900 to-slate-800 dark:from-slate-800 dark:to-slate-900 text-white rounded-2xl p-4 shadow-lg border border-slate-700/50">
+                        <div class="flex items-center gap-2 text-xs text-brand-400 font-bold mb-1">
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> 關鍵定位
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            「銜接業務數據痛點與 IT 開發語言，確保企業 AI 戰情室專案落地與標案決策準確性。」
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Capability Highlights Section -->
+    <section id="about" class="py-16 bg-white dark:bg-slate-900 border-y border-slate-200/60 dark:border-slate-800 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h2 class="text-xs font-bold text-brand-600 dark:text-brand-400 uppercase tracking-widest mb-2">ABOUT ME</h2>
+                <p class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">核心優勢與定位簡述</p>
+                <div class="w-12 h-1 bg-brand-500 mx-auto mt-3 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+                <!-- Advantage Card 1 -->
+                <div class="bg-slate-50 dark:bg-slate-800/60 rounded-2xl p-6 sm:p-8 border border-slate-100 dark:border-slate-700/60 hover:border-brand-300 transition-all shadow-sm hover:shadow-md group">
+                    <div class="w-12 h-12 rounded-xl bg-brand-100 dark:bg-brand-900/40 text-brand-600 dark:text-brand-400 flex items-center justify-center text-xl font-bold mb-5 group-hover:bg-brand-600 group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-database"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-3">BI 轉 AI 化溝通樞紐</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                        主責 BI 底層資料源串接前期梳理，橫向跨部門整合數據需求，建立標準化資料結構，使工程團隊能在正確資料基礎上加速 AI 戰情室開發。
+                    </p>
+                </div>
+
+                <!-- Advantage Card 2 -->
+                <div class="bg-slate-50 dark:bg-slate-800/60 rounded-2xl p-6 sm:p-8 border border-slate-100 dark:border-slate-700/60 hover:border-brand-300 transition-all shadow-sm hover:shadow-md group">
+                    <div class="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xl font-bold mb-5 group-hover:bg-indigo-600 group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-calculator"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-3">大型標案財務評估</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                        於運動事業體主導場館標案財務試算模型，與跨職能團隊緊密協作，產出投資回報與風險營運指標，為高層決策提供精準量化依據。
+                    </p>
+                </div>
+
+                <!-- Advantage Card 3 -->
+                <div class="bg-slate-50 dark:bg-slate-800/60 rounded-2xl p-6 sm:p-8 border border-slate-100 dark:border-slate-700/60 hover:border-brand-300 transition-all shadow-sm hover:shadow-md group">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-xl font-bold mb-5 group-hover:bg-emerald-600 group-hover:text-white transition-colors">
+                        <i class="fa-solid fa-people-arrows"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-3">跨部門溝通與賦能</h3>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                        具備優秀的會議召集、場控與結論整合能力。負責新人教學與流程化訓練，減少部門間資訊不對稱與溝通磨合成本。
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Projects Section -->
+    <section id="projects" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+            <div>
+                <h2 class="text-xs font-bold text-brand-600 dark:text-brand-400 uppercase tracking-widest mb-2">KEY PROJECTS</h2>
+                <p class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">重點專案與貢獻細節</p>
+            </div>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-2 md:mt-0 max-w-md">
+                聚焦於業務需求轉譯 (BRD)、數據架構奠基與財務評估模組的實際落地經驗。
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <!-- Project 1 -->
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between group">
+                <div class="p-6 sm:p-8">
+                    <div class="flex items-center justify-between gap-2 mb-4">
+                        <span class="px-3 py-1 rounded-full text-xs font-bold bg-brand-50 dark:bg-brand-950 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800">
+                            數據與 AI 戰略
+                        </span>
+                        <span class="text-xs font-semibold text-slate-400"><i class="fa-regular fa-building mr-1"></i>科技半導體事業體</span>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
+                        BI 轉 AI 化戰情室分析專案
+                    </h3>
+
+                    <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                        主責 BI 底層資料源串接前期工作，橫向溝通各部門資料需求，建立完整資料架構基礎，為後續工程團隊推動 AI 化分析奠定關鍵地基。
+                    </p>
+
+                    <ul class="space-y-2 text-xs text-slate-700 dark:text-slate-300 font-medium mb-6">
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-check text-brand-500 mt-0.5"></i>
+                            <span>梳理跨部門業務欄位定義與數據對齊</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-check text-brand-500 mt-0.5"></i>
+                            <span>整合鼎新 BI 系統數據與工程開發語言</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-check text-brand-500 mt-0.5"></i>
+                            <span>打造標準化需求草案 (BRD)</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="p-6 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-500 dark:text-slate-400">底層數據架構</span>
+                    <button onclick="openProjectModal('bi-ai')" class="text-xs font-bold text-brand-600 dark:text-brand-400 hover:text-brand-700 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                        查看專案解析 <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Project 2 -->
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between group">
+                <div class="p-6 sm:p-8">
+                    <div class="flex items-center justify-between gap-2 mb-4">
+                        <span class="px-3 py-1 rounded-full text-xs font-bold bg-indigo-50 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800">
+                            財務與營運試算
+                        </span>
+                        <span class="text-xs font-semibold text-slate-400"><i class="fa-regular fa-building mr-1"></i>運動事業體</span>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+                        運動場館標案財務模組分析
+                    </h3>
+
+                    <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                        於標案專案團隊中負責財務模組試算，與跨職能團員協作，產出評估指標與投標效益分析，作為主管決策與後續評估的重要依據。
+                    </p>
+
+                    <ul class="space-y-2 text-xs text-slate-700 dark:text-slate-300 font-medium mb-6">
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-check text-indigo-500 mt-0.5"></i>
+                            <span>建立標案收入/成本動態試算模型</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-check text-indigo-500 mt-0.5"></i>
+                            <span>評估投資回收期 (Payback Period) 與關鍵指標</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-check text-indigo-500 mt-0.5"></i>
+                            <span>提供高階主管投標策略優先順序</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="p-6 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-500 dark:text-slate-400">財務決策指標</span>
+                    <button onclick="openProjectModal('sports-finance')" class="text-xs font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-700 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                        查看專案解析 <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Project 3 -->
+            <div class="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between group">
+                <div class="p-6 sm:p-8">
+                    <div class="flex items-center justify-between gap-2 mb-4">
+                        <span class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-50 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                            跨部門整合
+                        </span>
+                        <span class="text-xs font-semibold text-slate-400"><i class="fa-regular fa-building mr-1"></i>零售事業體</span>
+                    </div>
+
+                    <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-3 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                        跨部門溝通疏理與人才教學
+                    </h3>
+
+                    <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-6">
+                        於多項專案中擔任資料與需求疏理的橋樑角色，並具備新人教學、會議召集場控與會議紀錄經驗，是團隊中重要的協作與資訊整合節點。
+                    </p>
+
+                    <ul class="space-y-2 text-xs text-slate-700 dark:text-slate-300 font-medium mb-6">
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-check text-emerald-500 mt-0.5"></i>
+                            <span>優化跨單位資訊對齊流程，降低誤解</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-check text-emerald-500 mt-0.5"></i>
+                            <span>主持跨部門專案會議並落實追蹤</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i class="fa-solid fa-check text-emerald-500 mt-0.5"></i>
+                            <span>培訓新進成員營運邏輯與系統操作</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="p-6 bg-slate-50 dark:bg-slate-800/50 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                    <span class="text-xs font-bold text-slate-500 dark:text-slate-400">團隊協作節點</span>
+                    <button onclick="openProjectModal('cross-comm')" class="text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 flex items-center gap-1 group-hover:translate-x-1 transition-transform">
+                        查看專案解析 <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Professional Skills Section -->
+    <section id="skills" class="py-20 bg-slate-900 text-white border-b border-slate-800 transition-colors">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-xs font-bold text-brand-400 uppercase tracking-widest mb-2">PROFESSIONAL SKILLS</h2>
+                <p class="text-2xl sm:text-3xl font-bold">專業技能矩陣與應用領域</p>
+                <p class="text-sm text-slate-400 mt-2">結合數據分析工具、經營財務邏輯與零售通路實戰技能</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Skill Category 1 -->
+                <div class="bg-slate-800/80 rounded-2xl p-6 border border-slate-700 hover:border-brand-500 transition-all">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-xl bg-brand-500/20 text-brand-400 flex items-center justify-center font-bold text-lg">
+                            <i class="fa-solid fa-robot"></i>
+                        </div>
+                        <h3 class="font-bold text-base">AI 專案管理 & 數據</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-xs mb-1 font-semibold">
+                                <span class="text-slate-300">AI/BI 需求轉譯 (BRD/PRD)</span>
+                                <span class="text-brand-400">精通</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-1.5">
+                                <div class="bg-brand-500 h-1.5 rounded-full" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1 font-semibold">
+                                <span class="text-slate-300">AI 戰情室專案落地與管控</span>
+                                <span class="text-brand-400">熟練</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-1.5">
+                                <div class="bg-brand-500 h-1.5 rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1 font-semibold">
+                                <span class="text-slate-300">生成式 AI 工具流程賦能</span>
+                                <span class="text-brand-400">熟練</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-1.5">
+                                <div class="bg-brand-500 h-1.5 rounded-full" style="width: 88%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1 font-semibold">
+                                <span class="text-slate-300">Excel / 鼎新 BI 數據鏈接</span>
+                                <span class="text-brand-400">精通</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-1.5">
+                                <div class="bg-brand-500 h-1.5 rounded-full" style="width: 92%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skill Category 2 -->
+                <div class="bg-slate-800/80 rounded-2xl p-6 border border-slate-700 hover:border-indigo-500 transition-all">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-lg">
+                            <i class="fa-solid fa-brain"></i>
+                        </div>
+                        <h3 class="font-bold text-base">邏輯與營運分析</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-xs mb-1 font-semibold">
+                                <span class="text-slate-300">統計概論邏輯思維</span>
+                                <span class="text-indigo-400">熟練</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-1.5">
+                                <div class="bg-indigo-500 h-1.5 rounded-full" style="width: 88%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1 font-semibold">
+                                <span class="text-slate-300">財務模組效益試算</span>
+                                <span class="text-indigo-400">精通</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-1.5">
+                                <div class="bg-indigo-500 h-1.5 rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1 font-semibold">
+                                <span class="text-slate-300">促銷活動 ROI 評估</span>
+                                <span class="text-indigo-400">精通</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-1.5">
+                                <div class="bg-indigo-500 h-1.5 rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skill Category 3 -->
+                <div class="bg-slate-800/80 rounded-2xl p-6 border border-slate-700 hover:border-emerald-500 transition-all">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-lg">
+                            <i class="fa-solid fa-store"></i>
+                        </div>
+                        <h3 class="font-bold text-base">零售與 CRM 管理</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-xs mb-1 font-semibold">
+                                <span class="text-slate-300">POS 後台資料處理與分析</span>
+                                <span class="text-emerald-400">精通</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-1.5">
+                                <div class="bg-emerald-500 h-1.5 rounded-full" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1 font-semibold">
+                                <span class="text-slate-300">促銷活動策略與設定</span>
+                                <span class="text-emerald-400">精通</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-1.5">
+                                <div class="bg-emerald-500 h-1.5 rounded-full" style="width: 92%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1 font-semibold">
+                                <span class="text-slate-300">CRM 工具套版與數據運用</span>
+                                <span class="text-emerald-400">熟練</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-1.5">
+                                <div class="bg-emerald-500 h-1.5 rounded-full" style="width: 85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skill Category 4 -->
+                <div class="bg-slate-800/80 rounded-2xl p-6 border border-slate-700 hover:border-amber-500 transition-all">
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-lg">
+                            <i class="fa-solid fa-chalkboard-user"></i>
+                        </div>
+                        <h3 class="font-bold text-base">溝通與專案管理</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <div class="flex justify-between text-xs mb-1 font-semibold">
+                                <span class="text-slate-300">跨部門需求轉譯與敏捷溝通</span>
+                                <span class="text-amber-400">精通</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-1.5">
+                                <div class="bg-amber-500 h-1.5 rounded-full" style="width: 95%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1 font-semibold">
+                                <span class="text-slate-300">PPT 簡報製作與決策呈報</span>
+                                <span class="text-amber-400">精通</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-1.5">
+                                <div class="bg-amber-500 h-1.5 rounded-full" style="width: 92%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between text-xs mb-1 font-semibold">
+                                <span class="text-slate-300">會議主持 / 場控 / 人才帶教</span>
+                                <span class="text-amber-400">精通</span>
+                            </div>
+                            <div class="w-full bg-slate-700 rounded-full h-1.5">
+                                <div class="bg-amber-500 h-1.5 rounded-full" style="width: 90%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Career Timeline Section -->
+    <section id="timeline" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto mb-16">
+            <h2 class="text-xs font-bold text-brand-600 uppercase tracking-widest mb-2">CAREER TIMELINE</h2>
+            <p class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">7 年跨產業職涯發展軌跡</p>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">持續累積近 7 年經營管理與數據分析綜合實力</p>
+        </div>
+
+        <div class="relative border-l-2 border-brand-200 dark:border-slate-800 ml-4 md:ml-32 space-y-12">
+            <!-- Timeline Item 1 -->
+            <div class="relative pl-8 group">
+                <div class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs shadow-md border-4 border-white dark:border-slate-950">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
+                    <div>
+                        <span class="text-xs font-bold text-brand-600 dark:text-brand-400 uppercase tracking-wider">運動事業領域 (近 1 年)</span>
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white">經營管理專員 / 標案財務分析負責人</h3>
+                    </div>
+                    <span class="text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 w-max mt-1 md:mt-0">運動事業體</span>
+                </div>
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
+                    <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-3">
+                        負責大型運動場館投標專案之財務模型建構，包含收入預測、成本試算、投資報酬率 (ROI) 與風險效益評估，成功為高階主管決策提供精準量化依據。
+                    </p>
+                    <div class="flex flex-wrap gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
+                        <span class="bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">標案財務試算</span>
+                        <span class="bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">跨團隊協作</span>
+                        <span class="bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">決策指標產出</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Item 2 -->
+            <div class="relative pl-8 group">
+                <div class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-slate-800 text-white flex items-center justify-center text-xs shadow-md border-4 border-white dark:border-slate-950">
+                    <i class="fa-solid fa-microchip"></i>
+                </div>
+                <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
+                    <div>
+                        <span class="text-xs font-bold text-indigo-600 dark:text-indigo-400 uppercase tracking-wider">科技半導體支援專案</span>
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white">BI 轉 AI 化戰情室底層資料架構負責人</h3>
+                    </div>
+                    <span class="text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 w-max mt-1 md:mt-0">科技半導體事業體</span>
+                </div>
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
+                    <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-3">
+                        主導跨部門 BI 底層資料源梳理，銜接業務部門與技術工程團隊，確立欄位規範與邏輯對齊，協助順利推進 AI 化戰情室開發。
+                    </p>
+                    <div class="flex flex-wrap gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
+                        <span class="bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">BI 轉 AI 專案</span>
+                        <span class="bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">需求轉譯 (BRD)</span>
+                        <span class="bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">資料源串接</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Item 3 -->
+            <div class="relative pl-8 group">
+                <div class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs shadow-md border-4 border-white dark:border-slate-950">
+                    <i class="fa-solid fa-store"></i>
+                </div>
+                <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
+                    <div>
+                        <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">零售事業領域 (近 6 年)</span>
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white">營運數據分析與系統管理專員</h3>
+                    </div>
+                    <span class="text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 w-max mt-1 md:mt-0">零售事業體</span>
+                </div>
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
+                    <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-3">
+                        主導跨部門 BI 底層資料源梳理，銜接業務部門與技術工程團隊，確立欄位規範與邏輯對齊，協助母公司順利推進 AI 化戰情室開發。
+                    </p>
+                    <div class="flex flex-wrap gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
+                        <span class="bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">BI 轉 AI 專案</span>
+                        <span class="bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">需求轉譯 (BRD)</span>
+                        <span class="bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">資料源串接</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Timeline Item 3 -->
+            <div class="relative pl-8 group">
+                <div class="absolute -left-[17px] top-1.5 w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs shadow-md border-4 border-white dark:border-slate-950">
+                    <i class="fa-solid fa-store"></i>
+                </div>
+                <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
+                    <div>
+                        <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">零售事業領域 (近 6 年)</span>
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white">營運數據分析與系統管理專員</h3>
+                    </div>
+                    <span class="text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 w-max mt-1 md:mt-0">崇越集團 - 零售事業體</span>
+                </div>
+                <div class="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-shadow">
+                    <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-3">
+                        負責 POS 後台資料挖掘、促銷活動規則設定與 CRM 套版應用；負責跨部門資訊傳達、新人教育訓練、高階簡報製作與會議場控。
+                    </p>
+                    <div class="flex flex-wrap gap-2 text-xs font-medium text-slate-500 dark:text-slate-400">
+                        <span class="bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">POS / CRM 應用</span>
+                        <span class="bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">促銷活動設定</span>
+                        <span class="bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-md">人才帶教</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Impact Simulator Widget -->
+    <section id="simulator" class="py-20 bg-slate-100/80 dark:bg-slate-900/60 border-t border-slate-200 dark:border-slate-800">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="glass-card rounded-3xl p-8 sm:p-10 shadow-xl border border-slate-200 dark:border-slate-800">
+                <div class="text-center max-w-2xl mx-auto mb-8">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-brand-300">互動式評估工具</span>
+                    <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mt-3">跨部門專案溝通與數據優化效益計算</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">拉動下方滑桿，模擬導入專門需求轉譯與財務模組後的潛在效益。</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <!-- Sliders Control -->
+                    <div class="space-y-6 bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800">
+                        <div>
+                            <div class="flex justify-between text-sm font-bold text-slate-700 dark:text-slate-200 mb-2">
+                                <span>跨部門專案對齊次數 / 月</span>
+                                <span id="val-meetings" class="text-brand-600 dark:text-brand-400">8 次</span>
+                            </div>
+                            <input type="range" id="input-meetings" min="2" max="20" value="8" oninput="updateSimulator()" class="w-full accent-brand-600 cursor-pointer">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-sm font-bold text-slate-700 dark:text-slate-200 mb-2">
+                                <span>標案/專案預估規模 (萬元)</span>
+                                <span id="val-budget" class="text-brand-600 dark:text-brand-400">500 萬</span>
+                            </div>
+                            <input type="range" id="input-budget" min="100" max="3000" step="100" value="500" oninput="updateSimulator()" class="w-full accent-brand-600 cursor-pointer">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between text-sm font-bold text-slate-700 dark:text-slate-200 mb-2">
+                                <span>BI 資料溝通成本痛點指數</span>
+                                <span id="val-pain" class="text-brand-600 dark:text-brand-400">高 (80%)</span>
+                            </div>
+                            <input type="range" id="input-pain" min="20" max="100" step="10" value="80" oninput="updateSimulator()" class="w-full accent-brand-600 cursor-pointer">
+                        </div>
+                    </div>
+
+                    <!-- Output Results Card -->
+                    <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white p-6 sm:p-8 rounded-2xl shadow-xl flex flex-col justify-between h-full border border-slate-700/50">
+                        <div>
+                            <div class="text-xs text-brand-400 font-bold uppercase tracking-wider mb-2">即時預估影響效益</div>
+                            <h3 class="text-xl font-bold mb-6">優化後的經營管理成果</h3>
+                            
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between pb-3 border-b border-slate-700">
+                                    <span class="text-xs text-slate-300">溝通成本減少 (工時/月)</span>
+                                    <span id="res-hours" class="text-lg font-black text-emerald-400">約 32 小時</span>
+                                </div>
+                                <div class="flex items-center justify-between pb-3 border-b border-slate-700">
+                                    <span class="text-xs text-slate-300">標案試算風控提升</span>
+                                    <span id="res-risk" class="text-lg font-black text-brand-400">+ 35 %</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-xs text-slate-300">IT 開發對齊效率</span>
+                                    <span id="res-speed" class="text-lg font-black text-amber-400">大幅縮短 2-3 週</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-slate-700 text-xs text-slate-400 italic">
+                            註：此試算反映「業務需求與工程開發標準對齊」對企業帶來的綜合效益提升。
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact & Call to Action -->
+    <section id="contact" class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-gradient-to-r from-brand-600 via-indigo-600 to-slate-900 rounded-3xl p-8 sm:p-14 text-white shadow-2xl relative overflow-hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+                <div class="lg:col-span-7">
+                    <span class="px-3 py-1 rounded-full bg-white/20 text-white text-xs font-bold backdrop-blur-md">
+                        開啟合作可能性
+                    </span>
+                    <h2 class="text-2xl sm:text-4xl font-black mt-4 mb-4 leading-tight">
+                        期待與您探討經營管理與 <br class="hidden sm:inline">數據 AI 專案合作！
+                    </h2>
+                    <p class="text-slate-200 text-sm sm:text-base leading-relaxed mb-8 max-w-xl">
+                        不論是 BI/AI 專案數據溝通、標案財務效益試算，或是跨部門專案推動，歡迎隨時與我聯繫交流。
+                    </p>
+
+                    <div class="flex flex-wrap gap-4">
+                        <button onclick="copyEmail()" class="px-6 py-3.5 rounded-xl bg-white text-slate-900 font-bold text-sm shadow-lg hover:bg-slate-100 transition-all flex items-center gap-2">
+                            <i class="fa-regular fa-envelope text-brand-600"></i>
+                            複製 Email 郵件地址
+                        </button>
+                        <a href="https://www.linkedin.com/in/ctboway" target="_blank" rel="noopener noreferrer" class="px-6 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/30 font-bold text-sm transition-all flex items-center gap-2">
+                            <i class="fa-brands fa-linkedin"></i>
+                            LinkedIn 檔案
+                        </a>
+                        <a href="https://sites.google.com/view/ctboy" target="_blank" rel="noopener noreferrer" class="px-6 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/30 font-bold text-sm transition-all flex items-center gap-2">
+                            <i class="fa-solid fa-globe"></i>
+                            個人作品集網站
+                        </a>
+                        <button onclick="copyProfileText()" class="px-6 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/30 font-bold text-sm transition-all flex items-center gap-2">
+                            <i class="fa-regular fa-copy"></i>
+                            一鍵複製完整個人簡介
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Simple Contact Form -->
+                <div class="lg:col-span-5 bg-white text-slate-800 p-6 sm:p-8 rounded-2xl shadow-xl">
+                    <h3 class="font-bold text-lg mb-4 text-slate-900">發送快速留言</h3>
+                    <form onsubmit="handleFormSubmit(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">您的姓名 / 稱呼</label>
+                            <input type="text" required placeholder="例如：張經理" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-brand-600 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">聯絡方式 (Email / Phone)</label>
+                            <input type="text" required placeholder="your.email@example.com" class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-brand-600 text-sm">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-600 mb-1">留言事項</label>
+                            <textarea rows="3" required placeholder="請簡述您的需求或合作邀請..." class="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-brand-600 text-sm resize-none"></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-sm shadow-md transition-colors">
+                            發送訊息
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-center text-xs text-slate-500 dark:text-slate-400">
+        <p>© 2026 陳柏瑋 Po-Wei Chen. All rights reserved. 跨產業經營管理與數據分析專家.</p>
+    </footer>
+
+    <!-- Audio Element -->
+    <audio id="bg-music" loop preload="auto" src="https://img.ai365.fans/artworks/c0340bfb-65f2-4e61-8173-c37341c6fabc/y3hzsrhc9p.mp3"></audio>
+
+    <!-- Project Detail Modal -->
+    <div id="project-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 dark:bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 rounded-3xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-slate-800">
+            <button onclick="closeProjectModal()" class="absolute top-5 right-5 w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 flex items-center justify-center font-bold">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <!-- Toast Alert Notification Box -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+        <div class="bg-slate-900 dark:bg-slate-800 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 border border-slate-700">
+            <i class="fa-solid fa-circle-check text-emerald-400 text-lg" id="toast-icon"></i>
+            <span id="toast-message" class="text-sm font-medium">提示訊息</span>
+        </div>
+    </div>
+
+    <script>
+        // Profile Summary Data
+        const profileSummaryText = `跨產業經營管理實戰者，專注於數據分析、AI專案管理與企業營運優化
+
+個人連結：
+- LinkedIn：https://www.linkedin.com/in/ctboway
+- 個人作品集：https://sites.google.com/view/ctboy
+
+個人簡介：
+【身份背景】
+我是陳柏瑋，曾擔任經營管理專員，橫跨半導體、零售、運動三大產業，累積近7年經營管理與營運策略相關經驗。職涯軌跡始於零售事業體近6年，其後轉往運動事業領域近1年，期間同時支援科技半導體相關專案，具備跨產業、跨部門的實務歷練與適應力。
+
+【職責貢獻】
+1. BI 轉 AI 化戰情室分析與專案管理：主責 BI 底層資料源串接前期工作與 AI 專案需求管理，橫向溝通各部門資料需求並撰寫需求規格 (BRD)，建立完整資料架構基礎，為後續工程團隊推動 AI 化分析奠定關鍵地基。
+2. 運動場館標案財務模組分析：於標案專案團隊中負責財務模組試算，與跨職能團員協作，產出評估指標與投標效益分析，作為主管決策與後續評估的重要依據。
+3. 跨部門溝通疏理者：於多項專案中擔任資料與需求疏理的橋樑角色，並具備新人教學、會議召集場控與會議紀錄經驗，是團隊中重要的協作與資訊整合節點。
+
+【專業技能】
+- AI 專案管理：AI/BI 業務需求轉譯 (BRD)、生成式 AI 工具應用與流程賦能、AI 戰情室專案落地與管控
+- 資料分析工具：Excel 進階應用、鼎新 BI 系統、底層資料源梳理
+- 邏輯與分析能力：統計概論邏輯思維、標案財務效益試算
+- 零售專業：POS 後台資料處理、促銷活動規則設定
+- 客戶管理：CRM 工具套版運用與數據鏈接
+- 簡報溝通：PPT 高階簡報製作與敏捷跨部門溝通`;
+
+        // Audio Control Logic
+        let isMusicPlaying = false;
+        const bgMusic = document.getElementById('bg-music');
+
+        function toggleMusic() {
+            const musicIcon = document.getElementById('music-icon');
+            const musicBtn = document.getElementById('music-btn');
+            const musicText = document.getElementById('music-text');
+
+            if (!isMusicPlaying) {
+                bgMusic.play().then(() => {
+                    isMusicPlaying = true;
+                    if (musicIcon) musicIcon.className = 'fa-solid fa-volume-high text-brand-600 dark:text-brand-400 animate-pulse';
+                    if (musicBtn) musicBtn.classList.add('border-brand-500', 'bg-brand-50', 'dark:bg-brand-950/40');
+                    if (musicText) musicText.innerText = '音樂播放中';
+                    showToast('已開啟背景音樂');
+                }).catch(err => {
+                    showToast('播放失敗，請檢查聲音設定或點擊頁面後再試');
+                });
+            } else {
+                bgMusic.pause();
+                isMusicPlaying = false;
+                if (musicIcon) musicIcon.className = 'fa-solid fa-music text-slate-500 dark:text-slate-400';
+                if (musicBtn) musicBtn.classList.remove('border-brand-500', 'bg-brand-50', 'dark:bg-brand-950/40');
+                if (musicText) musicText.innerText = '背景音樂';
+                showToast('已暫停背景音樂');
+            }
+        }
+
+        // Theme Switcher Logic
+        function toggleTheme() {
+            const htmlEl = document.documentElement;
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+
+            if (htmlEl.classList.contains('dark')) {
+                htmlEl.classList.remove('dark');
+                if (themeIcon) themeIcon.className = 'fa-solid fa-moon text-indigo-500 text-sm';
+                if (themeText) themeText.innerText = '深色';
+                localStorage.setItem('theme', 'light');
+                showToast('已切換至明亮模式');
+            } else {
+                htmlEl.classList.add('dark');
+                if (themeIcon) themeIcon.className = 'fa-solid fa-sun text-amber-400 text-sm';
+                if (themeText) themeText.innerText = '淺色';
+                localStorage.setItem('theme', 'dark');
+                showToast('已切換至深色模式');
+            }
+        }
+
+        // Initialize Theme Mode
+        (function initTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+
+            if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                if (themeIcon) themeIcon.className = 'fa-solid fa-sun text-amber-400 text-sm';
+                if (themeText) themeText.innerText = '淺色';
+            } else {
+                document.documentElement.classList.remove('dark');
+                if (themeIcon) themeIcon.className = 'fa-solid fa-moon text-indigo-500 text-sm';
+                if (themeText) themeText.innerText = '深色';
+            }
+        })();
+
+        // Copy Functions
+        function copyProfileText() {
+            const textarea = document.createElement('textarea');
+            textarea.value = profileSummaryText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast('個人簡介已成功複製至剪貼簿！');
+            } catch (err) {
+                showToast('複製失敗，請手動複製');
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function copyEmail() {
+            const email = "bowei.chen.job@gmail.com";
+            const textarea = document.createElement('textarea');
+            textarea.value = email;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast('Email 郵件地址已複製！');
+            } catch (err) {
+                showToast('複製失敗');
+            }
+            document.body.removeChild(textarea);
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const icon = document.getElementById('menu-icon');
+            if (menu.classList.contains('hidden')) {
+                menu.classList.remove('hidden');
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-xmark');
+            } else {
+                menu.classList.add('hidden');
+                icon.classList.remove('fa-xmark');
+                icon.classList.add('fa-bars');
+            }
+        }
+
+        // Project Data & Modal Logic
+        const projectData = {
+            'bi-ai': {
+                title: 'BI 轉 AI 化戰情室分析專案',
+                subtitle: '科技半導體事業支援專案 | 數據架構',
+                badge: '數據與 AI 戰略',
+                description: '在企業轉型推動 AI 化戰情室過程中，最大的痛點常在於「業務端數據定義不一」與「工程端資料串接規格不符」。本專案中我擔任前線梳理的核心橋樑：',
+                details: [
+                    '跨部門資料整合：橫向溝通零售、半導體供應鏈等各部門需求，確認關鍵指標 (KPI) 定義。',
+                    '底層資料源梳理：審視鼎新 BI 系統與各資料庫欄位，完成前期清洗與數據對齊規畫。',
+                    '規格書 (BRD) 產出：將複雜業務需求邏輯翻譯為技術團隊易於理解的工程語言，大幅減少無效開發。'
+                ]
+            },
+            'sports-finance': {
+                title: '運動場館標案財務模組分析',
+                subtitle: '運動事業體 | 大型投標專案',
+                badge: '財務與營運試算',
+                description: '針對政府大型運動場館營運移轉標案，建構高精準度之動態財務預測試算模型：',
+                details: [
+                    '收入與成本計算模型：涵蓋場館租金、課程、零售與日常營運維護費用之變動試算。',
+                    '財務可行性分析：計算專案投資回收期 (Payback Period)、淨現值 (NPV) 與內部報酬率。',
+                    '高階決策支援：產出圖像化財務簡報，協助主管迅速評估投標風險與出價區間策略。'
+                ]
+            },
+            'cross-comm': {
+                title: '跨部門溝通疏理與人才帶教',
+                subtitle: '零售事業體 | 營運流程優化',
+                badge: '跨部門整合',
+                description: '在零售事業體近 6 年期間，擔任部門內外溝通的關鍵節點，致力於提升溝通效率與流程規範：',
+                details: [
+                    '會議場控與追蹤：負責重要跨部門會議之召集、議程主持、精準紀錄與事後追蹤。',
+                    '新人導引與帶教：建立營運系統標準作業程序 (SOP)，指導新進人員快速上手 POS 及 CRM 後台。',
+                    '行銷與營運銜接：確保促銷活動規則設定精準，減少客服與門市端摩擦成本。'
+                ]
+            }
+        };
+
+        function openProjectModal(key) {
+            const item = projectData[key];
+            if (!item) return;
+
+            const modalContainer = document.getElementById('modal-content');
+            modalContainer.innerHTML = '';
+
+            const badgeSpan = document.createElement('span');
+            badgeSpan.className = 'px-3 py-1 rounded-full text-xs font-bold bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-brand-300';
+            badgeSpan.textContent = item.badge;
+
+            const titleH3 = document.createElement('h3');
+            titleH3.className = 'text-2xl font-bold text-slate-900 dark:text-white mt-3 mb-1';
+            titleH3.textContent = item.title;
+
+            const subP = document.createElement('p');
+            subP.className = 'text-xs text-slate-500 dark:text-slate-400 font-medium mb-4';
+            subP.textContent = item.subtitle;
+
+            const descP = document.createElement('p');
+            descP.className = 'text-sm text-slate-600 dark:text-slate-300 leading-relaxed mb-6';
+            descP.textContent = item.description;
+
+            const boxDiv = document.createElement('div');
+            boxDiv.className = 'bg-slate-50 dark:bg-slate-800/60 p-5 rounded-2xl border border-slate-100 dark:border-slate-700 mb-6';
+            
+            const boxTitle = document.createElement('h4');
+            boxTitle.className = 'font-bold text-sm text-slate-900 dark:text-white mb-3 flex items-center gap-2';
+            boxTitle.innerHTML = '<i class="fa-solid fa-list-check text-brand-600 dark:text-brand-400"></i>核心執行亮點';
+
+            const listUl = document.createElement('ul');
+            listUl.className = 'space-y-2 text-xs text-slate-700 dark:text-slate-300';
+
+            item.details.forEach(d => {
+                const li = document.createElement('li');
+                li.className = 'flex items-start gap-2';
+                li.innerHTML = '<i class="fa-solid fa-circle-dot text-brand-500 text-[10px] mt-1"></i>';
+                const textSpan = document.createElement('span');
+                textSpan.textContent = d;
+                li.appendChild(textSpan);
+                listUl.appendChild(li);
+            });
+
+            boxDiv.appendChild(boxTitle);
+            boxDiv.appendChild(listUl);
+
+            const closeBtn = document.createElement('button');
+            closeBtn.className = 'w-full py-3 bg-slate-900 dark:bg-brand-600 hover:bg-slate-800 dark:hover:bg-brand-500 text-white font-bold text-sm rounded-xl transition-colors';
+            closeBtn.textContent = '關閉視窗';
+            closeBtn.onclick = closeProjectModal;
+
+            modalContainer.appendChild(badgeSpan);
+            modalContainer.appendChild(titleH3);
+            modalContainer.appendChild(subP);
+            modalContainer.appendChild(descP);
+            modalContainer.appendChild(boxDiv);
+            modalContainer.appendChild(closeBtn);
+
+            document.getElementById('project-modal').classList.remove('hidden');
+        }
+
+        function closeProjectModal() {
+            document.getElementById('project-modal').classList.add('hidden');
+        }
+
+        // Simulator Interactive Calculator
+        function updateSimulator() {
+            const meetings = parseInt(document.getElementById('input-meetings').value);
+            const budget = parseInt(document.getElementById('input-budget').value);
+            const pain = parseInt(document.getElementById('input-pain').value);
+
+            document.getElementById('val-meetings').innerText = meetings + ' 次';
+            document.getElementById('val-budget').innerText = budget + ' 萬';
+            document.getElementById('val-pain').innerText = (pain >= 70 ? '高 ' : pain >= 40 ? '中 ' : '低 ') + '(' + pain + '%)';
+
+            const savedHours = Math.round(meetings * (pain / 100) * 5);
+            const riskImprovement = Math.round((pain * 0.3) + (budget / 200));
+
+            document.getElementById('res-hours').innerText = '約 ' + savedHours + ' 小時';
+            document.getElementById('res-risk').innerText = '+ ' + Math.min(riskImprovement, 60) + ' %';
+        }
+
+        // Form Submit Simulation
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            showToast('已收到您的訊息，陳柏瑋會盡快回覆您！');
+            e.target.reset();
+        }
+
+        // Toast Notification System
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const msgSpan = document.getElementById('toast-message');
+            if (msgSpan) msgSpan.innerText = message;
+
+            if (toast) {
+                toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+                toast.classList.add('translate-y-0', 'opacity-100');
+
+                setTimeout(() => {
+                    toast.classList.remove('translate-y-0', 'opacity-100');
+                    toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+                }, 3000);
+            }
+        }
+
+        // Initialize Simulator on Load
+        window.addEventListener('DOMContentLoaded', () => {
+            updateSimulator();
+        });
+    </script>
+</body>
+</html>

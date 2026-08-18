@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CT宇宙 - 跨領域創新應用與數位工具整合首頁門戶。匯聚個人品牌履歷、AI英語學習、本地資安工具、策略遊戲、發票對獎及健康飲水紀錄。">
+    <meta name="keywords" content="CT宇宙, 程式作品集, 數據分析, 英語學習, 資安工具, 統一發票對獎, 喝水紀錄, 網頁應用">
+    <meta name="author" content="CT Studio">
+    <title>CT宇宙 | 創新應用與數位工具入口</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', '"Noto Sans TC"', 'sans-serif'],
+                        display: ['"Outfit"', '"Noto Sans TC"', 'sans-serif'],
+                    },
+                    colors: {
+                        cosmic: {
+                            50: '#f0f4ff',
+                            100: '#dbe4fe',
+                            800: '#111827',
+                            900: '#0b0f19',
+                            950: '#060911',
+                        },
+                        brand: {
+                            cyan: '#06b6d4',
+                            indigo: '#6366f1',
+                            purple: '#a855f7',
+                            emerald: '#10b981',
+                            amber: '#f59e0b',
+                            rose: '#f43f5e',
+                            sky: '#0284c7'
+                        }
+                    },
+                    animation: {
+                        'float-slow': 'float 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'glow-line': 'glowLine 3s linear infinite',
+                        'badge-bounce': 'badgeBounce 2s infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        glowLine: {
+                            '0%': { backgroundPosition: '0% 50%' },
+                            '100%': { backgroundPosition: '200% 50%' },
+                        },
+                        badgeBounce: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-3px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Smooth Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(11, 15, 25, 0.8);
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.3);
+            border-radius: 9999px;
+        }
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(148, 163, 184, 0.5);
+            border-radius: 9999px;
+        }
+
+        /* Glassmorphism Styles */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.72);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .light .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-6px);
+            background: rgba(23, 33, 58, 0.85);
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.5), 0 0 25px -5px rgba(99, 102, 241, 0.25);
+        }
+
+        .light .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        .light .glass-card:hover {
+            transform: translateY(-6px);
+            background: rgba(255, 255, 255, 1);
+            border-color: rgba(99, 102, 241, 0.5);
+            box-shadow: 0 20px 30px -10px rgba(99, 102, 241, 0.15);
+        }
+
+        /* Gradient Text */
+        .cosmic-title-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 40%, #38bdf8 80%, #ec4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .light .cosmic-title-gradient {
+            background: linear-gradient(135deg, #0f172a 0%, #4338ca 40%, #0284c7 80%, #db2777 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Cosmic Canvas Background */
+        #space-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Ambient Glow Spheres */
+        .glow-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.22;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .light .glow-blob {
+            opacity: 0.12;
+            filter: blur(80px);
+        }
+
+        /* Button Glow on Hover */
+        .btn-glow {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .btn-glow::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(60deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: rotate(30deg) translateY(-100%);
+            transition: transform 0.6s ease;
+        }
+
+        .btn-glow:hover::after {
+            transform: rotate(30deg) translateY(100%);
+        }
+    </style>
+</head>
+
+<body class="bg-cosmic-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col relative selection:bg-indigo-500 selection:text-white transition-colors duration-300">
+
+    <!-- Dynamic Interactive Starfield Canvas -->
+    <canvas id="space-canvas"></canvas>
+
+    <!-- Ambient Glowing Nebulae -->
+    <div class="glow-blob w-96 h-96 bg-indigo-600 top-10 left-1/4 animate-pulse-slow"></div>
+    <div class="glow-blob w-80 h-80 bg-cyan-500 top-1/3 right-10 animate-float-slow"></div>
+    <div class="glow-blob w-96 h-96 bg-pink-600 bottom-10 left-10"></div>
+    <div class="glow-blob w-72 h-72 bg-emerald-500 bottom-1/3 right-1/4 animate-pulse-slow"></div>
+
+    <!-- Main Navigation Bar -->
+    <header class="sticky top-0 z-40 w-full glass-panel border-b border-slate-800/80 shadow-lg transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo & Title -->
+            <div class="flex items-center gap-3.5 group cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-cyan-400 p-[2px] shadow-lg shadow-indigo-500/25 group-hover:shadow-indigo-500/50 transition-all duration-300 group-hover:scale-105">
+                    <div class="w-full h-full bg-cosmic-900 rounded-[14px] flex items-center justify-center text-xl font-display font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-300 to-indigo-300">
+                        CT
+                    </div>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-2xl font-display font-black tracking-tight text-white dark:text-white flex items-center gap-1.5">
+                            CT宇宙
+                        </span>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-gradient-to-r from-indigo-500/20 to-purple-500/20 border border-indigo-500/40 text-indigo-300">
+                            v2.0 Portal
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-400 font-medium hidden sm:block">跨領域創新應用與數位工具整合平台</p>
+                </div>
+            </div>
+
+            <!-- Right Header Controls -->
+            <div class="flex items-center gap-3">
+                <!-- Current Time & Status Badge -->
+                <div class="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/60 border border-slate-700/60 text-xs text-slate-300">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 -ml-4"></span>
+                    <span id="live-time" class="font-mono font-medium">--:--:--</span>
+                </div>
+
+                <!-- Apps Counter Badge -->
+                <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-950/70 border border-indigo-500/30 text-xs font-semibold text-indigo-300 shadow-inner">
+                    <i class="fa-solid fa-cube text-indigo-400"></i>
+                    <span>已收錄 <strong class="text-white" id="total-count-badge">6</strong> 個程式</span>
+                </div>
+
+                <!-- Theme Toggle Button -->
+                <button id="theme-toggle" class="w-10 h-10 rounded-xl bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700/80 flex items-center justify-center text-slate-300 hover:text-white transition-all shadow-sm" title="切換深色 / 淺色主題">
+                    <i class="fa-solid fa-moon text-base dark:hidden"></i>
+                    <i class="fa-solid fa-sun text-base hidden dark:block text-amber-300"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 w-full">
+        
+        <!-- Hero Section -->
+        <section class="text-center max-w-3xl mx-auto mb-10 md:mb-14">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs font-semibold mb-5 shadow-sm">
+                <i class="fa-solid fa-wand-magic-sparkles text-cyan-400"></i>
+                <span>探索 CT 數位專案矩陣 · 即點即用</span>
+            </div>
+            
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-display font-black tracking-tight mb-4 cosmic-title-gradient">
+                探索無限可能，啟動智慧應用
+            </h1>
+            
+            <p class="text-base sm:text-lg text-slate-300 leading-relaxed max-w-2xl mx-auto">
+                歡迎蒞臨 <strong class="text-indigo-300 font-semibold">CT宇宙</strong>！集合個人品牌履歷、AI 英語學習、本地離線資安、策略遊戲、發票對獎與健康管理於一體的高效入口。
+            </p>
+
+            <!-- Search Bar & Instant Filter -->
+            <div class="mt-8 relative max-w-xl mx-auto">
+                <div class="relative flex items-center">
+                    <i class="fa-solid fa-magnifying-glass absolute left-4 text-slate-400 text-base"></i>
+                    <input 
+                        type="text" 
+                        id="search-input"
+                        placeholder="搜尋程式名稱、標籤、功能關鍵字（例如：履歷、英語、發票、喝水、資安）..." 
+                        class="w-full pl-12 pr-10 py-3.5 rounded-2xl bg-slate-900/80 border border-slate-700/80 focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 text-sm text-slate-100 placeholder-slate-400 outline-none transition-all shadow-xl backdrop-blur-md"
+                    >
+                    <button id="clear-search" class="absolute right-3.5 text-slate-400 hover:text-white hidden p-1">
+                        <i class="fa-solid fa-xmark text-sm"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Category Filter Tabs -->
+            <div class="mt-6 flex flex-wrap items-center justify-center gap-2" id="category-filter-container">
+                <button data-cat="all" class="cat-btn active px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 bg-indigo-600 text-white shadow-lg shadow-indigo-600/30">
+                    <i class="fa-solid fa-border-all mr-1.5"></i>全部應用 (6)
+                </button>
+                <button data-cat="career" class="cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white border border-slate-700/60">
+                    <i class="fa-solid fa-user-tie mr-1.5 text-sky-400"></i>專業履歷
+                </button>
+                <button data-cat="learning" class="cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white border border-slate-700/60">
+                    <i class="fa-solid fa-language mr-1.5 text-indigo-400"></i>語言學習
+                </button>
+                <button data-cat="security" class="cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white border border-slate-700/60">
+                    <i class="fa-solid fa-shield-halved mr-1.5 text-emerald-400"></i>資安工具
+                </button>
+                <button data-cat="gaming" class="cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white border border-slate-700/60">
+                    <i class="fa-solid fa-gamepad mr-1.5 text-rose-400"></i>休閒遊戲
+                </button>
+                <button data-cat="finance" class="cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white border border-slate-700/60">
+                    <i class="fa-solid fa-receipt mr-1.5 text-amber-400"></i>生活理財
+                </button>
+                <button data-cat="health" class="cat-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all duration-200 bg-slate-800/80 hover:bg-slate-700/80 text-slate-300 hover:text-white border border-slate-700/60">
+                    <i class="fa-solid fa-droplet mr-1.5 text-cyan-400"></i>健康生活
+                </button>
+            </div>
+        </section>
+
+        <!-- Project Cards Grid (RWD: 1 col mobile, 2 col tablet, 3 col desktop) -->
+        <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8" id="cards-grid">
+
+            <!-- Card 1: aboutMe.html -->
+            <article class="project-card glass-card rounded-3xl p-6 sm:p-7 flex flex-col justify-between relative overflow-hidden group" data-category="career" data-keywords="陳柏瑋 po-wei chen 履歷 經營管理 數據分析 專案成果 aboutme about me">
+                <!-- Top Accent Line -->
+                <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-sky-400 via-blue-500 to-indigo-500 opacity-80 group-hover:opacity-100 transition-opacity"></div>
+                
+                <div>
+                    <!-- Header Badges -->
+                    <div class="flex items-center justify-between gap-2 mb-4">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-sky-500/15 border border-sky-500/30 text-sky-400">
+                            <i class="fa-solid fa-user-tie text-xs"></i> 專業履歷
+                        </span>
+                        <span class="text-[11px] font-mono text-slate-400 bg-slate-800/80 px-2.5 py-0.5 rounded-lg border border-slate-700/60">
+                            aboutMe.html
+                        </span>
+                    </div>
+
+                    <!-- Icon & Title -->
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center text-white text-2xl shadow-lg shadow-sky-500/30 flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-id-card-clip"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-white group-hover:text-sky-300 transition-colors leading-tight">
+                                陳柏瑋 Po-Wei Chen
+                            </h2>
+                            <p class="text-xs font-medium text-sky-400/90 mt-0.5">
+                                跨產業經營管理與數據分析專家
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <p class="text-sm text-slate-300 leading-relaxed mb-4">
+                        全方位個人品牌履歷，深入展示經營管理實務、跨產業數據分析專案與豐碩的職涯發展成果。
+                    </p>
+
+                    <!-- Feature Highlights -->
+                    <div class="space-y-1.5 mb-6 text-xs text-slate-300 bg-slate-900/40 p-3.5 rounded-xl border border-slate-800/80">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-chart-pie text-sky-400 w-4 text-center"></i>
+                            <span>經營管理與跨領域數據分析實績</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-briefcase text-sky-400 w-4 text-center"></i>
+                            <span>完整職涯里程碑與精選專案彙整</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-award text-sky-400 w-4 text-center"></i>
+                            <span>現代化互動式排版與亮點展示</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Actions -->
+                <div class="pt-4 border-t border-slate-800/80 flex items-center gap-3">
+                    <a href="aboutMe.html" class="btn-glow flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-semibold text-sm bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white shadow-lg shadow-sky-600/30 hover:shadow-sky-500/50 transition-all">
+                        <span>開啟程式</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                    </a>
+                    <button onclick="openPreview('aboutMe')" class="p-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors" title="快速預覽">
+                        <i class="fa-solid fa-circle-info text-sm"></i>
+                    </button>
+                </div>
+            </article>
+
+            <!-- Card 2: dailyEnglish.html -->
+            <article class="project-card glass-card rounded-3xl p-6 sm:p-7 flex flex-col justify-between relative overflow-hidden group" data-category="learning" data-keywords="每日一句學英語 daily english ai 英語 英文 語言學習 語音發音 聽力 dailyenglish">
+                <!-- Top Accent Line -->
+                <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-indigo-400 via-violet-500 to-purple-500 opacity-80 group-hover:opacity-100 transition-opacity"></div>
+                
+                <div>
+                    <!-- Header Badges -->
+                    <div class="flex items-center justify-between gap-2 mb-4">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/15 border border-indigo-500/30 text-indigo-400">
+                            <i class="fa-solid fa-language text-xs"></i> 語言學習
+                        </span>
+                        <span class="text-[11px] font-mono text-slate-400 bg-slate-800/80 px-2.5 py-0.5 rounded-lg border border-slate-700/60">
+                            dailyEnglish.html
+                        </span>
+                    </div>
+
+                    <!-- Icon & Title -->
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-2xl shadow-lg shadow-indigo-500/30 flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-headphones-simple"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-white group-hover:text-indigo-300 transition-colors leading-tight">
+                                每日一句學英語
+                            </h2>
+                            <p class="text-xs font-medium text-indigo-400/90 mt-0.5">
+                                Daily English Global AI Platform
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <p class="text-sm text-slate-300 leading-relaxed mb-4">
+                        每日精選實用道地英語，結合 AI 擬真多國發音示範、情境生活對話與語法單字深度解析。
+                    </p>
+
+                    <!-- Feature Highlights -->
+                    <div class="space-y-1.5 mb-6 text-xs text-slate-300 bg-slate-900/40 p-3.5 rounded-xl border border-slate-800/80">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-microphone-lines text-indigo-400 w-4 text-center"></i>
+                            <span>AI 語音多重語系與自然口音發音示範</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-book-open text-indigo-400 w-4 text-center"></i>
+                            <span>每日精選實用語句、核心文法與單字</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-comments text-indigo-400 w-4 text-center"></i>
+                            <span>沉浸式對話情境練習與流暢互動</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Actions -->
+                <div class="pt-4 border-t border-slate-800/80 flex items-center gap-3">
+                    <a href="dailyEnglish.html" class="btn-glow flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-semibold text-sm bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white shadow-lg shadow-indigo-600/30 hover:shadow-indigo-500/50 transition-all">
+                        <span>開啟程式</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                    </a>
+                    <button onclick="openPreview('dailyEnglish')" class="p-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors" title="快速預覽">
+                        <i class="fa-solid fa-circle-info text-sm"></i>
+                    </button>
+                </div>
+            </article>
+
+            <!-- Card 3: delTool.html -->
+            <article class="project-card glass-card rounded-3xl p-6 sm:p-7 flex flex-col justify-between relative overflow-hidden group" data-category="security" data-keywords="個資假名化 規則自訂 去識別化 資安 隱私 excel csv deltool del tool 遮蔽">
+                <!-- Top Accent Line -->
+                <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-emerald-400 via-teal-500 to-cyan-500 opacity-80 group-hover:opacity-100 transition-opacity"></div>
+                
+                <div>
+                    <!-- Header Badges -->
+                    <div class="flex items-center justify-between gap-2 mb-4">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/15 border border-emerald-500/30 text-emerald-400">
+                            <i class="fa-solid fa-shield-halved text-xs"></i> 資安工具
+                        </span>
+                        <span class="text-[11px] font-mono text-slate-400 bg-slate-800/80 px-2.5 py-0.5 rounded-lg border border-slate-700/60">
+                            delTool.html
+                        </span>
+                    </div>
+
+                    <!-- Icon & Title -->
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white text-2xl shadow-lg shadow-emerald-500/30 flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-user-shield"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-white group-hover:text-emerald-300 transition-colors leading-tight">
+                                本地個資假名化工具
+                            </h2>
+                            <p class="text-xs font-medium text-emerald-400/90 mt-0.5">
+                                Local Data Anonymization Tool
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <p class="text-sm text-slate-300 leading-relaxed mb-4">
+                        100% 瀏覽器本地端離線運算，支援 Excel / CSV 檔案批次去識別化、自訂遮蔽與假名化規則。
+                    </p>
+
+                    <!-- Feature Highlights -->
+                    <div class="space-y-1.5 mb-6 text-xs text-slate-300 bg-slate-900/40 p-3.5 rounded-xl border border-slate-800/80">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-lock text-emerald-400 w-4 text-center"></i>
+                            <span>100% 離線本地運算，資料不上傳零洩漏</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-file-excel text-emerald-400 w-4 text-center"></i>
+                            <span>支援 Excel / CSV 結構化資料批次處理</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-sliders text-emerald-400 w-4 text-center"></i>
+                            <span>靈活自訂去識別化演算法與替換規則</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Actions -->
+                <div class="pt-4 border-t border-slate-800/80 flex items-center gap-3">
+                    <a href="delTool.html" class="btn-glow flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-semibold text-sm bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white shadow-lg shadow-emerald-600/30 hover:shadow-emerald-500/50 transition-all">
+                        <span>開啟程式</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                    </a>
+                    <button onclick="openPreview('delTool')" class="p-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors" title="快速預覽">
+                        <i class="fa-solid fa-circle-info text-sm"></i>
+                    </button>
+                </div>
+            </article>
+
+            <!-- Card 4: gameWar.html -->
+            <article class="project-card glass-card rounded-3xl p-6 sm:p-7 flex flex-col justify-between relative overflow-hidden group" data-category="gaming" data-keywords="政商大戰 politicians vs tycoons 遊戲 策略 卡牌 街機 gamewar game war">
+                <!-- Top Accent Line -->
+                <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-rose-500 via-red-500 to-amber-500 opacity-80 group-hover:opacity-100 transition-opacity"></div>
+                
+                <div>
+                    <!-- Header Badges -->
+                    <div class="flex items-center justify-between gap-2 mb-4">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/15 border border-rose-500/30 text-rose-400">
+                            <i class="fa-solid fa-gamepad text-xs"></i> 休閒遊戲
+                        </span>
+                        <span class="text-[11px] font-mono text-slate-400 bg-slate-800/80 px-2.5 py-0.5 rounded-lg border border-slate-700/60">
+                            gameWar.html
+                        </span>
+                    </div>
+
+                    <!-- Icon & Title -->
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-rose-500 to-amber-600 flex items-center justify-center text-white text-2xl shadow-lg shadow-rose-500/30 flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-chess-knight"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-white group-hover:text-rose-300 transition-colors leading-tight">
+                                政商大戰
+                            </h2>
+                            <p class="text-xs font-medium text-rose-400/90 mt-0.5">
+                                Politicians vs Tycoons Battle
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <p class="text-sm text-slate-300 leading-relaxed mb-4">
+                        趣味橫生的政商策略卡牌對決小遊戲，具備豐富角色技能、連攜機制與炫麗霓虹街機特效。
+                    </p>
+
+                    <!-- Feature Highlights -->
+                    <div class="space-y-1.5 mb-6 text-xs text-slate-300 bg-slate-900/40 p-3.5 rounded-xl border border-slate-800/80">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-bolt text-rose-400 w-4 text-center"></i>
+                            <span>政客 vs 富豪雙陣營策略深度對抗</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-layer-group text-rose-400 w-4 text-center"></i>
+                            <span>特色卡牌組合、技能連擊與資源調配</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-wand-magic-sparkles text-rose-400 w-4 text-center"></i>
+                            <span>復古霓虹燈光、生動音效與打擊感反饋</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Actions -->
+                <div class="pt-4 border-t border-slate-800/80 flex items-center gap-3">
+                    <a href="gameWar.html" class="btn-glow flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-semibold text-sm bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-400 hover:to-red-500 text-white shadow-lg shadow-rose-600/30 hover:shadow-rose-500/50 transition-all">
+                        <span>開啟程式</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                    </a>
+                    <button onclick="openPreview('gameWar')" class="p-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors" title="快速預覽">
+                        <i class="fa-solid fa-circle-info text-sm"></i>
+                    </button>
+                </div>
+            </article>
+
+            <!-- Card 5: moneygogo.html -->
+            <article class="project-card glass-card rounded-3xl p-6 sm:p-7 flex flex-col justify-between relative overflow-hidden group" data-category="finance" data-keywords="喵喵發財 統一發票 對獎機 發票對獎 qr code 掃描 貓咪 moneygogo money gogo">
+                <!-- Top Accent Line -->
+                <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-amber-400 via-orange-500 to-yellow-500 opacity-80 group-hover:opacity-100 transition-opacity"></div>
+                
+                <div>
+                    <!-- Header Badges -->
+                    <div class="flex items-center justify-between gap-2 mb-4">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/15 border border-amber-500/30 text-amber-400">
+                            <i class="fa-solid fa-receipt text-xs"></i> 生活理財
+                        </span>
+                        <span class="text-[11px] font-mono text-slate-400 bg-slate-800/80 px-2.5 py-0.5 rounded-lg border border-slate-700/60">
+                            moneygogo.html
+                        </span>
+                    </div>
+
+                    <!-- Icon & Title -->
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white text-2xl shadow-lg shadow-amber-500/30 flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-cat"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-white group-hover:text-amber-300 transition-colors leading-tight">
+                                喵喵發財 對獎機
+                            </h2>
+                            <p class="text-xs font-medium text-amber-400/90 mt-0.5">
+                                115年最新統一發票對獎神器
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <p class="text-sm text-slate-300 leading-relaxed mb-4">
+                        可愛療癒的貓咪主題對獎神器，支援相機 QR Code 極速掃描對獎、歷史紀錄與獎金自動試算。
+                    </p>
+
+                    <!-- Feature Highlights -->
+                    <div class="space-y-1.5 mb-6 text-xs text-slate-300 bg-slate-900/40 p-3.5 rounded-xl border border-slate-800/80">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-qrcode text-amber-400 w-4 text-center"></i>
+                            <span>相機 QR Code 智慧極速辨識與秒速對獎</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-coins text-amber-400 w-4 text-center"></i>
+                            <span>115年最新期數號碼即時比對與中獎試算</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-paw text-amber-400 w-4 text-center"></i>
+                            <span>超萌貓咪互動音效與可愛療癒界面</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Actions -->
+                <div class="pt-4 border-t border-slate-800/80 flex items-center gap-3">
+                    <a href="moneygogo.html" class="btn-glow flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-semibold text-sm bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white shadow-lg shadow-amber-600/30 hover:shadow-amber-500/50 transition-all">
+                        <span>開啟程式</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                    </a>
+                    <button onclick="openPreview('moneygogo')" class="p-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors" title="快速預覽">
+                        <i class="fa-solid fa-circle-info text-sm"></i>
+                    </button>
+                </div>
+            </article>
+
+            <!-- Card 6: water.html -->
+            <article class="project-card glass-card rounded-3xl p-6 sm:p-7 flex flex-col justify-between relative overflow-hidden group" data-category="health" data-keywords="aquaflow 喝水 喝開水 飲水紀錄 水位波浪 健康管理 統計圖表 water">
+                <!-- Top Accent Line -->
+                <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-cyan-400 via-teal-400 to-emerald-400 opacity-80 group-hover:opacity-100 transition-opacity"></div>
+                
+                <div>
+                    <!-- Header Badges -->
+                    <div class="flex items-center justify-between gap-2 mb-4">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-cyan-500/15 border border-cyan-500/30 text-cyan-400">
+                            <i class="fa-solid fa-droplet text-xs"></i> 健康生活
+                        </span>
+                        <span class="text-[11px] font-mono text-slate-400 bg-slate-800/80 px-2.5 py-0.5 rounded-lg border border-slate-700/60">
+                            water.html
+                        </span>
+                    </div>
+
+                    <!-- Icon & Title -->
+                    <div class="flex items-start gap-4 mb-4">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-400 to-teal-600 flex items-center justify-center text-white text-2xl shadow-lg shadow-cyan-500/30 flex-shrink-0 group-hover:scale-110 transition-transform duration-300">
+                            <i class="fa-solid fa-glass-water"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-white group-hover:text-cyan-300 transition-colors leading-tight">
+                                AquaFlow 喝水紀錄
+                            </h2>
+                            <p class="text-xs font-medium text-cyan-400/90 mt-0.5">
+                                每日喝開水紀錄與健康統計
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <p class="text-sm text-slate-300 leading-relaxed mb-4">
+                        活力運動風每日補水追蹤系統，配備動態水位波浪視覺、客製化目標計算與多維度健康分析圖表。
+                    </p>
+
+                    <!-- Feature Highlights -->
+                    <div class="space-y-1.5 mb-6 text-xs text-slate-300 bg-slate-900/40 p-3.5 rounded-xl border border-slate-800/80">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-water text-cyan-400 w-4 text-center"></i>
+                            <span>擬真動態水位波浪與即時達成率反饋</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-calculator text-cyan-400 w-4 text-center"></i>
+                            <span>依體重與活動量精準試算個人化飲水目標</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-chart-simple text-cyan-400 w-4 text-center"></i>
+                            <span>Chart.js 趨勢統計圖表與飲水歷史紀錄</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card Actions -->
+                <div class="pt-4 border-t border-slate-800/80 flex items-center gap-3">
+                    <a href="water.html" class="btn-glow flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl font-semibold text-sm bg-gradient-to-r from-cyan-500 to-teal-600 hover:from-cyan-400 hover:to-teal-500 text-white shadow-lg shadow-cyan-600/30 hover:shadow-cyan-500/50 transition-all">
+                        <span>開啟程式</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                    </a>
+                    <button onclick="openPreview('water')" class="p-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 transition-colors" title="快速預覽">
+                        <i class="fa-solid fa-circle-info text-sm"></i>
+                    </button>
+                </div>
+            </article>
+
+        </section>
+
+        <!-- No Results Fallback (Hidden by default) -->
+        <div id="no-results" class="hidden text-center py-16 px-4">
+            <div class="w-16 h-16 rounded-full bg-slate-800/80 border border-slate-700 flex items-center justify-center mx-auto text-2xl text-slate-400 mb-4">
+                <i class="fa-solid fa-ghost"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-1">找不到相關程式</h3>
+            <p class="text-sm text-slate-400 mb-4">請嘗試不同的關鍵字或重設分類標籤。</p>
+            <button onclick="resetSearchAndFilter()" class="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-md transition-colors">
+                重設篩選條件
+            </button>
+        </div>
+
+    </main>
+
+    <!-- Quick Preview Modal -->
+    <div id="preview-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="glass-panel w-full max-w-lg rounded-3xl p-6 sm:p-8 border border-slate-700/80 shadow-2xl transform scale-95 transition-transform duration-300 relative" id="modal-content-box">
+            <!-- Close Button -->
+            <button onclick="closePreview()" class="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white flex items-center justify-center transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <!-- Modal Header -->
+            <div class="flex items-center gap-4 mb-5">
+                <div id="modal-icon-box" class="w-14 h-14 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg"></div>
+                <div>
+                    <span id="modal-badge" class="text-xs px-2.5 py-0.5 rounded-full font-semibold"></span>
+                    <h3 id="modal-title" class="text-2xl font-bold text-white mt-1"></h3>
+                    <p id="modal-subtitle" class="text-xs text-slate-400"></p>
+                </div>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="space-y-4 text-sm text-slate-300 mb-6">
+                <p id="modal-desc" class="leading-relaxed bg-slate-900/50 p-3.5 rounded-xl border border-slate-800/80"></p>
+                <div>
+                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">重點特色：</h4>
+                    <ul id="modal-highlights" class="space-y-2 text-xs"></ul>
+                </div>
+                <div class="flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-slate-800">
+                    <span>檔案名稱：<code id="modal-filename" class="font-mono text-indigo-300"></code></span>
+                    <span>狀態：<span class="text-emerald-400 font-medium">● 就緒可執行</span></span>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="flex items-center gap-3">
+                <button onclick="closePreview()" class="flex-1 py-3 rounded-xl font-semibold text-sm bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors">
+                    關閉
+                </button>
+                <a id="modal-launch-btn" href="#" class="flex-1 btn-glow flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm text-white shadow-lg transition-all">
+                    <span>立刻開啟</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modern Footer -->
+    <footer class="mt-auto border-t border-slate-800/80 glass-panel py-8 z-10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-slate-400">
+            <div class="flex items-center gap-2">
+                <div class="w-6 h-6 rounded-lg bg-gradient-to-tr from-indigo-500 to-cyan-400 flex items-center justify-center text-[11px] font-bold text-white">
+                    CT
+                </div>
+                <span>© 2026 <strong>CT宇宙 (CT Universe)</strong> · 創新數位應用統合門戶</span>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <span class="flex items-center gap-1.5 text-slate-400">
+                    <i class="fa-solid fa-code text-indigo-400"></i> Pure HTML5 / Modern CSS / Vanilla JS
+                </span>
+                <span class="hidden sm:inline">|</span>
+                <span class="flex items-center gap-1.5 text-slate-400">
+                    <i class="fa-solid fa-bolt text-amber-400"></i> 100% 離線即開即用
+                </span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Interactive Scripts -->
+    <script>
+        // App Database for Quick Preview
+        const appsData = {
+            aboutMe: {
+                title: '陳柏瑋 Po-Wei Chen',
+                subtitle: '跨產業經營管理與數據分析專家',
+                category: '專業履歷',
+                badgeClass: 'bg-sky-500/20 text-sky-400 border border-sky-500/30',
+                iconClass: 'fa-solid fa-id-card-clip',
+                iconBg: 'from-sky-500 to-blue-600 shadow-sky-500/30',
+                btnBg: 'bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 shadow-sky-600/30',
+                filename: 'aboutMe.html',
+                desc: '全方位展示個人職涯背景、跨產業經營管理策略、商業智慧與數據分析專案實績，提供完整的專業經歷與技術棧呈現。',
+                highlights: [
+                    '📊 跨領域商業數據洞察與專案管理成效',
+                    '🚀 整合多元業務流程優化與策略規劃實務',
+                    '💼 響應式互動簡歷與成就里程碑'
+                ]
+            },
+            dailyEnglish: {
+                title: '每日一句學英語',
+                subtitle: 'Daily English Global AI Platform',
+                category: '語言學習',
+                badgeClass: 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/30',
+                iconClass: 'fa-solid fa-headphones-simple',
+                iconBg: 'from-indigo-500 to-purple-600 shadow-indigo-500/30',
+                btnBg: 'bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 shadow-indigo-600/30',
+                filename: 'dailyEnglish.html',
+                desc: '每日精選地道日常與商務實用金句，搭配自然流暢的 AI 擬真多國發音、詳細文法解說、單字拆解與沉浸式例句情境練習。',
+                highlights: [
+                    '🎙️ AI 智慧多重發音引擎，提供純正道地口音示範',
+                    '📖 每日更新名言語句、文法重點與核心單字詳解',
+                    '🧠 互動式情境模擬練習，全面提升聽力與口說表達'
+                ]
+            },
+            delTool: {
+                title: '本地個資假名化工具',
+                subtitle: 'Local Data Anonymization Tool',
+                category: '資安工具',
+                badgeClass: 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30',
+                iconClass: 'fa-solid fa-user-shield',
+                iconBg: 'from-emerald-500 to-teal-600 shadow-emerald-500/30',
+                btnBg: 'bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 shadow-emerald-600/30',
+                filename: 'delTool.html',
+                desc: '專為個資安全與隱私防護打造的工具，100% 在瀏覽器端本地離線運算，支援 Excel 與 CSV 檔案去識別化、自訂遮蔽與假名化規則。',
+                highlights: [
+                    '🛡️ 100% 離線本地運算，資料絕不上傳伺服器，安全零洩漏',
+                    '📄 支援大量 Excel / CSV 結構化資料極速批次去識別化',
+                    '⚙️ 靈活自訂姓名、身分證、電話、地址與自訂欄位遮蔽規則'
+                ]
+            },
+            gameWar: {
+                title: '政商大戰',
+                subtitle: 'Politicians vs Tycoons Battle',
+                category: '休閒遊戲',
+                badgeClass: 'bg-rose-500/20 text-rose-400 border border-rose-500/30',
+                iconClass: 'fa-solid fa-chess-knight',
+                iconBg: 'from-rose-500 to-amber-600 shadow-rose-500/30',
+                btnBg: 'bg-gradient-to-r from-rose-500 to-red-600 hover:from-rose-400 hover:to-red-500 shadow-rose-600/30',
+                filename: 'gameWar.html',
+                desc: '充滿黑色幽默與策略思考的卡牌對抗小遊戲，玩家可靈活調配資源、發動政客與富豪專屬技能進行對決，享受霓虹街機風格的打擊快感。',
+                highlights: [
+                    '⚔️ 政客 vs 富豪雙陣營對立機制，策略變化多端',
+                    '🃏 多樣化卡牌技能連鎖與資源調配機制',
+                    '⚡ 炫麗復古霓虹視覺、震撼音效與生動打擊動畫'
+                ]
+            },
+            moneygogo: {
+                title: '喵喵發財 對獎機',
+                subtitle: '115年最新統一發票對獎神器',
+                category: '生活理財',
+                badgeClass: 'bg-amber-500/20 text-amber-400 border border-amber-500/30',
+                iconClass: 'fa-solid fa-cat',
+                iconBg: 'from-amber-400 to-orange-500 shadow-amber-500/30',
+                btnBg: 'bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 shadow-amber-600/30',
+                filename: 'moneygogo.html',
+                desc: '療癒可愛的貓咪主題發票對獎神器，支援手機相機 QR Code 極速智慧對獎、歷史掃描清單紀錄與中獎獎金即時統計。',
+                highlights: [
+                    '📷 相機掃描 QR Code 即時自動辨識，秒速得知是否中獎',
+                    '💰 支援 115 年最新期數中獎號碼，提供獎金試算與明細',
+                    '🐱 萌趣貓咪音效與互動式視覺，讓對發票充滿樂趣'
+                ]
+            },
+            water: {
+                title: 'AquaFlow 喝水紀錄',
+                subtitle: '每日喝開水紀錄與健康統計',
+                category: '健康生活',
+                badgeClass: 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30',
+                iconClass: 'fa-solid fa-glass-water',
+                iconBg: 'from-cyan-400 to-teal-600 shadow-cyan-500/30',
+                btnBg: 'bg-gradient-to-r from-cyan-500 to-teal-600 hover:from-cyan-400 hover:to-teal-500 shadow-cyan-600/30',
+                filename: 'water.html',
+                desc: '活力運動風格的每日飲水量追蹤系統，具備擬真動態水位波浪視覺、個人化健康補水目標試算與 Chart.js 趨勢統計圖表。',
+                highlights: [
+                    '🌊 動態波浪水位即時視覺化，清晰呈現每日達成百分比',
+                    '⏱️ 快速記錄單次飲水量，支援定時補水提醒功能',
+                    '📈 直覺豐富的歷史趨勢統計圖表，培養良好飲水習慣'
+                ]
+            }
+        };
+
+        // Starfield Canvas Background Animation
+        (function initSpaceCanvas() {
+            const canvas = document.getElementById('space-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            let stars = [];
+            let width, height;
+            let mouseX = 0, mouseY = 0;
+
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+                createStars();
+            }
+
+            function createStars() {
+                stars = [];
+                const count = Math.floor((width * height) / 9000);
+                for (let i = 0; i < count; i++) {
+                    stars.push({
+                        x: Math.random() * width,
+                        y: Math.random() * height,
+                        radius: Math.random() * 1.5 + 0.3,
+                        alpha: Math.random() * 0.8 + 0.2,
+                        speedX: (Math.random() - 0.5) * 0.2,
+                        speedY: (Math.random() - 0.5) * 0.2,
+                        pulse: Math.random() * 0.05
+                    });
+                }
+            }
+
+            window.addEventListener('resize', resize);
+            window.addEventListener('mousemove', (e) => {
+                mouseX = (e.clientX - width / 2) * 0.0005;
+                mouseY = (e.clientY - height / 2) * 0.0005;
+            });
+
+            resize();
+
+            function draw() {
+                ctx.clearRect(0, 0, width, height);
+                const isDark = document.documentElement.classList.contains('dark');
+                
+                ctx.fillStyle = isDark ? '#ffffff' : '#334155';
+                
+                stars.forEach(star => {
+                    star.x += star.speedX + mouseX;
+                    star.y += star.speedY + mouseY;
+
+                    if (star.x < 0) star.x = width;
+                    if (star.x > width) star.x = 0;
+                    if (star.y < 0) star.y = height;
+                    if (star.y > height) star.y = 0;
+
+                    star.alpha += Math.sin(Date.now() * 0.002 + star.x) * 0.005;
+                    const clampedAlpha = Math.max(0.1, Math.min(0.9, star.alpha));
+
+                    ctx.beginPath();
+                    ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                    ctx.globalAlpha = isDark ? clampedAlpha : clampedAlpha * 0.4;
+                    ctx.fill();
+                });
+
+                requestAnimationFrame(draw);
+            }
+
+            draw();
+        })();
+
+        // Live Clock
+        function updateLiveTime() {
+            const timeEl = document.getElementById('live-time');
+            if (timeEl) {
+                const now = new Date();
+                timeEl.textContent = now.toLocaleTimeString('zh-TW', { hour12: false });
+            }
+        }
+        setInterval(updateLiveTime, 1000);
+        updateLiveTime();
+
+        // Search & Category Filtering
+        const searchInput = document.getElementById('search-input');
+        const clearSearchBtn = document.getElementById('clear-search');
+        const categoryButtons = document.querySelectorAll('.cat-btn');
+        const cards = document.querySelectorAll('.project-card');
+        const noResults = document.getElementById('no-results');
+        let currentCategory = 'all';
+
+        function filterCards() {
+            const query = searchInput.value.trim().toLowerCase();
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const cardCat = card.getAttribute('data-category');
+                const cardKeywords = (card.getAttribute('data-keywords') || '').toLowerCase();
+                const cardText = card.textContent.toLowerCase();
+
+                const matchesCat = (currentCategory === 'all' || cardCat === currentCategory);
+                const matchesQuery = !query || cardKeywords.includes(query) || cardText.includes(query);
+
+                if (matchesCat && matchesQuery) {
+                    card.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            if (visibleCount === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
+
+            if (query) {
+                clearSearchBtn.classList.remove('hidden');
+            } else {
+                clearSearchBtn.classList.add('hidden');
+            }
+        }
+
+        searchInput.addEventListener('input', filterCards);
+
+        clearSearchBtn.addEventListener('click', () => {
+            searchInput.value = '';
+            filterCards();
+            searchInput.focus();
+        });
+
+        categoryButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryButtons.forEach(b => {
+                    b.classList.remove('active', 'bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-600/30');
+                    b.classList.add('bg-slate-800/80', 'text-slate-300');
+                });
+
+                btn.classList.add('active', 'bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-600/30');
+                btn.classList.remove('bg-slate-800/80', 'text-slate-300');
+
+                currentCategory = btn.getAttribute('data-cat');
+                filterCards();
+            });
+        });
+
+        function resetSearchAndFilter() {
+            searchInput.value = '';
+            currentCategory = 'all';
+            categoryButtons.forEach(b => {
+                if (b.getAttribute('data-cat') === 'all') {
+                    b.classList.add('active', 'bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-600/30');
+                    b.classList.remove('bg-slate-800/80', 'text-slate-300');
+                } else {
+                    b.classList.remove('active', 'bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-600/30');
+                    b.classList.add('bg-slate-800/80', 'text-slate-300');
+                }
+            });
+            filterCards();
+        }
+
+        // Preview Modal Logic
+        const modal = document.getElementById('preview-modal');
+        const modalContentBox = document.getElementById('modal-content-box');
+        const modalTitle = document.getElementById('modal-title');
+        const modalSubtitle = document.getElementById('modal-subtitle');
+        const modalBadge = document.getElementById('modal-badge');
+        const modalIconBox = document.getElementById('modal-icon-box');
+        const modalDesc = document.getElementById('modal-desc');
+        const modalHighlights = document.getElementById('modal-highlights');
+        const modalFilename = document.getElementById('modal-filename');
+        const modalLaunchBtn = document.getElementById('modal-launch-btn');
+
+        function openPreview(appKey) {
+            const data = appsData[appKey];
+            if (!data) return;
+
+            modalTitle.textContent = data.title;
+            modalSubtitle.textContent = data.subtitle;
+            modalBadge.className = `text-xs px-2.5 py-0.5 rounded-full font-semibold ${data.badgeClass}`;
+            modalBadge.textContent = data.category;
+            
+            modalIconBox.className = `w-14 h-14 rounded-2xl flex items-center justify-center text-white text-2xl shadow-lg bg-gradient-to-br ${data.iconBg}`;
+            modalIconBox.innerHTML = `<i class="${data.iconClass}"></i>`;
+
+            modalDesc.textContent = data.desc;
+            modalFilename.textContent = data.filename;
+            
+            modalHighlights.innerHTML = data.highlights.map(item => `
+                <li class="flex items-center gap-2 text-slate-300">
+                    <i class="fa-solid fa-check text-indigo-400 text-xs"></i>
+                    <span>${item}</span>
+                </li>
+            `).join('');
+
+            modalLaunchBtn.href = data.filename;
+            modalLaunchBtn.className = `flex-1 btn-glow flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm text-white shadow-lg transition-all ${data.btnBg}`;
+
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            modalContentBox.classList.remove('scale-95');
+            modalContentBox.classList.add('scale-100');
+        }
+
+        function closePreview() {
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            modalContentBox.classList.remove('scale-100');
+            modalContentBox.classList.add('scale-95');
+        }
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closePreview();
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closePreview();
+        });
+
+        // Theme Toggle Logic
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        themeToggleBtn.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('ct-theme', isDark ? 'dark' : 'light');
+        });
+
+        // Load Saved Theme
+        if (localStorage.getItem('ct-theme') === 'light') {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+</body>
+</html>

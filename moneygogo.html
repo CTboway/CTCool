@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>喵喵發財 - 115年最新統一發票對獎機</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- HTML5 QR Code Scanner Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Zen Maru Gothic', -apple-system, BlinkMacSystemFont, sans-serif;
+            touch-action: manipulation;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(2deg); }
+        }
+        @keyframes pulse-grow {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        @keyframes pop-in {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-float { animation: float 3.5s ease-in-out infinite; }
+        .animate-pop-in { animation: pop-in 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .bg-pattern {
+            background-color: #fefce8;
+            background-image: radial-gradient(#fde047 1.5px, transparent 1.5px), radial-gradient(#fde047 1.5px, #fefce8 1.5px);
+            background-size: 60px 60px;
+            background-position: 0 0, 30px 30px;
+        }
+    </style>
+</head>
+<body class="bg-pattern text-slate-800 min-h-screen flex flex-col justify-between select-none pb-8">
+
+    <!-- Header / Navbar -->
+    <header class="w-full bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 text-slate-900 shadow-md py-3 px-4 sticky top-0 z-30 border-b-4 border-amber-600">
+        <div class="max-w-md mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-10 h-10 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-inner border-2 border-amber-600 animate-bounce">
+                    🐱
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-black tracking-tight flex items-center gap-2 text-amber-950">
+                        喵喵對獎機 <span class="text-[10px] bg-red-600 text-white px-2 py-0.5 rounded-full font-bold uppercase shadow">115年最新版</span>
+                    </h1>
+                    <p class="text-xs font-bold text-amber-900">統一發票對獎神器 ‧ 億萬富翁就是你！</p>
+                </div>
+            </div>
+            <!-- Audio Toggle & Prize Table Button -->
+            <div class="flex items-center gap-1.5">
+                <button id="audio-toggle-btn" class="w-9 h-9 rounded-xl bg-amber-100 hover:bg-white border-2 border-amber-600 text-amber-900 font-bold flex items-center justify-center shadow transition-all active:scale-95" title="音效設定">
+                    <i id="audio-icon" class="fa-solid fa-volume-high"></i>
+                </button>
+                <button id="view-prizes-btn" class="w-9 h-9 rounded-xl bg-amber-100 hover:bg-white border-2 border-amber-600 text-amber-900 font-bold flex items-center justify-center shadow transition-all active:scale-95" title="對獎號碼對照表">
+                    <i class="fa-solid fa-list"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-md mx-auto w-full px-4 pt-3 flex-1 flex flex-col gap-3">
+
+        <!-- Card 1: Period Selector & Mode Toggle -->
+        <div class="bg-white rounded-3xl p-4 shadow-lg border-2 border-amber-300 flex flex-col gap-3">
+            <div class="flex items-center justify-between gap-2">
+                <label for="period-select" class="text-xs md:text-sm font-black text-slate-700 flex items-center gap-1.5">
+                    <i class="fa-regular fa-calendar-days text-amber-500 text-base"></i> 開獎期別:
+                </label>
+                <select id="period-select" class="bg-amber-50 border-2 border-amber-300 text-amber-900 font-extrabold rounded-xl px-3 py-1.5 text-xs md:text-sm outline-none focus:ring-2 focus:ring-amber-400 cursor-pointer shadow-sm">
+                    <option value="115-0506">115年 05-06月</option>
+                    <option value="115-0304">115年 03-04月</option>
+                    <option value="115-0102">115年 01-02月</option>
+                    <option value="114-1112">114年 11-12月</option>
+                </select>
+            </div>
+
+            <!-- Mode Switch Tabs -->
+            <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1.5 rounded-2xl font-black text-xs border border-slate-200">
+                <button id="mode-quick-btn" class="py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 bg-amber-400 text-slate-900 shadow-sm border border-amber-500">
+                    <i class="fa-solid fa-bolt"></i> 末3碼快速對獎
+                </button>
+                <button id="mode-full-btn" class="py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 text-slate-500 hover:text-slate-800">
+                    <i class="fa-solid fa-barcode"></i> 8碼完整核對
+                </button>
+            </div>
+
+            <!-- QR Code Scanner Trigger -->
+            <button id="start-qr-btn" class="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-black py-2.5 px-4 rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 border-2 border-emerald-300 active:scale-95 text-xs md:text-sm">
+                <i class="fa-solid fa-qrcode text-lg"></i>
+                <span>相機 / 照片 掃描 QR Code 對獎</span>
+            </button>
+        </div>
+
+        <!-- Mascot Interactive Area -->
+        <div id="mascot-card" class="bg-gradient-to-b from-amber-100 via-orange-50 to-white rounded-3xl p-4 shadow-lg border-2 border-amber-300 relative overflow-hidden flex flex-col items-center justify-center min-h-[140px]">
+            <!-- Dynamic Mascot Face -->
+            <div id="mascot-avatar" class="text-6xl my-1 animate-float transition-all transform duration-300">
+                🐱
+            </div>
+            
+            <!-- Dialogue Speech Bubble -->
+            <div id="speech-bubble" class="bg-white text-slate-800 font-extrabold text-xs md:text-sm px-4 py-2 rounded-2xl border-2 border-amber-400 shadow-md max-w-[90%] text-center relative z-10 transition-all">
+                請輸入發票<span id="mode-hint-text" class="text-amber-600 font-black">後 3 碼</span>，喵喵幫你算財運！
+            </div>
+
+            <!-- Status Indicator Badge -->
+            <div id="status-badge" class="mt-2 text-[11px] font-black px-3 py-1 rounded-full bg-amber-200 text-amber-900 hidden shadow-sm">
+                準備好了！
+            </div>
+        </div>
+
+        <!-- Keypad & Input Display Box -->
+        <div class="bg-white rounded-3xl p-4 shadow-lg border-2 border-amber-300 flex flex-col gap-3">
+            
+            <!-- Number Display Box -->
+            <div class="bg-slate-900 rounded-2xl p-3 border-4 border-amber-400 flex items-center justify-between shadow-inner">
+                <div class="text-amber-400 font-mono font-bold text-xs">
+                    <span id="input-mode-label">末3碼對獎:</span>
+                </div>
+                <div id="number-display" class="font-mono text-3xl md:text-4xl font-black text-amber-300 tracking-widest min-h-[40px] flex items-center justify-end">
+                    <span class="animate-pulse text-amber-500/50">___</span>
+                </div>
+            </div>
+
+            <!-- Numpad Grid -->
+            <div class="grid grid-cols-3 gap-2">
+                <button class="numpad-btn bg-amber-100 hover:bg-amber-200 text-amber-950 border-b-4 border-amber-300 rounded-2xl py-3 font-black text-2xl shadow active:translate-y-1 active:border-b-0 transition-all" data-key="1">1</button>
+                <button class="numpad-btn bg-amber-100 hover:bg-amber-200 text-amber-950 border-b-4 border-amber-300 rounded-2xl py-3 font-black text-2xl shadow active:translate-y-1 active:border-b-0 transition-all" data-key="2">2</button>
+                <button class="numpad-btn bg-amber-100 hover:bg-amber-200 text-amber-950 border-b-4 border-amber-300 rounded-2xl py-3 font-black text-2xl shadow active:translate-y-1 active:border-b-0 transition-all" data-key="3">3</button>
+                
+                <button class="numpad-btn bg-amber-100 hover:bg-amber-200 text-amber-950 border-b-4 border-amber-300 rounded-2xl py-3 font-black text-2xl shadow active:translate-y-1 active:border-b-0 transition-all" data-key="4">4</button>
+                <button class="numpad-btn bg-amber-100 hover:bg-amber-200 text-amber-950 border-b-4 border-amber-300 rounded-2xl py-3 font-black text-2xl shadow active:translate-y-1 active:border-b-0 transition-all" data-key="5">5</button>
+                <button class="numpad-btn bg-amber-100 hover:bg-amber-200 text-amber-950 border-b-4 border-amber-300 rounded-2xl py-3 font-black text-2xl shadow active:translate-y-1 active:border-b-0 transition-all" data-key="6">6</button>
+                
+                <button class="numpad-btn bg-amber-100 hover:bg-amber-200 text-amber-950 border-b-4 border-amber-300 rounded-2xl py-3 font-black text-2xl shadow active:translate-y-1 active:border-b-0 transition-all" data-key="7">7</button>
+                <button class="numpad-btn bg-amber-100 hover:bg-amber-200 text-amber-950 border-b-4 border-amber-300 rounded-2xl py-3 font-black text-2xl shadow active:translate-y-1 active:border-b-0 transition-all" data-key="8">8</button>
+                <button class="numpad-btn bg-amber-100 hover:bg-amber-200 text-amber-950 border-b-4 border-amber-300 rounded-2xl py-3 font-black text-2xl shadow active:translate-y-1 active:border-b-0 transition-all" data-key="9">9</button>
+                
+                <button id="btn-clear" class="bg-rose-100 hover:bg-rose-200 text-rose-700 border-b-4 border-rose-300 rounded-2xl py-3 font-black text-base shadow active:translate-y-1 active:border-b-0 transition-all flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-eraser"></i> 清除
+                </button>
+                <button class="numpad-btn bg-amber-100 hover:bg-amber-200 text-amber-950 border-b-4 border-amber-300 rounded-2xl py-3 font-black text-2xl shadow active:translate-y-1 active:border-b-0 transition-all" data-key="0">0</button>
+                <button id="btn-backspace" class="bg-amber-200 hover:bg-amber-300 text-amber-900 border-b-4 border-amber-400 rounded-2xl py-3 font-black text-lg shadow active:translate-y-1 active:border-b-0 transition-all flex items-center justify-center">
+                    <i class="fa-solid fa-backspace"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Summary Counter -->
+        <div class="bg-amber-50 rounded-2xl p-3 border-2 border-amber-200 flex items-center justify-around text-center">
+            <div>
+                <p class="text-[10px] font-black text-slate-500 uppercase">已對張數</p>
+                <p id="stat-total" class="text-base font-black text-slate-800">0 張</p>
+            </div>
+            <div class="h-6 w-0.5 bg-amber-200"></div>
+            <div>
+                <p class="text-[10px] font-black text-slate-500 uppercase">中獎張數</p>
+                <p id="stat-wins" class="text-base font-black text-emerald-600">0 張</p>
+            </div>
+            <div class="h-6 w-0.5 bg-amber-200"></div>
+            <div>
+                <p class="text-[10px] font-black text-slate-500 uppercase">累積中獎金額</p>
+                <p id="stat-money" class="text-base font-black text-red-600">NT$ 0</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- MODAL 1: Prize Numbers Reference List -->
+    <div id="prizes-modal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-md w-full max-h-[90vh] flex flex-col shadow-2xl border-4 border-amber-400 overflow-hidden animate-pop-in">
+            <!-- Modal Header -->
+            <div class="bg-amber-400 p-4 flex items-center justify-between text-amber-950">
+                <h2 class="font-black text-lg flex items-center gap-2">
+                    <i class="fa-solid fa-trophy text-amber-700"></i> <span id="modal-period-title">115年 05-06月</span> 獎號列表
+                </h2>
+                <button id="close-modal-btn" class="w-8 h-8 rounded-full bg-amber-500/30 hover:bg-amber-500/50 flex items-center justify-center font-black transition-colors">
+                    ✕
+                </button>
+            </div>
+
+            <!-- Modal Content Body -->
+            <div class="p-4 overflow-y-auto space-y-3 text-xs md:text-sm">
+                <!-- 特別獎 -->
+                <div class="bg-red-50 p-3 rounded-2xl border border-red-200">
+                    <div class="font-black text-red-600 flex justify-between items-center mb-1">
+                        <span>特別獎 (1000萬)</span>
+                        <span class="text-[10px] bg-red-200 text-red-800 px-2 py-0.5 rounded-full">需8碼全中</span>
+                    </div>
+                    <p id="modal-special-num" class="font-mono text-xl font-black text-red-700 tracking-widest text-center py-1 bg-white rounded-xl border border-red-100">--------</p>
+                </div>
+
+                <!-- 特獎 -->
+                <div class="bg-orange-50 p-3 rounded-2xl border border-orange-200">
+                    <div class="font-black text-orange-600 flex justify-between items-center mb-1">
+                        <span>特獎 (200萬)</span>
+                        <span class="text-[10px] bg-orange-200 text-orange-800 px-2 py-0.5 rounded-full">需8碼全中</span>
+                    </div>
+                    <p id="modal-grand-num" class="font-mono text-xl font-black text-orange-700 tracking-widest text-center py-1 bg-white rounded-xl border border-orange-100">--------</p>
+                </div>
+
+                <!-- 頭獎 -->
+                <div class="bg-amber-50 p-3 rounded-2xl border border-amber-200">
+                    <div class="font-black text-amber-700 flex justify-between items-center mb-1">
+                        <span>頭獎 (20萬)</span>
+                        <span class="text-[10px] bg-amber-200 text-amber-800 px-2 py-0.5 rounded-full">末3碼~8碼皆有獎</span>
+                    </div>
+                    <div id="modal-first-nums" class="font-mono text-lg font-black text-amber-900 tracking-widest text-center grid grid-cols-1 gap-1.5 mt-1">
+                        <div>--------</div>
+                        <div>--------</div>
+                        <div>--------</div>
+                    </div>
+                </div>
+
+                <div class="text-[11px] font-bold text-slate-500 space-y-1 bg-slate-50 p-3 rounded-xl border border-slate-200">
+                    <p>💡 <span class="text-slate-800 font-extrabold">頭獎中獎對應獎項：</span></p>
+                    <p>‧ 8碼全中：頭獎 20 萬元</p>
+                    <p>‧ 末 7 碼中：二獎 4 萬元</p>
+                    <p>‧ 末 6 碼中：三獎 1 萬元</p>
+                    <p>‧ 末 5 碼中：四獎 4 千元</p>
+                    <p>‧ 末 4 碼中：五獎 1 千元</p>
+                    <p>‧ 末 3 碼中：六獎 200 元</p>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-3 bg-slate-100 border-t border-slate-200 text-center">
+                <button id="modal-confirm-btn" class="w-full bg-amber-400 hover:bg-amber-500 text-slate-900 font-black py-2.5 rounded-xl shadow transition-all">
+                    瞭解，開始對獎！
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: QR Code Scanner Modal -->
+    <div id="qr-modal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-md w-full flex flex-col shadow-2xl border-4 border-emerald-400 overflow-hidden animate-pop-in">
+            <!-- Modal Header -->
+            <div class="bg-gradient-to-r from-emerald-500 to-teal-600 p-4 flex items-center justify-between text-white">
+                <h2 class="font-black text-lg flex items-center gap-2">
+                    <i class="fa-solid fa-qrcode"></i> 掃描電子發票 QR Code
+                </h2>
+                <button id="close-qr-modal-btn" class="w-8 h-8 rounded-full bg-black/20 hover:bg-black/30 flex items-center justify-center transition-colors font-bold text-white">
+                    ✕
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-4 flex flex-col items-center gap-3">
+                <p class="text-xs font-bold text-slate-600 text-center">對準電子發票<span class="text-emerald-600 font-extrabold">左側 QR Code</span>，即可自動解析期別與號碼對獎！</p>
+                <div id="qr-reader" class="w-full bg-slate-900 rounded-2xl overflow-hidden border-2 border-emerald-300 min-h-[240px] flex items-center justify-center text-white text-xs"></div>
+                <div id="qr-status-msg" class="text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200 hidden w-full text-center"></div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="p-3 bg-slate-100 border-t border-slate-200 flex justify-between items-center gap-2">
+                <label for="qr-file-input" class="cursor-pointer bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold px-3 py-2 rounded-xl text-xs flex items-center gap-1.5 shadow-sm hover:border-emerald-400 transition-colors">
+                    <i class="fa-solid fa-image text-emerald-600"></i> 上傳圖片對獎
+                    <input type="file" id="qr-file-input" accept="image/*" class="hidden">
+                </label>
+                <button id="close-qr-btn" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-4 py-2 rounded-xl text-xs transition-colors">
+                    關閉鏡頭
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Canvas for Celebration FX -->
+    <canvas id="fx-canvas" class="fixed inset-0 pointer-events-none z-40"></canvas>
+
+    <!-- Footer -->
+    <footer class="max-w-md mx-auto w-full text-center py-2 text-[11px] font-bold text-amber-900/60">
+        <p>喵喵發財統一發票對獎機 ‧ 開獎資料僅供參考，實際結果以財政部賦稅署為準</p>
+    </footer>
+
+    <script>
+        const INVOICE_DATA = {
+            '115-0506': {
+                periodName: '115年 05-06月',
+                special: '38548029', // 1000萬
+                grand: '10138845',   // 200萬
+                first: ['24121106', '28589937', '83663333'] // 20萬
+            },
+            '115-0304': {
+                periodName: '115年 03-04月',
+                special: '19531471',
+                grand: '85941329',
+                first: ['07225810', '20231230', '83518781']
+            },
+            '115-0102': {
+                periodName: '115年 01-02月',
+                special: '87510041',
+                grand: '32220522',
+                first: ['21677046', '44662410', '31262513']
+            },
+            '114-1112': {
+                periodName: '114年 11-12月',
+                special: '97023797',
+                grand: '00507588',
+                first: ['92377231', '05232592', '78125249']
+            }
+        };
+
+        const state = {
+            currentPeriodKey: '115-0506',
+            mode: 'quick', // 'quick' (3 digits) or 'full' (8 digits)
+            inputBuffer: '',
+            soundEnabled: true,
+            totalChecked: 0,
+            wonCount: 0,
+            totalPrizeMoney: 0
+        };
+
+        // DOM Elements
+        const periodSelect = document.getElementById('period-select');
+        const modeQuickBtn = document.getElementById('mode-quick-btn');
+        const modeFullBtn = document.getElementById('mode-full-btn');
+        const numberDisplay = document.getElementById('number-display');
+        const inputModeLabel = document.getElementById('input-mode-label');
+        const modeHintText = document.getElementById('mode-hint-text');
+        
+        const mascotAvatar = document.getElementById('mascot-avatar');
+        const speechBubble = document.getElementById('speech-bubble');
+        const statusBadge = document.getElementById('status-badge');
+
+        const statTotal = document.getElementById('stat-total');
+        const statWins = document.getElementById('stat-wins');
+        const statMoney = document.getElementById('stat-money');
+
+        const audioToggleBtn = document.getElementById('audio-toggle-btn');
+        const audioIcon = document.getElementById('audio-icon');
+
+        // Modal Elements
+        const viewPrizesBtn = document.getElementById('view-prizes-btn');
+        const prizesModal = document.getElementById('prizes-modal');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const modalConfirmBtn = document.getElementById('modal-confirm-btn');
+        const modalPeriodTitle = document.getElementById('modal-period-title');
+        const modalSpecialNum = document.getElementById('modal-special-num');
+        const modalGrandNum = document.getElementById('modal-grand-num');
+        const modalFirstNums = document.getElementById('modal-first-nums');
+
+        // QR Scanner Elements
+        const startQrBtn = document.getElementById('start-qr-btn');
+        const qrModal = document.getElementById('qr-modal');
+        const closeQrModalBtn = document.getElementById('close-qr-modal-btn');
+        const closeQrBtn = document.getElementById('close-qr-btn');
+        const qrFileInput = document.getElementById('qr-file-input');
+        const qrStatusMsg = document.getElementById('qr-status-msg');
+        let html5QrCode = null;
+
+        let audioCtx = null;
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) audioCtx = new AudioContext();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function playSound(type) {
+            if (!state.soundEnabled) return;
+            try {
+                const ctx = getAudioContext();
+                if (!ctx) return;
+
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                const now = ctx.currentTime;
+
+                if (type === 'click') {
+                    osc.frequency.setValueAtTime(400, now);
+                    gain.gain.setValueAtTime(0.1, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                } else if (type === 'clear') {
+                    osc.frequency.setValueAtTime(300, now);
+                    osc.frequency.exponentialRampToValueAtTime(150, now + 0.1);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                    osc.start(now);
+                    osc.stop(now + 0.1);
+                } else if (type === 'miss') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(180, now);
+                    osc.frequency.linearRampToValueAtTime(110, now + 0.25);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+                } else if (type === 'win') {
+                    // Happy chord arpeggio
+                    const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+                    notes.forEach((freq, idx) => {
+                        const noteOsc = ctx.createOscillator();
+                        const noteGain = ctx.createGain();
+                        noteOsc.connect(noteGain);
+                        noteGain.connect(ctx.destination);
+                        
+                        noteOsc.frequency.setValueAtTime(freq, now + idx * 0.08);
+                        noteGain.gain.setValueAtTime(0.15, now + idx * 0.08);
+                        noteGain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.2);
+                        
+                        noteOsc.start(now + idx * 0.08);
+                        noteOsc.stop(now + idx * 0.08 + 0.2);
+                    });
+                } else if (type === 'jackpot') {
+                    // Grand fanfare
+                    const notes = [523.25, 659.25, 783.99, 987.77, 1046.50, 1318.51];
+                    notes.forEach((freq, idx) => {
+                        const noteOsc = ctx.createOscillator();
+                        const noteGain = ctx.createGain();
+                        noteOsc.connect(noteGain);
+                        noteGain.connect(ctx.destination);
+                        
+                        noteOsc.type = 'triangle';
+                        noteOsc.frequency.setValueAtTime(freq, now + idx * 0.07);
+                        noteGain.gain.setValueAtTime(0.2, now + idx * 0.07);
+                        noteGain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.07 + 0.35);
+                        
+                        noteOsc.start(now + idx * 0.07);
+                        noteOsc.stop(now + idx * 0.07 + 0.35);
+                    });
+                }
+            } catch (e) {
+                console.warn('Audio playback error:', e);
+            }
+        }
+
+        function initApp() {
+            setupEventListeners();
+            updateModalPrizeTable();
+            renderDisplay();
+        }
+
+        function setupEventListeners() {
+            // Period Selector
+            periodSelect.addEventListener('change', (e) => {
+                state.currentPeriodKey = e.target.value;
+                updateModalPrizeTable();
+                resetInput();
+            });
+
+            // Mode Switching
+            modeQuickBtn.addEventListener('click', () => switchMode('quick'));
+            modeFullBtn.addEventListener('click', () => switchMode('full'));
+
+            // Audio Toggle
+            audioToggleBtn.addEventListener('click', () => {
+                state.soundEnabled = !state.soundEnabled;
+                if (state.soundEnabled) {
+                    audioIcon.className = 'fa-solid fa-volume-high text-amber-900';
+                    playSound('click');
+                } else {
+                    audioIcon.className = 'fa-solid fa-volume-xmark text-slate-400';
+                }
+            });
+
+            // Modal Controls
+            viewPrizesBtn.addEventListener('click', () => prizesModal.classList.remove('hidden'));
+            closeModalBtn.addEventListener('click', () => prizesModal.classList.add('hidden'));
+            modalConfirmBtn.addEventListener('click', () => prizesModal.classList.add('hidden'));
+
+            // QR Code Scanner Controls
+            startQrBtn.addEventListener('click', startQrScanner);
+            closeQrModalBtn.addEventListener('click', stopQrScanner);
+            closeQrBtn.addEventListener('click', stopQrScanner);
+            qrFileInput.addEventListener('change', handleQrFileSelect);
+
+            // Numpad Key Clicks
+            document.querySelectorAll('.numpad-btn[data-key]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const key = btn.getAttribute('data-key');
+                    handleKeyPress(key);
+                });
+            });
+
+            document.getElementById('btn-clear').addEventListener('click', () => {
+                playSound('clear');
+                resetInput();
+                setMascot('idle', '清空重新輸入！喵~');
+            });
+
+            document.getElementById('btn-backspace').addEventListener('click', () => {
+                if (state.inputBuffer.length > 0) {
+                    playSound('click');
+                    state.inputBuffer = state.inputBuffer.slice(0, -1);
+                    renderDisplay();
+                }
+            });
+
+            // Physical Keyboard listener
+            window.addEventListener('keydown', (e) => {
+                if (prizesModal.classList.contains('hidden') === false || qrModal.classList.contains('hidden') === false) return;
+                
+                if (e.key >= '0' && e.key <= '9') {
+                    handleKeyPress(e.key);
+                } else if (e.key === 'Backspace') {
+                    document.getElementById('btn-backspace').click();
+                } else if (e.key === 'Escape' || e.key === 'c' || e.key === 'C') {
+                    document.getElementById('btn-clear').click();
+                }
+            });
+        }
+
+        function switchMode(newMode) {
+            playSound('click');
+            state.mode = newMode;
+            resetInput();
+
+            if (newMode === 'quick') {
+                modeQuickBtn.className = 'py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 bg-amber-400 text-slate-900 shadow-sm border border-amber-500';
+                modeFullBtn.className = 'py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 text-slate-500 hover:text-slate-800';
+                inputModeLabel.textContent = '末3碼對獎:';
+                modeHintText.textContent = '後 3 碼';
+                setMascot('idle', '切換至「末 3 碼快速對獎」！輸入 3 位數即可速查。');
+            } else {
+                modeFullBtn.className = 'py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 bg-amber-400 text-slate-900 shadow-sm border border-amber-500';
+                modeQuickBtn.className = 'py-2.5 rounded-xl transition-all flex items-center justify-center gap-1.5 text-slate-500 hover:text-slate-800';
+                inputModeLabel.textContent = '8碼完整對獎:';
+                modeHintText.textContent = '完整 8 碼';
+                setMascot('idle', '切換至「8 碼完整核對」！幫你精密檢測大獎！');
+            }
+        }
+
+        function resetInput() {
+            state.inputBuffer = '';
+            renderDisplay();
+        }
+
+        function handleKeyPress(key) {
+            const maxLen = state.mode === 'quick' ? 3 : 8;
+            if (state.inputBuffer.length < maxLen) {
+                playSound('click');
+                state.inputBuffer += key;
+                renderDisplay();
+
+                if (state.inputBuffer.length === maxLen) {
+                    processCheck();
+                }
+            }
+        }
+
+        function renderDisplay() {
+            const maxLen = state.mode === 'quick' ? 3 : 8;
+            const current = state.inputBuffer;
+            const placeHolderCount = Math.max(0, maxLen - current.length);
+            const placeholders = '_'.repeat(placeHolderCount);
+
+            if (current.length === 0) {
+                numberDisplay.innerHTML = `<span class="animate-pulse text-amber-500/50">${placeholders}</span>`;
+            } else {
+                numberDisplay.innerHTML = `<span class="text-amber-300 font-black">${current}</span><span class="text-amber-500/50">${placeholders}</span>`;
+            }
+        }
+
+        function updateModalPrizeTable() {
+            const data = INVOICE_DATA[state.currentPeriodKey];
+            modalPeriodTitle.textContent = data.periodName;
+            modalSpecialNum.textContent = data.special;
+            modalGrandNum.textContent = data.grand;
+            modalFirstNums.innerHTML = data.first.map(n => `<div>${n}</div>`).join('');
+        }
+
+        function processCheck() {
+            const input = state.inputBuffer;
+            const data = INVOICE_DATA[state.currentPeriodKey];
+            state.totalChecked++;
+
+            let isWin = false;
+            let winTitle = '';
+            let prizeAmount = 0;
+            let mascotMsg = '';
+            let mascotType = 'miss';
+
+            if (state.mode === 'quick') {
+                // Check 3-digit Quick Mode
+                const special3 = data.special.slice(-3);
+                const grand3 = data.grand.slice(-3);
+                const first3 = data.first.map(n => n.slice(-3));
+
+                if (first3.includes(input)) {
+                    isWin = true;
+                    winTitle = '六獎 (末3碼中獎)';
+                    prizeAmount = 200;
+                    mascotType = 'win';
+                    mascotMsg = '🎉 恭喜中頭獎末3碼！獎金 NT$ 200 元！喵！';
+                } else if (input === special3 || input === grand3) {
+                    // Possible match for Special/Grand 10M/2M
+                    isWin = true;
+                    winTitle = '特別獎/特獎 (末3碼符合)';
+                    prizeAmount = 200;
+                    mascotType = 'jackpot';
+                    mascotMsg = '🌟 哇！末3碼對中特別獎/特獎！快切換至「8碼完整核對」確認千萬大獎！';
+                } else {
+                    mascotType = 'miss';
+                    mascotMsg = '😿 沒中喵... 再接再厲，下一張就是億萬富翁！';
+                }
+            } else {
+                // Check 8-digit Full Mode
+                if (input === data.special) {
+                    isWin = true;
+                    winTitle = '特別獎';
+                    prizeAmount = 10000000;
+                    mascotType = 'jackpot';
+                    mascotMsg = '👑 狂賀！！對中「特別獎」1000 萬元！發大財啦喵！！！';
+                } else if (input === data.grand) {
+                    isWin = true;
+                    winTitle = '特獎';
+                    prizeAmount = 2000000;
+                    mascotType = 'jackpot';
+                    mascotMsg = '💎 恭喜！！對中「特獎」200 萬元！喵喵要吃罐罐大餐！';
+                } else {
+                    // Check First Prize and sub-prizes
+                    let highestPrize = 0;
+                    let highestTitle = '';
+
+                    data.first.forEach(firstNum => {
+                        if (input === firstNum) {
+                            highestPrize = 200000;
+                            highestTitle = '頭獎 (20萬元)';
+                        } else if (input.slice(-7) === firstNum.slice(-7) && highestPrize < 40000) {
+                            highestPrize = 40000;
+                            highestTitle = '二獎 (4萬元)';
+                        } else if (input.slice(-6) === firstNum.slice(-6) && highestPrize < 10000) {
+                            highestPrize = 10000;
+                            highestTitle = '三獎 (1萬元)';
+                        } else if (input.slice(-5) === firstNum.slice(-5) && highestPrize < 4000) {
+                            highestPrize = 4000;
+                            highestTitle = '四獎 (4千元)';
+                        } else if (input.slice(-4) === firstNum.slice(-4) && highestPrize < 1000) {
+                            highestPrize = 1000;
+                            highestTitle = '五獎 (1千元)';
+                        } else if (input.slice(-3) === firstNum.slice(-3) && highestPrize < 200) {
+                            highestPrize = 200;
+                            highestTitle = '六獎 (200元)';
+                        }
+                    });
+
+                    if (highestPrize > 0) {
+                        isWin = true;
+                        winTitle = highestTitle;
+                        prizeAmount = highestPrize;
+                        mascotType = highestPrize >= 10000 ? 'jackpot' : 'win';
+                        mascotMsg = `✨ 恭喜對中 ${highestTitle}！太幸運了喵！`;
+                    } else {
+                        mascotType = 'miss';
+                        mascotMsg = '😿 沒中獎喵，沒關係，財神爺正在路上！';
+                    }
+                }
+            }
+
+            // Apply Updates
+            if (isWin) {
+                state.wonCount++;
+                state.totalPrizeMoney += prizeAmount;
+                playSound(mascotType === 'jackpot' ? 'jackpot' : 'win');
+                triggerFX(mascotType === 'jackpot' ? 'coins' : 'confetti');
+            } else {
+                playSound('miss');
+            }
+
+            setMascot(mascotType, mascotMsg, winTitle);
+            updateStatsUI();
+
+            // Auto reset after small delay
+            setTimeout(() => {
+                resetInput();
+            }, state.mode === 'quick' ? 1200 : 1800);
+        }
+
+        function setMascot(type, message, badgeText = '') {
+            speechBubble.textContent = message;
+
+            if (badgeText) {
+                statusBadge.textContent = badgeText;
+                statusBadge.classList.remove('hidden');
+            } else {
+                statusBadge.classList.add('hidden');
+            }
+
+            if (type === 'win') {
+                mascotAvatar.textContent = '😻';
+                speechBubble.className = 'bg-emerald-50 text-emerald-900 font-extrabold text-xs md:text-sm px-4 py-2 rounded-2xl border-2 border-emerald-400 shadow-md max-w-[90%] text-center relative z-10 transition-all animate-bounce';
+            } else if (type === 'jackpot') {
+                mascotAvatar.textContent = '😸';
+                speechBubble.className = 'bg-amber-100 text-red-900 font-black text-xs md:text-sm px-4 py-2 rounded-2xl border-2 border-red-500 shadow-lg max-w-[90%] text-center relative z-10 transition-all animate-pulse';
+            } else if (type === 'miss') {
+                mascotAvatar.textContent = '😿';
+                speechBubble.className = 'bg-slate-50 text-slate-700 font-extrabold text-xs md:text-sm px-4 py-2 rounded-2xl border-2 border-slate-300 shadow-md max-w-[90%] text-center relative z-10 transition-all';
+            } else {
+                mascotAvatar.textContent = '🐱';
+                speechBubble.className = 'bg-white text-slate-800 font-extrabold text-xs md:text-sm px-4 py-2 rounded-2xl border-2 border-amber-400 shadow-md max-w-[90%] text-center relative z-10 transition-all';
+            }
+        }
+
+        function updateStatsUI() {
+            statTotal.textContent = `${state.totalChecked} 張`;
+            statWins.textContent = `${state.wonCount} 張`;
+            statMoney.textContent = `NT$ ${state.totalPrizeMoney.toLocaleString()}`;
+        }
+
+        function startQrScanner() {
+            qrModal.classList.remove('hidden');
+            qrStatusMsg.classList.add('hidden');
+
+            if (!html5QrCode) {
+                html5QrCode = new Html5Qrcode("qr-reader");
+            }
+
+            const config = { fps: 10, qrbox: { width: 200, height: 200 } };
+            html5QrCode.start(
+                { facingMode: "environment" },
+                config,
+                (decodedText) => handleQrCodeSuccess(decodedText),
+                () => {}
+            ).catch(err => {
+                showQrStatus('無法開啟鏡頭（請允許相機權限或使用圖片上傳）', true);
+            });
+        }
+
+        function stopQrScanner() {
+            if (html5QrCode && html5QrCode.isScanning) {
+                html5QrCode.stop().then(() => {
+                    qrModal.classList.add('hidden');
+                }).catch(() => {
+                    qrModal.classList.add('hidden');
+                });
+            } else {
+                qrModal.classList.add('hidden');
+            }
+        }
+
+        function handleQrFileSelect(e) {
+            if (e.target.files.length === 0) return;
+            const imageFile = e.target.files[0];
+            if (!html5QrCode) {
+                html5QrCode = new Html5Qrcode("qr-reader");
+            }
+            html5QrCode.scanFile(imageFile, true)
+                .then(decodedText => handleQrCodeSuccess(decodedText))
+                .catch(() => {
+                    showQrStatus('無法解析圖片中的 QR Code，請確認照片清晰！', true);
+                });
+        }
+
+        function showQrStatus(msg, isError = false) {
+            qrStatusMsg.textContent = msg;
+            qrStatusMsg.classList.remove('hidden');
+            qrStatusMsg.className = `text-xs font-bold p-2 rounded-xl border w-full text-center ${isError ? 'text-red-700 bg-red-50 border-red-200' : 'text-emerald-700 bg-emerald-50 border-emerald-200'}`;
+        }
+
+        function handleQrCodeSuccess(decodedText) {
+            // Standard Taiwan E-Invoice QR Code pattern: [2 letters][8 digits number][7 digits ROC date]
+            const invoiceMatch = decodedText.match(/([A-Za-z]{2})(\d{8})/);
+            const dateMatch = decodedText.match(/(11[45])(0[1-9]|1[0-2])\d{2}/);
+
+            let extractedNum = '';
+            if (invoiceMatch) {
+                extractedNum = invoiceMatch[2]; // 8 digits
+            } else {
+                const fallbackMatch = decodedText.match(/\d{8}/) || decodedText.match(/\d{3}/);
+                if (fallbackMatch) {
+                    extractedNum = fallbackMatch[0];
+                }
+            }
+
+            if (!extractedNum) {
+                showQrStatus('⚠️ 未感應到發票號碼，請對準電子發票左側 QR Code', true);
+                return;
+            }
+
+            // Match period if date code exists
+            if (dateMatch) {
+                const rocYear = dateMatch[1]; // 115 or 114
+                const month = parseInt(dateMatch[2], 10);
+                let periodSuffix = '';
+                if (month === 1 || month === 2) periodSuffix = '0102';
+                else if (month === 3 || month === 4) periodSuffix = '0304';
+                else if (month === 5 || month === 6) periodSuffix = '0506';
+                else if (month === 7 || month === 8) periodSuffix = '0708';
+                else if (month === 9 || month === 10) periodSuffix = '0910';
+                else if (month === 11 || month === 12) periodSuffix = '1112';
+
+                const matchedKey = `${rocYear}-${periodSuffix}`;
+                if (INVOICE_DATA[matchedKey]) {
+                    state.currentPeriodKey = matchedKey;
+                    periodSelect.value = matchedKey;
+                    updateModalPrizeTable();
+                }
+            }
+
+            stopQrScanner();
+
+            // Set appropriate mode and trigger auto check
+            if (extractedNum.length === 8) {
+                switchMode('full');
+            } else {
+                switchMode('quick');
+            }
+            state.inputBuffer = extractedNum;
+            renderDisplay();
+            processCheck();
+        }
+
+        const canvas = document.getElementById('fx-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function triggerFX(type) {
+            particles = [];
+            const count = type === 'coins' ? 50 : 35;
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: -20 - Math.random() * 50,
+                    size: Math.random() * 14 + 10,
+                    speedY: Math.random() * 5 + 3,
+                    speedX: (Math.random() - 0.5) * 4,
+                    rotation: Math.random() * Math.PI * 2,
+                    rotSpeed: (Math.random() - 0.5) * 0.1,
+                    type: type,
+                    color: `hsl(${Math.random() * 360}, 90%, 60%)`
+                });
+            }
+            requestAnimationFrame(renderFX);
+        }
+
+        function renderFX() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            let active = false;
+
+            particles.forEach(p => {
+                p.y += p.speedY;
+                p.x += p.speedX;
+                p.rotation += p.rotSpeed;
+
+                if (p.y < canvas.height + 30) {
+                    active = true;
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rotation);
+
+                    if (p.type === 'coins') {
+                        ctx.fillStyle = '#fbbf24';
+                        ctx.strokeStyle = '#d97706';
+                        ctx.lineWidth = 2;
+                        ctx.beginPath();
+                        ctx.arc(0, 0, p.size, 0, Math.PI * 2);
+                        ctx.fill();
+                        ctx.stroke();
+                        ctx.fillStyle = '#b45309';
+                        ctx.font = 'bold 10px sans-serif';
+                        ctx.textAlign = 'center';
+                        ctx.textBaseline = 'middle';
+                        ctx.fillText('$', 0, 0);
+                    } else {
+                        ctx.fillStyle = p.color;
+                        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size / 2);
+                    }
+                    ctx.restore();
+                }
+            });
+
+            if (active) {
+                requestAnimationFrame(renderFX);
+            }
+        }
+
+        // Initialize application on window load
+        window.onload = initApp;
+    </script>
+</body>
+</html>

@@ -1,0 +1,1752 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>政商大戰 - Politicians vs Tycoons Battle</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Zen Maru Gothic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@700;900&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Zen Maru Gothic', sans-serif;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+            background-color: #0b0f19;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.92);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .neon-border-pol {
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.5), inset 0 0 10px rgba(245, 158, 11, 0.3);
+        }
+
+        .neon-border-tycoon {
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.5), inset 0 0 10px rgba(16, 185, 129, 0.3);
+        }
+
+        .neon-text-gold {
+            text-shadow: 0 0 10px rgba(251, 191, 36, 0.8), 0 0 20px rgba(245, 158, 11, 0.4);
+        }
+
+        .btn-pulse {
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 15px rgba(245, 158, 11, 0.6); }
+            50% { transform: scale(1.03); box-shadow: 0 0 25px rgba(236, 72, 153, 0.8); }
+        }
+
+        .custom-scroll::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scroll::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+            border-radius: 8px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb {
+            background: rgba(245, 158, 11, 0.5);
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body class="text-white overflow-hidden w-screen h-screen relative flex flex-col justify-between">
+
+    <!-- Top Minimal HUD Navigation Bar -->
+    <header id="hud" class="fixed top-2 left-1/2 -translate-x-1/2 z-20 w-[96%] max-w-6xl glass-panel rounded-2xl px-3 py-2 md:px-5 md:py-2.5 flex items-center justify-between text-xs sm:text-sm font-bold shadow-2xl border border-slate-700/80">
+        
+        <!-- Player Info -->
+        <div class="flex items-center space-x-2 md:space-x-3 w-1/3">
+            <div id="hud-player-avatar" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-amber-500/20 border-2 border-amber-400 flex items-center justify-center overflow-hidden shadow shrink-0">
+                <!-- Dynamic Q Avatar Canvas Image -->
+            </div>
+            <div class="flex-1 min-w-0">
+                <div class="flex justify-between items-center text-[10px] sm:text-xs text-amber-300">
+                    <span id="hud-player-name" class="font-extrabold truncate">柯文哲</span>
+                    <span id="hud-player-hp-text" class="font-mono">135/135</span>
+                </div>
+                <div class="w-full bg-slate-800 rounded-full h-2.5 sm:h-3 overflow-hidden border border-amber-500/40 p-0.5">
+                    <div id="hud-player-hp-bar" class="bg-gradient-to-r from-amber-500 to-emerald-400 h-full rounded-full transition-all duration-300" style="width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Center Match Stats, Wind & Score -->
+        <div class="flex flex-col items-center justify-center px-2">
+            <div class="flex items-center space-x-2">
+                <span class="text-amber-400 font-black text-xs sm:text-base">STAGE <span id="hud-level" class="text-white">1</span>/10</span>
+                <span class="text-slate-500">|</span>
+                <span class="text-emerald-400 font-black text-xs sm:text-base">SCORE: <span id="hud-score" class="text-white font-mono">0</span></span>
+            </div>
+            <!-- Wind Indicator -->
+            <div class="flex items-center space-x-1 mt-0.5 text-[10px] sm:text-xs bg-slate-900/80 px-2 py-0.5 rounded-full border border-slate-700">
+                <span class="text-slate-400">風向:</span>
+                <span id="hud-wind-dir" class="text-cyan-400 font-bold">➡️</span>
+                <span id="hud-wind-speed" class="text-cyan-300 font-mono font-bold">0.0</span>
+            </div>
+        </div>
+
+        <!-- Enemy Info -->
+        <div class="flex items-center space-x-2 md:space-x-3 w-1/3 justify-end text-right">
+            <div class="flex-1 min-w-0">
+                <div class="flex justify-between items-center text-[10px] sm:text-xs text-emerald-300 flex-row-reverse">
+                    <span id="hud-enemy-name" class="font-extrabold truncate">馬斯克</span>
+                    <span id="hud-enemy-hp-text" class="font-mono">130/130</span>
+                </div>
+                <div class="w-full bg-slate-800 rounded-full h-2.5 sm:h-3 overflow-hidden border border-emerald-500/40 p-0.5">
+                    <div id="hud-enemy-hp-bar" class="bg-gradient-to-r from-emerald-500 to-cyan-400 h-full rounded-full transition-all duration-300" style="width: 100%;"></div>
+                </div>
+            </div>
+            <div id="hud-enemy-avatar" class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-emerald-500/20 border-2 border-emerald-400 flex items-center justify-center overflow-hidden shadow shrink-0">
+                <!-- Dynamic Q Avatar Canvas Image -->
+            </div>
+        </div>
+
+        <!-- System Controls & Leaderboard -->
+        <div class="flex items-center space-x-1 sm:space-x-1.5 ml-1.5 pl-1.5 border-l border-slate-700">
+            <button id="btn-leaderboard" class="p-1.5 rounded-xl bg-slate-800/90 hover:bg-amber-500/30 border border-amber-500/50 text-amber-300 transition text-xs" title="排行榜 TOP 10">
+                🏆
+            </button>
+            <button id="btn-bgm" class="p-1.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 border border-slate-600 transition text-xs" title="音樂開關">
+                🎵 <span id="label-bgm" class="hidden md:inline">ON</span>
+            </button>
+            <button id="btn-sfx" class="p-1.5 rounded-xl bg-slate-800/90 hover:bg-slate-700 border border-slate-600 transition text-xs" title="音效開關">
+                🔊 <span id="label-sfx" class="hidden md:inline">ON</span>
+            </button>
+            <button id="btn-restart" class="p-1.5 rounded-xl bg-slate-800/90 hover:bg-red-900/50 border border-red-500/50 text-red-400 transition text-xs" title="重新選角">
+                🔄
+            </button>
+        </div>
+    </header>
+
+    <main class="w-full h-full relative">
+        <canvas id="gameCanvas" class="block w-full h-full cursor-crosshair"></canvas>
+
+        <!-- Bottom Interactive Throw & Weapon Control Bar -->
+        <div id="controls-panel" class="fixed bottom-3 left-1/2 -translate-x-1/2 z-20 w-[94%] max-w-2xl glass-panel rounded-2xl p-3 flex flex-col gap-2 shadow-2xl border border-slate-700/80">
+            
+            <!-- Angle Slider, Weapon Switch & Turn Status -->
+            <div class="flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm">
+                <!-- Angle Slider -->
+                <div class="flex items-center space-x-2">
+                    <span class="text-amber-400 font-bold">投擲角度:</span>
+                    <input id="angle-slider" type="range" min="15" max="80" value="45" class="w-24 sm:w-36 accent-amber-500 cursor-pointer">
+                    <span id="angle-value" class="text-white font-mono font-bold text-sm">45°</span>
+                </div>
+
+                <!-- Active Weapon Quick Picker (3 Choice) -->
+                <div class="flex items-center space-x-1 bg-slate-900/90 p-1 rounded-xl border border-slate-700">
+                    <span class="text-slate-400 text-[11px] px-1 font-bold">武器:</span>
+                    <div id="weapon-selector-group" class="flex space-x-1">
+                        <!-- Dynamic 3 Weapon Buttons -->
+                    </div>
+                </div>
+
+                <!-- Turn Badge -->
+                <div id="turn-status-badge" class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40 animate-pulse text-xs">
+                    你的回合！
+                </div>
+            </div>
+
+            <!-- Power Bar & Launch Button -->
+            <div class="flex items-center space-x-3">
+                <!-- Power Meter Bar -->
+                <div class="flex-1 bg-slate-900 rounded-xl h-9 overflow-hidden relative border border-slate-700 p-1 flex items-center">
+                    <div id="power-bar-fill" class="h-full bg-gradient-to-r from-yellow-400 via-orange-500 to-red-600 rounded-lg w-0 transition-all"></div>
+                    <span id="power-bar-text" class="absolute inset-0 flex items-center justify-center text-xs sm:text-sm font-black text-white drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]">
+                        按住按鈕蓄力 (0%)
+                    </span>
+                </div>
+
+                <!-- Throw Action Button -->
+                <button id="btn-throw" class="px-5 py-2.5 bg-gradient-to-r from-amber-500 via-orange-500 to-red-500 rounded-xl font-black text-white text-sm sm:text-base shadow-lg hover:brightness-110 active:scale-95 transition min-w-[110px] border border-amber-300/40 select-none">
+                    🎯 投擲！
+                </button>
+            </div>
+            <div class="text-[10px] sm:text-xs text-slate-400 text-center">
+                💡 提示：按住「🎯 投擲！」進行蓄力，放開即可發射！切換武器可產生不同攻擊效果！
+            </div>
+        </div>
+    </main>
+
+    <!-- Start & Faction / Character & Weapon Selection Modal -->
+    <div id="modal-select" class="fixed inset-0 z-30 flex items-center justify-center bg-black/85 backdrop-blur-md p-3 sm:p-5">
+        <div class="glass-panel border-2 border-amber-500/50 rounded-3xl p-4 sm:p-6 max-w-3xl w-full text-center space-y-3.5 shadow-2xl relative max-h-[95vh] flex flex-col">
+            
+            <!-- Header Title -->
+            <div class="space-y-1">
+                <h1 class="text-3xl sm:text-5xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-emerald-400 to-cyan-400 neon-text-gold">
+                    🏛️ 政商大戰 💰
+                </h1>
+                <p class="text-xs sm:text-sm text-slate-300">台灣政壇名嘴 🆚 全球百億富豪！10關終極霸主決戰！</p>
+            </div>
+
+            <!-- Player Name Input field -->
+            <div class="flex items-center justify-center space-x-2 bg-slate-900/80 p-2 rounded-2xl border border-slate-700">
+                <span class="text-xs sm:text-sm text-amber-300 font-bold">玩家暱稱:</span>
+                <input id="player-name-input" type="text" maxlength="12" value="政壇巨擘" class="bg-slate-800 text-white font-bold px-3 py-1 rounded-xl border border-slate-600 focus:outline-none focus:border-amber-400 text-xs sm:text-sm text-center">
+            </div>
+
+            <!-- Faction Selection Tabs -->
+            <div class="flex rounded-2xl bg-slate-900/80 p-1.5 border border-slate-700/80">
+                <button id="tab-faction-pol" class="flex-1 py-2 rounded-xl font-black text-xs sm:text-base transition flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg">
+                    🏛️ 台灣政壇人物 (對手：富豪)
+                </button>
+                <button id="tab-faction-tycoon" class="flex-1 py-2 rounded-xl font-black text-xs sm:text-base transition flex items-center justify-center gap-2 text-slate-400 hover:text-white">
+                    💰 全球百億富豪 (對手：政客)
+                </button>
+            </div>
+
+            <!-- 10 Character Selection Grid -->
+            <div class="flex-1 overflow-y-auto custom-scroll pr-1 max-h-[35vh]">
+                <div id="character-grid" class="grid grid-cols-2 sm:grid-cols-5 gap-2 p-1">
+                    <!-- Dynamic Character Cards -->
+                </div>
+            </div>
+
+            <!-- Selected Character Info Card & 3 Weapon Picker -->
+            <div id="selected-hero-card" class="glass-card rounded-2xl p-3 border border-amber-500/30 flex flex-col sm:flex-row items-center justify-between text-left text-xs sm:text-sm gap-2">
+                <div class="flex items-center space-x-3 w-full sm:w-1/2">
+                    <div id="hero-preview-avatar" class="w-12 h-12 sm:w-14 sm:h-14 bg-amber-500/20 rounded-2xl border border-amber-400 overflow-hidden flex items-center justify-center shrink-0"></div>
+                    <div>
+                        <div id="hero-preview-name" class="font-black text-amber-400 text-sm sm:text-base">柯文哲 (阿北)</div>
+                        <div id="hero-preview-desc" class="text-slate-300 text-[11px] sm:text-xs">特質：高生命值，招牌阿北狂語打擊</div>
+                    </div>
+                </div>
+                
+                <!-- 3 Weapon Choices for Hero -->
+                <div class="w-full sm:w-1/2 bg-slate-900/90 p-2 rounded-xl border border-slate-700">
+                    <div class="text-[11px] text-amber-300 font-extrabold mb-1">選擇裝備武器 (選一):</div>
+                    <div id="modal-weapon-picker" class="grid grid-cols-3 gap-1">
+                        <!-- Dynamic 3 weapon selection buttons -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Start Game Action -->
+            <button id="btn-start-game" class="w-full py-3.5 bg-gradient-to-r from-amber-500 via-emerald-500 to-cyan-500 rounded-2xl text-slate-950 font-black text-base sm:text-lg tracking-wider shadow-lg btn-pulse hover:brightness-110 active:scale-95 transition">
+                🚀 開啟政商大戰！ START BATTLE
+            </button>
+        </div>
+    </div>
+
+    <!-- Stage Clear Modal -->
+    <div id="modal-clear" class="fixed inset-0 z-30 hidden flex items-center justify-center bg-black/85 backdrop-blur-md p-4">
+        <div class="glass-panel border-2 border-amber-400/50 rounded-3xl p-6 sm:p-8 max-w-md w-full text-center space-y-5 shadow-2xl">
+            <h2 class="text-3xl sm:text-4xl font-black text-amber-400 neon-text-gold">STAGE CLEAR! 🎉</h2>
+            <p class="text-slate-200 text-sm">成功擊敗強勁對手！獲勝積分進帳！</p>
+            <div class="bg-slate-900/80 rounded-2xl p-4 border border-slate-700 text-sm space-y-2">
+                <div class="flex justify-between text-slate-300">
+                    <span>關卡獎勵:</span>
+                    <span id="clear-bonus-score" class="text-emerald-400 font-mono font-bold">+1000</span>
+                </div>
+                <div class="flex justify-between text-slate-300">
+                    <span>目前累積總分:</span>
+                    <span id="clear-total-score" class="text-amber-400 font-mono font-bold">1000</span>
+                </div>
+                <hr class="border-slate-700">
+                <div class="text-slate-400">下一關挑戰對手：</div>
+                <div id="next-enemy-title" class="text-cyan-400 font-extrabold text-lg">Stage 2: 貝佐斯 📦</div>
+            </div>
+            <button id="btn-next-level" class="w-full py-3.5 bg-gradient-to-r from-amber-500 to-emerald-500 rounded-2xl text-slate-950 font-black text-base shadow-lg hover:brightness-110 active:scale-95 transition">
+                進入下一關 NEXT STAGE ➔
+            </button>
+        </div>
+    </div>
+
+    <!-- Game Over Modal -->
+    <div id="modal-gameover" class="fixed inset-0 z-30 hidden flex items-center justify-center bg-black/85 backdrop-blur-md p-4">
+        <div class="glass-panel border-2 border-red-500/50 rounded-3xl p-6 sm:p-8 max-w-md w-full text-center space-y-5 shadow-2xl">
+            <h2 class="text-3xl sm:text-4xl font-black text-red-500">GAME OVER 💸</h2>
+            <p class="text-slate-300 text-sm">體力耗盡！政商對決敗下陣來！</p>
+            <div class="bg-slate-900/80 rounded-2xl p-3 border border-slate-700 text-sm">
+                <div class="text-slate-400">最終獲得分數:</div>
+                <div id="gameover-final-score" class="text-amber-400 font-mono font-black text-2xl">0</div>
+            </div>
+            <button id="btn-retry" class="w-full py-3.5 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl text-white font-bold text-base shadow-lg hover:brightness-110 active:scale-95 transition">
+                🔄 重新挑戰 RETRY
+            </button>
+        </div>
+    </div>
+
+    <!-- Game Win Champion Modal -->
+    <div id="modal-win" class="fixed inset-0 z-30 hidden flex items-center justify-center bg-black/90 backdrop-blur-md p-4">
+        <div class="glass-panel border-2 border-yellow-400/80 rounded-3xl p-6 sm:p-8 max-w-md w-full text-center space-y-5 shadow-2xl">
+            <h2 class="text-3xl sm:text-5xl font-black text-yellow-300 neon-text-gold">🏆 全通關政商霸主！</h2>
+            <p class="text-slate-200 text-sm">恭喜你過關斬將征服10位世界級巨頭，問鼎最高榮耀殿堂！</p>
+            <div class="bg-slate-900/80 rounded-2xl p-4 border border-amber-500/40 text-sm space-y-1">
+                <div class="text-slate-400">最終通關總高分:</div>
+                <div id="win-final-score" class="text-yellow-400 font-mono font-black text-3xl">0</div>
+            </div>
+            <button id="btn-win-restart" class="w-full py-3.5 bg-gradient-to-r from-yellow-400 via-amber-500 to-emerald-500 rounded-2xl text-slate-950 font-black text-base shadow-lg hover:brightness-110 active:scale-95 transition">
+                👑 榮耀再戰 PLAY AGAIN
+            </button>
+        </div>
+    </div>
+
+    <!-- Leaderboard Modal (TOP 10) -->
+    <div id="modal-leaderboard" class="fixed inset-0 z-40 hidden flex items-center justify-center bg-black/85 backdrop-blur-md p-4">
+        <div class="glass-panel border-2 border-amber-400/60 rounded-3xl p-5 sm:p-7 max-w-lg w-full text-center space-y-4 shadow-2xl relative max-h-[90vh] flex flex-col">
+            <div class="flex items-center justify-between border-b border-slate-700 pb-2">
+                <h3 class="text-2xl sm:text-3xl font-black text-amber-400 neon-text-gold">🏆 政商風雲榜 TOP 10</h3>
+                <button id="btn-close-leaderboard" class="text-slate-400 hover:text-white font-black text-xl px-2">✕</button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto custom-scroll pr-1">
+                <table class="w-full text-left text-xs sm:text-sm">
+                    <thead class="text-amber-300 bg-slate-900/80 sticky top-0 border-b border-slate-700">
+                        <tr>
+                            <th class="p-2 text-center">名次</th>
+                            <th class="p-2">玩家暱稱</th>
+                            <th class="p-2">代表英雄</th>
+                            <th class="p-2 text-right">關卡</th>
+                            <th class="p-2 text-right">最高得分</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-table-body" class="divide-y divide-slate-800 text-slate-200 font-mono">
+                        <!-- Dynamic Leaderboard Rows -->
+                    </tbody>
+                </table>
+            </div>
+
+            <button id="btn-clear-leaderboard" class="text-xs text-slate-500 hover:text-red-400 underline">重置排行榜紀錄</button>
+        </div>
+    </div>
+
+    <script>
+        // Canvas roundRect Polyfill for cross-browser safety
+        if (!CanvasRenderingContext2D.prototype.roundRect) {
+            CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, radii) {
+                if (typeof radii === 'number') radii = [radii, radii, radii, radii];
+                if (!Array.isArray(radii)) radii = [0, 0, 0, 0];
+                const r0 = radii[0] || 0, r1 = radii[1] || 0, r2 = radii[2] || 0, r3 = radii[3] || 0;
+                this.beginPath();
+                this.moveTo(x + r0, y);
+                this.lineTo(x + w - r1, y);
+                this.quadraticCurveTo(x + w, y, x + w, y + r1);
+                this.lineTo(x + w, y + h - r2);
+                this.quadraticCurveTo(x + w, y + h, x + w - r2, y + h);
+                this.lineTo(x + r3, y + h);
+                this.quadraticCurveTo(x, y + h, x, y + h - r3);
+                this.lineTo(x, y + r0);
+                this.quadraticCurveTo(x, y, x + r0, y);
+                this.closePath();
+                return this;
+            };
+        }
+
+        // Global Variables
+        let canvas, ctx;
+        let viewWidth = window.innerWidth || 800;
+        let viewHeight = window.innerHeight || 600;
+
+        let selectedFaction = 'POL'; // 'POL' or 'TYCOON'
+        let playerHero = null;
+        let selectedWeaponIndex = 0;
+
+        let currentEnemyHero = null;
+        let enemyWeaponIndex = 0;
+
+        let playerName = '政壇巨擘';
+        let level = 1;
+        let score = 0;
+
+        let playerHP = 135;
+        let playerMaxHP = 135;
+        let enemyHP = 130;
+        let enemyMaxHP = 130;
+
+        let wind = 0;
+        let throwAngle = 45;
+        let power = 0;
+        let isCharging = false;
+        let powerIncreasing = true;
+        let powerAnimFrame = null;
+
+        let gameState = 'INIT'; // 'INIT', 'PLAYER_TURN', 'CHARGING', 'FIRING', 'ENEMY_TURN'
+        let activeProjectile = null;
+        let particles = [];
+        let floatingTexts = [];
+
+        let playerPos = { x: 120, y: 500 };
+        let enemyPos = { x: 800, y: 500 };
+        let fenceX = 460;
+        let fenceHeight = 120;
+        const GRAVITY = 0.35;
+
+        // Top-scope Canvas Resize Handler
+        function resizeCanvas() {
+            canvas = document.getElementById('gameCanvas');
+            if (!canvas) return;
+
+            const dpr = window.devicePixelRatio || 1;
+            viewWidth = window.innerWidth || 800;
+            viewHeight = window.innerHeight || 600;
+
+            canvas.width = viewWidth * dpr;
+            canvas.height = viewHeight * dpr;
+            canvas.style.width = viewWidth + 'px';
+            canvas.style.height = viewHeight + 'px';
+
+            ctx = canvas.getContext('2d');
+            if (ctx) {
+                ctx.scale(dpr, dpr);
+            }
+
+            const groundY = viewHeight - 70;
+            playerPos = { x: Math.max(80, viewWidth * 0.18), y: groundY };
+            enemyPos = { x: Math.min(viewWidth - 80, viewWidth * 0.82), y: groundY };
+            fenceX = viewWidth * 0.5;
+            fenceHeight = Math.min(180, Math.max(80, viewHeight * 0.22));
+        }
+        window.resizeCanvas = resizeCanvas;
+
+        const POLITICIANS = [
+            {
+                id: 'pol_1', name: '柯文哲', avatar: '👓', hp: 135, atk: 28, desc: '特質：高血量坦度，招牌阿北狂語打擊',
+                qStyle: { hairColor: '#2b1e16', skinColor: '#ffdca8', shirtColor: '#1e3a8a', vestColor: '#0284c7', glasses: 'ROUND', hat: 'NONE', item: '📜', hairType: 'KP_FOREHEAD' },
+                weapons: [
+                    { name: '柯語錄白皮書', icon: '📜', atk: 28, speed: 1.0, splash: 10, desc: '標準高體量語錄重擊' },
+                    { name: '雙塔自行車', icon: '🚲', atk: 33, speed: 1.2, splash: 15, desc: '高速衝撞破壞力大' },
+                    { name: '台大聽診器', icon: '🩺', atk: 25, speed: 0.9, splash: 5, desc: '精準點狀治療打擊' }
+                ]
+            },
+            {
+                id: 'pol_2', name: '賴清德', avatar: '🍵', hp: 125, atk: 30, desc: '特質：全糖甜度，高爆發清德飛彈',
+                qStyle: { hairColor: '#1a1a1a', skinColor: '#ffe4c4', shirtColor: '#0f172a', tieColor: '#16a34a', glasses: 'NONE', hat: 'NONE', item: '🧋', hairType: 'MIDDLE_PART' },
+                weapons: [
+                    { name: '全糖珍珠奶茶', icon: '🧋', atk: 30, speed: 1.0, splash: 12, desc: '高糖分粘性打擊' },
+                    { name: '總統府金印', icon: '🏛️', atk: 35, speed: 0.8, splash: 20, desc: '重量級鎮壓打擊' },
+                    { name: '威廉柴犬', icon: '🐕', atk: 27, speed: 1.2, splash: 8, desc: '快速敏捷衝鋒' }
+                ]
+            },
+            {
+                id: 'pol_3', name: '韓國瑜', avatar: '🥬', hp: 130, atk: 29, desc: '特質：發財熱情，高雄蔬菜與摺疊椅',
+                qStyle: { hairColor: '#332211', skinColor: '#fdd3a1', shirtColor: '#2563eb', vestColor: 'NONE', glasses: 'NONE', hat: 'NONE', item: '🥬', hairType: 'BALD' },
+                weapons: [
+                    { name: '發財高粱酒', icon: '🍶', atk: 29, speed: 1.0, splash: 15, desc: '烈酒火焰範圍爆炸' },
+                    { name: '禿子摺疊椅', icon: '🪑', atk: 34, speed: 0.9, splash: 10, desc: '經典武器重砸' },
+                    { name: '高雄大高麗菜', icon: '🥬', atk: 26, speed: 1.1, splash: 18, desc: '滾動平民打擊' }
+                ]
+            },
+            {
+                id: 'pol_4', name: '蔣萬安', avatar: '☕', hp: 120, atk: 31, desc: '特質：帥氣極速，台北美式咖啡與演習',
+                qStyle: { hairColor: '#0d0d0d', skinColor: '#ffdfc4', shirtColor: '#1e293b', tieColor: '#2563eb', glasses: 'NONE', hat: 'NONE', item: '☕', hairType: 'POMPADOUR' },
+                weapons: [
+                    { name: '精品美式咖啡', icon: '☕', atk: 31, speed: 1.1, splash: 8, desc: '提神高威力射擊' },
+                    { name: '育兒奶瓶砲', icon: '🍼', atk: 27, speed: 1.0, splash: 14, desc: '溫馨奶粉爆破' },
+                    { name: '萬安演習警報', icon: '🔔', atk: 36, speed: 0.8, splash: 22, desc: '震撼全場防空警報' }
+                ]
+            },
+            {
+                id: 'pol_5', name: '蔡英文', avatar: '🐱', hp: 115, atk: 33, desc: '特質：貓咪軍團，辣台妹國艦防禦',
+                qStyle: { hairColor: '#3d2612', skinColor: '#ffe5cc', shirtColor: '#334155', glasses: 'OVAL', hat: 'CAT_EARS', item: '🐱', hairType: 'BOB_CUT' },
+                weapons: [
+                    { name: '貓咪軍團彈頭', icon: '🐱', atk: 33, speed: 1.0, splash: 12, desc: '萌寵連鎖打擊' },
+                    { name: '英式伯爵紅茶', icon: '🫖', atk: 28, speed: 1.1, splash: 10, desc: '優雅穿透攻擊' },
+                    { name: '國艦潛艦模型', icon: '🚢', atk: 37, speed: 0.8, splash: 25, desc: '水雷防禦巨額傷害' }
+                ]
+            },
+            {
+                id: 'pol_6', name: '馬英九', avatar: '🤝', hp: 120, atk: 32, desc: '特質：死亡握手，環島車輪與巧克力',
+                qStyle: { hairColor: '#1a1a1a', skinColor: '#ffdbac', shirtColor: '#1e293b', tieColor: '#dc2626', glasses: 'NONE', hat: 'NONE', item: '✋', hairType: 'SLICK_BACK' },
+                weapons: [
+                    { name: '死亡握手神掌', icon: '✋', atk: 32, speed: 1.0, splash: 15, desc: '因果律無法避開打擊' },
+                    { name: '環島單車輪胎', icon: '🚴', atk: 29, speed: 1.2, splash: 10, desc: '高旋轉滾動衝擊' },
+                    { name: '黑巧克力蛋糕', icon: '🍫', atk: 35, speed: 0.9, splash: 18, desc: '甜食高壓重砸' }
+                ]
+            },
+            {
+                id: 'pol_7', name: '陳水扁', avatar: '🧢', hp: 110, atk: 34, desc: '特質：台灣阿扁，扁帽精神與319',
+                qStyle: { hairColor: '#1a1a1a', skinColor: '#fcd2a0', shirtColor: '#16a34a', glasses: 'NONE', hat: 'GREEN_FLAT_CAP', item: '🧢', hairType: 'SHORT' },
+                weapons: [
+                    { name: '綠色扁帽飛盤', icon: '🧢', atk: 34, speed: 1.1, splash: 10, desc: '旋轉飛盤切削' },
+                    { name: '319紀念彈頭', icon: '🔫', atk: 38, speed: 1.3, splash: 5, desc: '極速精準貫穿' },
+                    { name: '寶島吉他樂音', icon: '🎸', atk: 30, speed: 0.9, splash: 20, desc: '聲波擴散爆炸' }
+                ]
+            },
+            {
+                id: 'pol_8', name: '黃國昌', avatar: '📢', hp: 115, atk: 33, desc: '特質：咆哮震撼，大聲公與蔥頭',
+                qStyle: { hairColor: '#0a0a0a', skinColor: '#ffe0bd', shirtColor: '#0f172a', tieColor: '#f59e0b', glasses: 'RECT', hat: 'NONE', item: '📢', hairType: 'SIDE_BANG' },
+                weapons: [
+                    { name: '咆哮大聲公', icon: '📢', atk: 33, speed: 1.0, splash: 20, desc: '高分貝聲波衝擊' },
+                    { name: '揭弊卷宗飛彈', icon: '📁', atk: 36, speed: 0.9, splash: 12, desc: '重量文件重擊' },
+                    { name: '正義蔥頭炸彈', icon: '🧅', atk: 30, speed: 1.2, splash: 15, desc: '辛辣範圍氣味爆發' }
+                ]
+            },
+            {
+                id: 'pol_9', name: '郭台銘', avatar: '🏭', hp: 140, atk: 27, desc: '特質：霸氣企業家，富士康晶圓與媽祖',
+                qStyle: { hairColor: '#2b231d', skinColor: '#ffd5a5', shirtColor: '#1e1b4b', tieColor: '#b91c1c', glasses: 'NONE', hat: 'ROC_CAP', item: '🪙', hairType: 'SHORT' },
+                weapons: [
+                    { name: '代工晶圓飛鏢', icon: '💿', atk: 27, speed: 1.2, splash: 8, desc: '高科技精密打擊' },
+                    { name: '富士康金條', icon: '🪙', atk: 35, speed: 0.8, splash: 18, desc: '黃金重量砸落' },
+                    { name: '媽祖金身賜福', icon: '⛩️', atk: 32, speed: 1.0, splash: 22, desc: '神明庇佑光芒爆炸' }
+                ]
+            },
+            {
+                id: 'pol_10', name: '高虹安', avatar: '🎓', hp: 110, atk: 35, desc: '特質：斐陶斐學霸，棒球場紅土與公事包',
+                qStyle: { hairColor: '#261a13', skinColor: '#ffe8d6', shirtColor: '#0284c7', glasses: 'OVAL', hat: 'GRADUATION_CAP', item: '🏅', hairType: 'LONG_BANGS' },
+                weapons: [
+                    { name: '斐陶斐榮譽勳章', icon: '🏅', atk: 35, speed: 1.1, splash: 10, desc: '學術尖端閃耀擊碎' },
+                    { name: '棒球場大紅土包', icon: '⚾', atk: 31, speed: 1.0, splash: 22, desc: '紅土沙塵擴散爆破' },
+                    { name: '科技公事包', icon: '💼', atk: 38, speed: 0.9, splash: 14, desc: '重型金屬包打擊' }
+                ]
+            }
+        ];
+
+        const TYCOONS = [
+            {
+                id: 'tycoon_1', name: '馬斯克', avatar: '🚀', hp: 130, atk: 29, desc: '特質：SpaceX星艦，Tesla與X社群標籤',
+                qStyle: { hairColor: '#523a28', skinColor: '#ffe0bd', shirtColor: '#0f172a', glasses: 'NONE', hat: 'NONE', item: '🚀', hairType: 'SPIKY_MODERN' },
+                weapons: [
+                    { name: 'SpaceX星艦火箭', icon: '🚀', atk: 35, speed: 1.1, splash: 25, desc: '太空級範圍爆炸' },
+                    { name: 'Tesla Cybertruck', icon: '🛻', atk: 31, speed: 0.9, splash: 15, desc: '防彈皮卡衝撞' },
+                    { name: 'X黑色符號彈', icon: '✖️', atk: 29, speed: 1.2, splash: 10, desc: '社群極速標擊' }
+                ]
+            },
+            {
+                id: 'tycoon_2', name: '貝佐斯', avatar: '📦', hp: 125, atk: 30, desc: '特質：亞馬遜包裹，藍色起源與無限黑卡',
+                qStyle: { hairColor: '#1a1a1a', skinColor: '#fcd0a1', shirtColor: '#111827', glasses: 'AVIATOR_SUNGLASSES', hat: 'NONE', item: '📦', hairType: 'SHINY_BALD' },
+                weapons: [
+                    { name: '亞馬遜紙箱彈頭', icon: '📦', atk: 30, speed: 1.0, splash: 15, desc: '海量快遞壓頂' },
+                    { name: '藍色起源火箭', icon: '🛸', atk: 36, speed: 0.8, splash: 22, desc: '亞軌道重力打擊' },
+                    { name: '無限刷黑卡', icon: '💳', atk: 28, speed: 1.3, splash: 8, desc: '金錢飛鏢快速連發' }
+                ]
+            },
+            {
+                id: 'tycoon_3', name: '祖克柏', avatar: '🥽', hp: 120, atk: 32, desc: '特質：元宇宙VR頭顯，蜥蜴人熱感射線',
+                qStyle: { hairColor: '#b45309', skinColor: '#ffebd7', shirtColor: '#64748b', glasses: 'NONE', hat: 'VR_HEADSET', item: '👍', hairType: 'CURLY_CROP' },
+                weapons: [
+                    { name: 'Meta Quest VR頭顯', icon: '🥽', atk: 32, speed: 1.0, splash: 14, desc: '虛擬現實光線衝擊' },
+                    { name: '藍色讚手勢', icon: '👍', atk: 28, speed: 1.2, splash: 10, desc: '按讚推波助瀾' },
+                    { name: '蜥蜴人熱感雷射', icon: '🦎', atk: 38, speed: 0.9, splash: 20, desc: '高能高熱灼燒打擊' }
+                ]
+            },
+            {
+                id: 'tycoon_4', name: '比爾蓋茲', avatar: '💻', hp: 125, atk: 31, desc: '特質：Windows藍當磁碟，蚊子生物科技',
+                qStyle: { hairColor: '#9ca3af', skinColor: '#ffebcd', shirtColor: '#7f1d1d', tieColor: '#3b82f6', glasses: 'WIRE_SQUARE', hat: 'NONE', item: '💾', hairType: 'SIDE_SWEPT' },
+                weapons: [
+                    { name: 'Windows藍當光碟', icon: '💿', atk: 31, speed: 1.1, splash: 12, desc: '系統當機死藍光芒' },
+                    { name: '基因改造蚊子包', icon: '🦟', atk: 27, speed: 1.3, splash: 18, desc: '生物蜂擁擴散' },
+                    { name: '微軟軟體光碟包', icon: '💾', atk: 36, speed: 0.8, splash: 15, desc: '經典DOS壓制' }
+                ]
+            },
+            {
+                id: 'tycoon_5', name: '巴菲特', avatar: '📈', hp: 140, atk: 26, desc: '特質：價值投資K線，麥當勞漢堡與金幣',
+                qStyle: { hairColor: '#e5e7eb', skinColor: '#ffd8b1', shirtColor: '#1e3a8a', tieColor: '#dc2626', glasses: 'ROUND_THICK', hat: 'NONE', item: '📈', hairType: 'WHITE_SIDE_FLUFF' },
+                weapons: [
+                    { name: '價值投資K線圖', icon: '📈', atk: 28, speed: 1.0, splash: 15, desc: '複利滾雪球擊打' },
+                    { name: '神聖麥當勞漢堡', icon: '🍔', atk: 26, speed: 1.1, splash: 10, desc: '美味熱量爆發' },
+                    { name: '股神金幣雨', icon: '💰', atk: 35, speed: 0.8, splash: 24, desc: '金幣傾瀉沉重打擊' }
+                ]
+            },
+            {
+                id: 'tycoon_6', name: '阿爾諾', avatar: '👜', hp: 115, atk: 33, desc: '特質：LVMH奢華精品包，香檳王軟木塞',
+                qStyle: { hairColor: '#d1d5db', skinColor: '#ffe4c4', shirtColor: '#111827', tieColor: '#4b5563', glasses: 'NONE', hat: 'NONE', item: '👜', hairType: 'SLICK_BACK' },
+                weapons: [
+                    { name: 'LVMH頂級包', icon: '👜', atk: 33, speed: 1.0, splash: 12, desc: '昂貴時尚砸擊' },
+                    { name: '香檳王爆破塞', icon: '🍾', atk: 37, speed: 0.9, splash: 20, desc: '高壓氣體噴射' },
+                    { name: '璀璨巨鑽戒指', icon: '💎', atk: 29, speed: 1.2, splash: 8, desc: '鑽石耀眼穿透' }
+                ]
+            },
+            {
+                id: 'tycoon_7', name: '黃仁勳', avatar: '🟩', hp: 120, atk: 34, desc: '特質：NVIDIA 5090顯卡，招牌皮衣與夜市麻辣',
+                qStyle: { hairColor: '#111827', skinColor: '#ffdfc4', shirtColor: '#000000', jacketColor: '#1f2937', glasses: 'NONE', hat: 'NONE', item: '🟩', hairType: 'SILVER_HIGHLIGHT' },
+                weapons: [
+                    { name: 'RTX 5090 Ti顯卡', icon: '🟩', atk: 38, speed: 1.1, splash: 22, desc: '光線追蹤高溫爆發' },
+                    { name: '招牌黑色皮夾克', icon: '🧥', atk: 29, speed: 1.2, splash: 10, desc: '皮衣高速風阻破空' },
+                    { name: '夜市麻辣花生包', icon: '🥜', atk: 31, speed: 1.0, splash: 16, desc: '麻辣香氣震撼擴散' }
+                ]
+            },
+            {
+                id: 'tycoon_8', name: '艾利森', avatar: '⛵', hp: 125, atk: 30, desc: '特質：甲骨文帆船，雲端資料庫與椰子',
+                qStyle: { hairColor: '#1f2937', skinColor: '#fdd0a2', shirtColor: '#0284c7', beardColor: '#374151', glasses: 'NONE', hat: 'YACHT_CAP', item: '⛵', hairType: 'BEARDED' },
+                weapons: [
+                    { name: '甲骨文帆船戰艦', icon: '⛵', atk: 34, speed: 0.9, splash: 18, desc: '巨浪帆船轟炸' },
+                    { name: '雲端資料庫硬碟', icon: '💽', atk: 30, speed: 1.1, splash: 12, desc: '數據流高頻打擊' },
+                    { name: '夏威夷拉奈島椰子', icon: '🥥', atk: 27, speed: 1.2, splash: 15, desc: '堅硬椰子彈跳' }
+                ]
+            },
+            {
+                id: 'tycoon_9', name: '鮑爾默', avatar: '📢', hp: 135, atk: 28, desc: '特質：Developers狂吼，快艇隊籃球',
+                qStyle: { hairColor: '#4b5563', skinColor: '#fca5a5', shirtColor: '#dc2626', glasses: 'NONE', hat: 'NONE', item: '🗣️', hairType: 'BALD_EXPRESSIVE' },
+                weapons: [
+                    { name: 'Developers狂吼音波', icon: '🗣️', atk: 32, speed: 1.0, splash: 22, desc: '激情澎湃震耳欲聾' },
+                    { name: '快艇隊籃球', icon: '🏀', atk: 28, speed: 1.2, splash: 12, desc: '高彈力砸擊' },
+                    { name: '重型軟體手冊', icon: '📕', atk: 33, speed: 0.8, splash: 14, desc: '厚重書籍沉重擊打' }
+                ]
+            },
+            {
+                id: 'tycoon_10', name: '佩吉', avatar: '🔍', hp: 110, atk: 35, desc: '特質：Google搜尋關鍵字，DeepMind AI核心',
+                qStyle: { hairColor: '#374151', skinColor: '#ffebcd', shirtColor: '#2563eb', glasses: 'GOOGLE_COLORS', hat: 'NONE', item: '🔍', hairType: 'MODERN_CROP' },
+                weapons: [
+                    { name: 'Google搜尋關鍵字', icon: '🔍', atk: 35, speed: 1.1, splash: 12, desc: '精準演算法打擊' },
+                    { name: 'DeepMind AI核心', icon: '🤖', atk: 39, speed: 0.9, splash: 25, desc: '人工智慧高能核爆' },
+                    { name: '數據中心伺服器', icon: '🖥️', atk: 31, speed: 1.0, splash: 16, desc: '伺服器機櫃壓頂' }
+                ]
+            }
+        ];
+
+        class SoundEngine {
+            constructor() {
+                this.ctx = null;
+                this.sfxEnabled = localStorage.getItem('pol_sfx') !== 'false';
+                this.bgmEnabled = localStorage.getItem('pol_bgm') !== 'false';
+                this.bgmInterval = null;
+                this.bgmStep = 0;
+                this.melody = [293.66, 349.23, 440.00, 523.25, 440.00, 349.23, 329.63, 392.00];
+            }
+
+            init() {
+                if (!this.ctx) {
+                    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                    this.ctx = new AudioContextClass();
+                }
+                if (this.ctx.state === 'suspended') {
+                    this.ctx.resume();
+                }
+            }
+
+            playTone(freq, type = 'sine', duration = 0.15, startGain = 0.3, endGain = 0.01) {
+                if (!this.sfxEnabled || !this.ctx) return;
+                try {
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = type;
+                    osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                    gain.gain.setValueAtTime(startGain, this.ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(endGain, this.ctx.currentTime + duration);
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start();
+                    osc.stop(this.ctx.currentTime + duration);
+                } catch(e) {}
+            }
+
+            playLaunch() {
+                if (!this.sfxEnabled || !this.ctx) return;
+                const now = this.ctx.currentTime;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(180, now);
+                osc.frequency.exponentialRampToValueAtTime(700, now + 0.2);
+                gain.gain.setValueAtTime(0.35, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.2);
+            }
+
+            playExplosion() {
+                if (!this.sfxEnabled || !this.ctx) return;
+                const bufferSize = this.ctx.sampleRate * 0.35;
+                const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+
+                const noise = this.ctx.createBufferSource();
+                noise.buffer = buffer;
+                const filter = this.ctx.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(700, this.ctx.currentTime);
+                filter.frequency.linearRampToValueAtTime(30, this.ctx.currentTime + 0.35);
+
+                const gain = this.ctx.createGain();
+                gain.gain.setValueAtTime(0.45, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.35);
+
+                noise.connect(filter);
+                filter.connect(gain);
+                gain.connect(this.ctx.destination);
+                noise.start();
+            }
+
+            playHit() {
+                if (!this.sfxEnabled || !this.ctx) return;
+                this.playTone(320, 'square', 0.12, 0.4, 0.01);
+            }
+
+            playWin() {
+                if (!this.sfxEnabled || !this.ctx) return;
+                [440, 554.37, 659.25, 880.00].forEach((freq, i) => {
+                    setTimeout(() => this.playTone(freq, 'triangle', 0.22, 0.35, 0.01), i * 110);
+                });
+            }
+
+            startBGM() {
+                if (this.bgmInterval) clearInterval(this.bgmInterval);
+                if (!this.bgmEnabled) return;
+
+                this.bgmStep = 0;
+                this.bgmInterval = setInterval(() => {
+                    if (!this.bgmEnabled || !this.ctx || this.ctx.state !== 'running') return;
+                    const now = this.ctx.currentTime;
+                    const freq = this.melody[this.bgmStep % this.melody.length];
+
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(freq, now);
+                    gain.gain.setValueAtTime(0.035, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.22);
+
+                    this.bgmStep++;
+                }, 250);
+            }
+
+            stopBGM() {
+                if (this.bgmInterval) {
+                    clearInterval(this.bgmInterval);
+                    this.bgmInterval = null;
+                }
+            }
+
+            toggleSFX() {
+                this.sfxEnabled = !this.sfxEnabled;
+                localStorage.setItem('pol_sfx', this.sfxEnabled);
+                return this.sfxEnabled;
+            }
+
+            toggleBGM() {
+                this.bgmEnabled = !this.bgmEnabled;
+                localStorage.setItem('pol_bgm', this.bgmEnabled);
+                if (this.bgmEnabled) this.startBGM();
+                else this.stopBGM();
+                return this.bgmEnabled;
+            }
+        }
+
+        const audio = new SoundEngine();
+
+        function drawQCharacter(targetCtx, hero, isFacingRight, options = {}) {
+            const {
+                scale = 1.0,
+                isAttacking = false,
+                isHurt = false,
+                hpRatio = 1.0,
+                animFrame = 0
+            } = options;
+
+            const st = hero.qStyle || {};
+            targetCtx.save();
+
+            if (!isFacingRight) {
+                targetCtx.scale(-1, 1);
+            }
+
+            targetCtx.scale(scale, scale);
+
+            // Subtle Idle Bobbing Animation
+            const idleY = Math.sin(animFrame * 0.08) * 2;
+            targetCtx.translate(0, idleY);
+
+            // 1. Shadow Ground Glow
+            targetCtx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+            targetCtx.beginPath();
+            targetCtx.ellipse(0, 36, 26, 8, 0, 0, Math.PI * 2);
+            targetCtx.fill();
+
+            // 2. Chibi Body / Torso
+            targetCtx.fillStyle = st.shirtColor || '#1e293b';
+            targetCtx.beginPath();
+            targetCtx.roundRect(-16, 12, 32, 24, 8);
+            targetCtx.fill();
+
+            // KP Doctor / Political Vest
+            if (st.vestColor && st.vestColor !== 'NONE') {
+                targetCtx.fillStyle = st.vestColor;
+                targetCtx.beginPath();
+                targetCtx.roundRect(-16, 12, 10, 24, [8, 0, 0, 8]);
+                targetCtx.roundRect(6, 12, 10, 24, [0, 8, 8, 0]);
+                targetCtx.fill();
+            } else if (st.jacketColor) {
+                targetCtx.fillStyle = st.jacketColor;
+                targetCtx.beginPath();
+                targetCtx.roundRect(-17, 10, 34, 26, 10);
+                targetCtx.fill();
+            }
+
+            // Tie
+            if (st.tieColor) {
+                targetCtx.fillStyle = st.tieColor;
+                targetCtx.beginPath();
+                targetCtx.moveTo(-3, 12);
+                targetCtx.lineTo(3, 12);
+                targetCtx.lineTo(4, 26);
+                targetCtx.lineTo(0, 30);
+                targetCtx.lineTo(-4, 26);
+                targetCtx.closePath();
+                targetCtx.fill();
+            }
+
+            // Arms & Hands
+            targetCtx.fillStyle = st.skinColor || '#ffdbac';
+            if (isAttacking) {
+                targetCtx.beginPath();
+                targetCtx.arc(18, 16, 7, 0, Math.PI * 2);
+                targetCtx.fill();
+            } else {
+                targetCtx.beginPath();
+                targetCtx.arc(-16, 20, 6, 0, Math.PI * 2);
+                targetCtx.arc(16, 20, 6, 0, Math.PI * 2);
+                targetCtx.fill();
+            }
+
+            // 3. Big Cute Chibi Head
+            const headY = -12;
+            const headRadius = 26;
+            targetCtx.fillStyle = st.skinColor || '#ffdbac';
+            targetCtx.beginPath();
+            targetCtx.arc(0, headY, headRadius, 0, Math.PI * 2);
+            targetCtx.fill();
+
+            // Cheeks Rosy Blush
+            targetCtx.fillStyle = 'rgba(244, 63, 94, 0.35)';
+            targetCtx.beginPath();
+            targetCtx.arc(-13, headY + 8, 5, 0, Math.PI * 2);
+            targetCtx.arc(13, headY + 8, 5, 0, Math.PI * 2);
+            targetCtx.fill();
+
+            // 4. Detailed Hair Styles
+            targetCtx.fillStyle = st.hairColor || '#1a1a1a';
+            const hType = st.hairType || 'SHORT';
+
+            if (hType === 'KP_FOREHEAD') {
+                targetCtx.beginPath();
+                targetCtx.arc(0, headY - 4, headRadius + 2, Math.PI * 0.8, Math.PI * 2.2);
+                targetCtx.fill();
+                targetCtx.beginPath();
+                targetCtx.moveTo(-16, headY - 14);
+                targetCtx.quadraticCurveTo(-4, headY - 26, 8, headY - 12);
+                targetCtx.quadraticCurveTo(-2, headY - 18, -16, headY - 14);
+                targetCtx.fill();
+            } else if (hType === 'MIDDLE_PART') {
+                targetCtx.beginPath();
+                targetCtx.arc(0, headY - 4, headRadius + 2, Math.PI * 0.8, Math.PI * 2.2);
+                targetCtx.fill();
+                targetCtx.fillStyle = st.skinColor;
+                targetCtx.beginPath();
+                targetCtx.moveTo(-4, headY - headRadius);
+                targetCtx.lineTo(0, headY - 10);
+                targetCtx.lineTo(4, headY - headRadius);
+                targetCtx.fill();
+            } else if (hType === 'BALD' || hType === 'SHINY_BALD') {
+                targetCtx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+                targetCtx.beginPath();
+                targetCtx.arc(-8, headY - 14, 5, 0, Math.PI * 2);
+                targetCtx.fill();
+            } else if (hType === 'POMPADOUR' || hType === 'SPIKY_MODERN') {
+                targetCtx.beginPath();
+                targetCtx.arc(0, headY - 8, headRadius + 4, Math.PI * 0.7, Math.PI * 2.3);
+                targetCtx.fill();
+            } else if (hType === 'BOB_CUT' || hType === 'LONG_BANGS') {
+                targetCtx.beginPath();
+                targetCtx.arc(0, headY - 2, headRadius + 3, Math.PI * 0.7, Math.PI * 2.3);
+                targetCtx.fill();
+                targetCtx.beginPath();
+                targetCtx.roundRect(-headRadius - 2, headY - 5, 10, 28, 4);
+                targetCtx.roundRect(headRadius - 8, headY - 5, 10, 28, 4);
+                targetCtx.fill();
+            } else {
+                targetCtx.beginPath();
+                targetCtx.arc(0, headY - 6, headRadius + 2, Math.PI * 0.8, Math.PI * 2.2);
+                targetCtx.fill();
+            }
+
+            if (st.beardColor) {
+                targetCtx.fillStyle = st.beardColor;
+                targetCtx.beginPath();
+                targetCtx.arc(0, headY + 12, 12, 0, Math.PI);
+                targetCtx.fill();
+            }
+
+            // 5. Expressive Eyes & Mouth
+            if (isHurt || hpRatio < 0.3) {
+                targetCtx.strokeStyle = '#0f172a';
+                targetCtx.lineWidth = 3;
+                targetCtx.beginPath();
+                targetCtx.moveTo(-14, headY - 2); targetCtx.lineTo(-6, headY + 4);
+                targetCtx.moveTo(-14, headY + 4); targetCtx.lineTo(-6, headY - 2);
+
+                targetCtx.moveTo(6, headY - 2); targetCtx.lineTo(14, headY + 4);
+                targetCtx.moveTo(6, headY + 4); targetCtx.lineTo(14, headY - 2);
+                targetCtx.stroke();
+
+                targetCtx.fillStyle = '#991b1b';
+                targetCtx.beginPath();
+                targetCtx.arc(0, headY + 12, 5, 0, Math.PI * 2);
+                targetCtx.fill();
+            } else {
+                targetCtx.fillStyle = '#0f172a';
+                targetCtx.beginPath();
+                targetCtx.arc(-10, headY + 2, 4.5, 0, Math.PI * 2);
+                targetCtx.arc(10, headY + 2, 4.5, 0, Math.PI * 2);
+                targetCtx.fill();
+
+                targetCtx.fillStyle = '#ffffff';
+                targetCtx.beginPath();
+                targetCtx.arc(-11.5, headY, 1.8, 0, Math.PI * 2);
+                targetCtx.arc(8.5, headY, 1.8, 0, Math.PI * 2);
+                targetCtx.fill();
+
+                targetCtx.strokeStyle = '#0f172a';
+                targetCtx.lineWidth = 2.5;
+                targetCtx.beginPath();
+                if (st.item === '🗣️') {
+                    targetCtx.fillStyle = '#dc2626';
+                    targetCtx.arc(0, headY + 10, 6, 0, Math.PI);
+                    targetCtx.fill();
+                } else {
+                    targetCtx.arc(0, headY + 8, 5, 0.1 * Math.PI, 0.9 * Math.PI);
+                    targetCtx.stroke();
+                }
+            }
+
+            // 6. Eyeglasses
+            if (st.glasses && st.glasses !== 'NONE') {
+                targetCtx.strokeStyle = st.glasses === 'GOOGLE_COLORS' ? '#ea4335' : '#1e293b';
+                targetCtx.lineWidth = 2.5;
+
+                if (st.glasses === 'ROUND' || st.glasses === 'ROUND_THICK' || st.glasses === 'OVAL') {
+                    targetCtx.beginPath();
+                    targetCtx.arc(-10, headY + 2, 8, 0, Math.PI * 2);
+                    targetCtx.arc(10, headY + 2, 8, 0, Math.PI * 2);
+                    targetCtx.stroke();
+                    targetCtx.beginPath();
+                    targetCtx.moveTo(-2, headY + 2); targetCtx.lineTo(2, headY + 2);
+                    targetCtx.stroke();
+                } else if (st.glasses === 'AVIATOR_SUNGLASSES') {
+                    targetCtx.fillStyle = '#0f172a';
+                    targetCtx.beginPath();
+                    targetCtx.roundRect(-18, headY - 4, 15, 12, 4);
+                    targetCtx.roundRect(3, headY - 4, 15, 12, 4);
+                    targetCtx.fill();
+                } else if (st.glasses === 'RECT' || st.glasses === 'WIRE_SQUARE') {
+                    targetCtx.beginPath();
+                    targetCtx.strokeRect(-17, headY - 3, 13, 10);
+                    targetCtx.strokeRect(4, headY - 3, 13, 10);
+                    targetCtx.moveTo(-4, headY + 2); targetCtx.lineTo(4, headY + 2);
+                    targetCtx.stroke();
+                }
+            }
+
+            // 7. Hats
+            if (st.hat && st.hat !== 'NONE') {
+                if (st.hat === 'ROC_CAP' || st.hat === 'GREEN_FLAT_CAP' || st.hat === 'YACHT_CAP') {
+                    const capColor = st.hat === 'ROC_CAP' ? '#dc2626' : (st.hat === 'GREEN_FLAT_CAP' ? '#16a34a' : '#0284c7');
+                    targetCtx.fillStyle = capColor;
+                    targetCtx.beginPath();
+                    targetCtx.arc(0, headY - 14, headRadius, Math.PI, Math.PI * 2);
+                    targetCtx.fill();
+                    targetCtx.fillStyle = '#0f172a';
+                    targetCtx.beginPath();
+                    targetCtx.ellipse(8, headY - 12, 16, 5, 0.2, 0, Math.PI * 2);
+                    targetCtx.fill();
+                } else if (st.hat === 'VR_HEADSET') {
+                    targetCtx.fillStyle = '#0284c7';
+                    targetCtx.beginPath();
+                    targetCtx.roundRect(-18, headY - 6, 36, 14, 5);
+                    targetCtx.fill();
+                } else if (st.hat === 'CAT_EARS') {
+                    targetCtx.fillStyle = '#f43f5e';
+                    targetCtx.beginPath();
+                    targetCtx.moveTo(-18, headY - 20); targetCtx.lineTo(-10, headY - 34); targetCtx.lineTo(-4, headY - 20);
+                    targetCtx.moveTo(4, headY - 20); targetCtx.lineTo(10, headY - 34); targetCtx.lineTo(18, headY - 20);
+                    targetCtx.fill();
+                } else if (st.hat === 'GRADUATION_CAP') {
+                    targetCtx.fillStyle = '#0f172a';
+                    targetCtx.beginPath();
+                    targetCtx.moveTo(0, headY - 34);
+                    targetCtx.lineTo(22, headY - 26);
+                    targetCtx.lineTo(0, headY - 18);
+                    targetCtx.lineTo(-22, headY - 26);
+                    targetCtx.closePath();
+                    targetCtx.fill();
+                }
+            }
+
+            // 8. Signature Item Floating
+            if (st.item) {
+                targetCtx.font = '18px sans-serif';
+                targetCtx.textAlign = 'center';
+                targetCtx.textBaseline = 'middle';
+                targetCtx.fillText(st.item, 24, headY + 8);
+            }
+
+            targetCtx.restore();
+        }
+
+        /* Generate Base64 DataURL Image for UI Modal & HUD Cards */
+        const avatarCache = {};
+        function getQAvatarDataUrl(hero) {
+            if (!hero) return '';
+            if (avatarCache[hero.id]) return avatarCache[hero.id];
+
+            const c = document.createElement('canvas');
+            c.width = 100;
+            c.height = 100;
+            const cCtx = c.getContext('2d');
+
+            cCtx.translate(50, 60);
+            drawQCharacter(cCtx, hero, true, { scale: 1.1 });
+
+            const url = c.toDataURL();
+            avatarCache[hero.id] = url;
+            return url;
+        }
+
+        const gridContainer = document.getElementById('character-grid');
+        const tabPol = document.getElementById('tab-faction-pol');
+        const tabTycoon = document.getElementById('tab-faction-tycoon');
+        const modalWeaponPicker = document.getElementById('modal-weapon-picker');
+        const HUDWeaponGroup = document.getElementById('weapon-selector-group');
+
+        function renderCharacterSelection() {
+            if (!playerHero) {
+                playerHero = POLITICIANS[0];
+            }
+            const list = (selectedFaction === 'POL') ? POLITICIANS : TYCOONS;
+            gridContainer.innerHTML = '';
+
+            list.forEach((hero) => {
+                const isSelected = (hero.id === playerHero.id);
+                const card = document.createElement('div');
+                card.className = `glass-card p-2 rounded-xl border text-center cursor-pointer transition transform hover:scale-105 flex flex-col items-center justify-between ${
+                    isSelected ? 'border-amber-400 bg-amber-500/30 shadow-lg' : 'border-slate-700/60 hover:border-slate-500'
+                }`;
+                card.onclick = () => selectHero(hero);
+
+                const avatarUrl = getQAvatarDataUrl(hero);
+
+                card.innerHTML = `
+                    <div class="w-14 h-14 my-1 rounded-full bg-slate-900/60 border border-slate-700 overflow-hidden flex items-center justify-center shrink-0">
+                        <img src="${avatarUrl}" class="w-full h-full object-cover" alt="${hero.name}">
+                    </div>
+                    <div class="font-extrabold text-xs sm:text-sm ${isSelected ? 'text-amber-300' : 'text-slate-200'}">${hero.name}</div>
+                    <div class="text-[10px] text-slate-400 font-mono mt-0.5">HP:${hero.hp} ATK:${hero.atk}</div>
+                `;
+                gridContainer.appendChild(card);
+            });
+
+            // Update preview panel & weapon pickers
+            const previewAvatarBox = document.getElementById('hero-preview-avatar');
+            previewAvatarBox.innerHTML = `<img src="${getQAvatarDataUrl(playerHero)}" class="w-full h-full object-cover">`;
+            document.getElementById('hero-preview-name').textContent = `${playerHero.name} (${selectedFaction === 'POL' ? '台灣政壇' : '全球富豪'})`;
+            document.getElementById('hero-preview-desc').textContent = playerHero.desc;
+
+            renderModalWeaponPicker();
+            renderHUDWeaponGroup();
+        }
+
+        function renderModalWeaponPicker() {
+            modalWeaponPicker.innerHTML = '';
+            playerHero.weapons.forEach((w, idx) => {
+                const isSelected = (idx === selectedWeaponIndex);
+                const btn = document.createElement('button');
+                btn.className = `p-1.5 rounded-lg border text-center transition flex flex-col items-center justify-center ${
+                    isSelected ? 'bg-amber-500/40 border-amber-400 text-amber-300 font-bold' : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
+                }`;
+                btn.onclick = () => {
+                    selectedWeaponIndex = idx;
+                    renderModalWeaponPicker();
+                    renderHUDWeaponGroup();
+                };
+                btn.innerHTML = `
+                    <span class="text-base sm:text-lg">${w.icon}</span>
+                    <span class="text-[10px] truncate w-full">${w.name}</span>
+                `;
+                modalWeaponPicker.appendChild(btn);
+            });
+        }
+
+        function renderHUDWeaponGroup() {
+            HUDWeaponGroup.innerHTML = '';
+            playerHero.weapons.forEach((w, idx) => {
+                const isSelected = (idx === selectedWeaponIndex);
+                const btn = document.createElement('button');
+                btn.className = `px-2 py-1 rounded-lg border text-xs font-bold transition flex items-center space-x-1 ${
+                    isSelected ? 'bg-amber-500 border-amber-300 text-slate-950 shadow' : 'bg-slate-800 border-slate-700 text-slate-300 hover:bg-slate-700'
+                }`;
+                btn.onclick = () => {
+                    selectedWeaponIndex = idx;
+                    renderHUDWeaponGroup();
+                };
+                btn.innerHTML = `<span>${w.icon}</span> <span class="hidden sm:inline">${w.name}</span>`;
+                HUDWeaponGroup.appendChild(btn);
+            });
+        }
+
+        function selectHero(hero) {
+            playerHero = hero;
+            selectedWeaponIndex = 0;
+            renderCharacterSelection();
+        }
+
+        tabPol.addEventListener('click', () => {
+            selectedFaction = 'POL';
+            playerHero = POLITICIANS[0];
+            selectedWeaponIndex = 0;
+            tabPol.className = 'flex-1 py-2 rounded-xl font-black text-xs sm:text-base transition flex items-center justify-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg';
+            tabTycoon.className = 'flex-1 py-2 rounded-xl font-black text-xs sm:text-base transition flex items-center justify-center gap-2 text-slate-400 hover:text-white';
+            renderCharacterSelection();
+        });
+
+        tabTycoon.addEventListener('click', () => {
+            selectedFaction = 'TYCOON';
+            playerHero = TYCOONS[0];
+            selectedWeaponIndex = 0;
+            tabTycoon.className = 'flex-1 py-2 rounded-xl font-black text-xs sm:text-base transition flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-lg';
+            tabPol.className = 'flex-1 py-2 rounded-xl font-black text-xs sm:text-base transition flex items-center justify-center gap-2 text-slate-400 hover:text-white';
+            renderCharacterSelection();
+        });
+
+        function initLevel() {
+            const enemyList = (selectedFaction === 'POL') ? TYCOONS : POLITICIANS;
+            currentEnemyHero = enemyList[(level - 1) % enemyList.length];
+            enemyWeaponIndex = Math.floor(Math.random() * currentEnemyHero.weapons.length);
+
+            playerMaxHP = playerHero.hp;
+            playerHP = playerMaxHP;
+
+            enemyMaxHP = currentEnemyHero.hp + (level * 10);
+            enemyHP = enemyMaxHP;
+
+            generateWind();
+            updateHUD();
+
+            gameState = 'PLAYER_TURN';
+            document.getElementById('turn-status-badge').textContent = '你的回合！';
+            document.getElementById('turn-status-badge').className = 'px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40 animate-pulse text-xs';
+            enableControls(true);
+        }
+
+        function generateWind() {
+            wind = (Math.random() * 3.8 - 1.9); // -1.9 to +1.9
+        }
+
+        function updateHUD() {
+            document.getElementById('hud-level').textContent = level;
+            document.getElementById('hud-score').textContent = score;
+
+            // Player HUD Avatar
+            const playerAvatarBox = document.getElementById('hud-player-avatar');
+            playerAvatarBox.innerHTML = `<img src="${getQAvatarDataUrl(playerHero)}" class="w-full h-full object-cover">`;
+            document.getElementById('hud-player-name').textContent = `${playerName} (${playerHero.name})`;
+            document.getElementById('hud-player-hp-text').textContent = `${Math.max(0, Math.round(playerHP))}/${playerMaxHP}`;
+            const playerPct = Math.max(0, (playerHP / playerMaxHP) * 100);
+            document.getElementById('hud-player-hp-bar').style.width = `${playerPct}%`;
+
+            // Enemy HUD Avatar
+            const enemyAvatarBox = document.getElementById('hud-enemy-avatar');
+            enemyAvatarBox.innerHTML = `<img src="${getQAvatarDataUrl(currentEnemyHero)}" class="w-full h-full object-cover">`;
+            document.getElementById('hud-enemy-name').textContent = currentEnemyHero.name;
+            document.getElementById('hud-enemy-hp-text').textContent = `${Math.max(0, Math.round(enemyHP))}/${enemyMaxHP}`;
+            const enemyPct = Math.max(0, (enemyHP / enemyMaxHP) * 100);
+            document.getElementById('hud-enemy-hp-bar').style.width = `${enemyPct}%`;
+
+            // Wind Indicator
+            const dirIcon = wind >= 0 ? '➡️' : '⬅️';
+            document.getElementById('hud-wind-dir').textContent = dirIcon;
+            document.getElementById('hud-wind-speed').textContent = Math.abs(wind).toFixed(1);
+        }
+
+        function enableControls(enable) {
+            const btnThrow = document.getElementById('btn-throw');
+            btnThrow.disabled = !enable;
+            document.getElementById('angle-slider').disabled = !enable;
+            if (!enable) {
+                btnThrow.classList.add('opacity-50', 'cursor-not-allowed');
+            } else {
+                btnThrow.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        }
+
+        // Angle Slider Listener
+        const angleSlider = document.getElementById('angle-slider');
+        const angleValue = document.getElementById('angle-value');
+        angleSlider.addEventListener('input', (e) => {
+            throwAngle = parseInt(e.target.value, 10);
+            angleValue.textContent = `${throwAngle}°`;
+        });
+
+        const btnThrow = document.getElementById('btn-throw');
+        const powerFill = document.getElementById('power-bar-fill');
+        const powerText = document.getElementById('power-bar-text');
+
+        function startCharging() {
+            if (gameState !== 'PLAYER_TURN' || isCharging) return;
+            audio.init();
+            isCharging = true;
+            power = 0;
+            powerIncreasing = true;
+            gameState = 'CHARGING';
+
+            function updatePower() {
+                if (!isCharging) return;
+
+                if (powerIncreasing) {
+                    power += 2.0;
+                    if (power >= 100) {
+                        power = 100;
+                        powerIncreasing = false;
+                    }
+                } else {
+                    power -= 2.0;
+                    if (power <= 0) {
+                        power = 0;
+                        powerIncreasing = true;
+                    }
+                }
+
+                powerFill.style.width = `${power}%`;
+                powerText.textContent = `蓄力中... (${Math.round(power)}%)`;
+                powerAnimFrame = requestAnimationFrame(updatePower);
+            }
+
+            powerAnimFrame = requestAnimationFrame(updatePower);
+        }
+
+        function releaseThrow() {
+            if (!isCharging) return;
+            isCharging = false;
+            if (powerAnimFrame) cancelAnimationFrame(powerAnimFrame);
+
+            powerText.textContent = `發射力道: ${Math.round(power)}%`;
+            firePlayerProjectile();
+        }
+
+        btnThrow.addEventListener('mousedown', startCharging);
+        window.addEventListener('mouseup', releaseThrow);
+
+        btnThrow.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            startCharging();
+        }, { passive: false });
+
+        window.addEventListener('touchend', releaseThrow);
+
+        function firePlayerProjectile() {
+            gameState = 'FIRING';
+            enableControls(false);
+            audio.playLaunch();
+
+            const curWeapon = playerHero.weapons[selectedWeaponIndex];
+            const rad = (throwAngle * Math.PI) / 180;
+            const velocityMagnitude = (8 + (power / 100) * 18) * curWeapon.speed;
+
+            activeProjectile = {
+                x: playerPos.x + 20,
+                y: playerPos.y - 30,
+                vx: Math.cos(rad) * velocityMagnitude,
+                vy: -Math.sin(rad) * velocityMagnitude,
+                owner: 'PLAYER',
+                weapon: curWeapon,
+                trail: []
+            };
+        }
+
+        function fireEnemyAIProjectile() {
+            gameState = 'ENEMY_TURN';
+            document.getElementById('turn-status-badge').textContent = '對手發射中...';
+            document.getElementById('turn-status-badge').className = 'px-3 py-1 rounded-full bg-red-500/20 text-red-300 font-bold border border-red-500/40 animate-pulse text-xs';
+
+            setTimeout(() => {
+                audio.playLaunch();
+
+                const curWeapon = currentEnemyHero.weapons[enemyWeaponIndex];
+                const accuracyNoise = Math.max(2, 24 - (level * 2));
+                const noisyTargetX = playerPos.x + (Math.random() * accuracyNoise * 2 - accuracyNoise);
+
+                const enemyAngle = 135; // Towards left
+                const rad = (enemyAngle * Math.PI) / 180;
+
+                const targetDx = noisyTargetX - enemyPos.x;
+                let estimatedV = Math.sqrt(Math.abs((GRAVITY * targetDx * targetDx) / (Math.sin(2 * rad) * targetDx + 0.1)));
+                estimatedV = Math.min(26, Math.max(10, estimatedV)) * curWeapon.speed;
+
+                activeProjectile = {
+                    x: enemyPos.x - 20,
+                    y: enemyPos.y - 30,
+                    vx: Math.cos(rad) * estimatedV,
+                    vy: -Math.sin(rad) * estimatedV,
+                    owner: 'ENEMY',
+                    weapon: curWeapon,
+                    trail: []
+                };
+            }, 1000);
+        }
+
+        function addFloatingText(x, y, text, color) {
+            floatingTexts.push({
+                x: x, y: y, text: text, color: color, alpha: 1, vy: -1.5
+            });
+        }
+
+        function createExplosionParticles(x, y, color, count = 22) {
+            for (let i = 0; i < count; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 6 + 2;
+                particles.push({
+                    x: x, y: y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    color: color,
+                    radius: Math.random() * 4 + 2,
+                    alpha: 1,
+                    decay: Math.random() * 0.03 + 0.02
+                });
+            }
+        }
+
+        function updatePhysics() {
+            if (activeProjectile) {
+                const p = activeProjectile;
+
+                p.vx += wind * 0.015;
+                p.vy += GRAVITY;
+
+                p.trail.push({ x: p.x, y: p.y });
+                if (p.trail.length > 10) p.trail.shift();
+
+                p.x += p.vx;
+                p.y += p.vy;
+
+                const groundY = viewHeight - 70;
+
+                // Check Fence Collision
+                const fenceWidth = 24;
+                const fenceTopY = groundY - fenceHeight;
+                if (p.x >= fenceX - fenceWidth/2 && p.x <= fenceX + fenceWidth/2 && p.y >= fenceTopY) {
+                    audio.playExplosion();
+                    createExplosionParticles(p.x, p.y, '#94a3b8');
+                    addFloatingText(p.x, p.y - 10, '高牆擋住了！', '#cbd5e1');
+                    activeProjectile = null;
+                    onTurnFinished();
+                    return;
+                }
+
+                // Check Player Hit
+                const playerDist = Math.hypot(p.x - playerPos.x, p.y - (playerPos.y - 25));
+                if (p.owner === 'ENEMY' && playerDist < 38) {
+                    audio.playHit();
+                    audio.playExplosion();
+                    const damage = Math.round(p.weapon.atk * (0.85 + Math.random() * 0.3));
+                    playerHP -= damage;
+                    updateHUD();
+
+                    createExplosionParticles(playerPos.x, playerPos.y - 25, '#ef4444', p.weapon.splash);
+                    addFloatingText(playerPos.x, playerPos.y - 50, `-${damage} HP!`, '#ef4444');
+
+                    activeProjectile = null;
+                    if (playerHP <= 0) {
+                        setTimeout(triggerGameOver, 600);
+                    } else {
+                        onTurnFinished();
+                    }
+                    return;
+                }
+
+                // Check Enemy Hit
+                const enemyDist = Math.hypot(p.x - enemyPos.x, p.y - (enemyPos.y - 25));
+                if (p.owner === 'PLAYER' && enemyDist < 38) {
+                    audio.playHit();
+                    audio.playExplosion();
+                    const damage = Math.round(p.weapon.atk * (0.85 + Math.random() * 0.3));
+                    enemyHP -= damage;
+                    score += damage * 15;
+                    updateHUD();
+
+                    createExplosionParticles(enemyPos.x, enemyPos.y - 25, '#f59e0b', p.weapon.splash);
+                    addFloatingText(enemyPos.x, enemyPos.y - 50, `💥 -${damage} HP!`, '#facc15');
+
+                    activeProjectile = null;
+                    if (enemyHP <= 0) {
+                        setTimeout(triggerStageClear, 600);
+                    } else {
+                        onTurnFinished();
+                    }
+                    return;
+                }
+
+                // Out of Bounds Hit
+                if (p.y >= groundY || p.x < -50 || p.x > viewWidth + 50) {
+                    audio.playExplosion();
+                    createExplosionParticles(p.x, Math.min(p.y, groundY), '#e2e8f0', 10);
+                    addFloatingText(p.x, Math.min(p.y, groundY) - 10, '沒命中！', '#94a3b8');
+                    activeProjectile = null;
+                    onTurnFinished();
+                    return;
+                }
+            }
+
+            // Update Particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const pt = particles[i];
+                pt.x += pt.vx;
+                pt.y += pt.vy;
+                pt.alpha -= pt.decay;
+                if (pt.alpha <= 0) particles.splice(i, 1);
+            }
+
+            // Update Floating Text
+            for (let i = floatingTexts.length - 1; i >= 0; i--) {
+                const ft = floatingTexts[i];
+                ft.y += ft.vy;
+                ft.alpha -= 0.02;
+                if (ft.alpha <= 0) floatingTexts.splice(i, 1);
+            }
+        }
+
+        function onTurnFinished() {
+            generateWind();
+            updateHUD();
+
+            if (gameState === 'FIRING') {
+                fireEnemyAIProjectile();
+            } else if (gameState === 'ENEMY_TURN') {
+                gameState = 'PLAYER_TURN';
+                document.getElementById('turn-status-badge').textContent = '你的回合！';
+                document.getElementById('turn-status-badge').className = 'px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/40 animate-pulse text-xs';
+                enableControls(true);
+                powerFill.style.width = '0%';
+                powerText.textContent = '按住按鈕蓄力 (0%)';
+            }
+        }
+
+        let globalAnimTick = 0;
+
+        function render() {
+            globalAnimTick++;
+
+            if (!ctx) return;
+
+            // Cyber Metropolis Gradient Background
+            const skyGradient = ctx.createLinearGradient(0, 0, 0, viewHeight);
+            skyGradient.addColorStop(0, '#090d16');
+            skyGradient.addColorStop(0.6, '#111827');
+            skyGradient.addColorStop(1, '#1e1b4b');
+            ctx.fillStyle = skyGradient;
+            ctx.fillRect(0, 0, viewWidth, viewHeight);
+
+            const groundY = viewHeight - 70;
+
+            // City Skyline Silhouette
+            ctx.fillStyle = 'rgba(30, 41, 59, 0.4)';
+            const buildingWidths = [60, 90, 70, 110, 80, 100, 70, 90];
+            let bx = 10;
+            buildingWidths.forEach((w, i) => {
+                const bh = 80 + (i % 3) * 40;
+                ctx.fillRect(bx, groundY - bh, w, bh);
+                bx += w + 20;
+            });
+
+            // Ground Floor
+            ctx.fillStyle = '#0f172a';
+            ctx.fillRect(0, groundY, viewWidth, viewHeight - groundY);
+            ctx.strokeStyle = '#38bdf8';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(0, groundY);
+            ctx.lineTo(viewWidth, groundY);
+            ctx.stroke();
+
+            // Fence Wall Barrier
+            const fenceWidth = 20;
+            const fenceTopY = groundY - fenceHeight;
+            ctx.fillStyle = '#334155';
+            ctx.fillRect(fenceX - fenceWidth/2, fenceTopY, fenceWidth, fenceHeight);
+            ctx.strokeStyle = '#f59e0b';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(fenceX - fenceWidth/2, fenceTopY, fenceWidth, fenceHeight);
+
+            // Render Player & Enemy Q-Version Characters
+            if (playerHero) {
+                ctx.save();
+                ctx.translate(playerPos.x, playerPos.y - 30);
+                drawQCharacter(ctx, playerHero, true, {
+                    scale: 1.15,
+                    isAttacking: gameState === 'CHARGING' || gameState === 'FIRING',
+                    hpRatio: playerHP / playerMaxHP,
+                    animFrame: globalAnimTick
+                });
+                ctx.restore();
+            }
+
+            if (currentEnemyHero) {
+                ctx.save();
+                ctx.translate(enemyPos.x, enemyPos.y - 30);
+                drawQCharacter(ctx, currentEnemyHero, false, {
+                    scale: 1.15,
+                    isAttacking: gameState === 'ENEMY_TURN',
+                    hpRatio: enemyHP / enemyMaxHP,
+                    animFrame: globalAnimTick + 10
+                });
+                ctx.restore();
+            }
+
+            // Aim Trajectory Guide
+            if (gameState === 'PLAYER_TURN' || gameState === 'CHARGING') {
+                drawAimGuide(playerPos.x + 20, playerPos.y - 30, throwAngle);
+            }
+
+            // Projectiles
+            if (activeProjectile) {
+                const p = activeProjectile;
+                p.trail.forEach((t, i) => {
+                    ctx.beginPath();
+                    ctx.arc(t.x, t.y, 4 * (i / p.trail.length), 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(251, 191, 36, ${i / p.trail.length})`;
+                    ctx.fill();
+                });
+
+                ctx.font = '26px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText(p.weapon.icon, p.x, p.y);
+            }
+
+            // Particles
+            particles.forEach(pt => {
+                ctx.save();
+                ctx.globalAlpha = pt.alpha;
+                ctx.fillStyle = pt.color;
+                ctx.beginPath();
+                ctx.arc(pt.x, pt.y, pt.radius, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            });
+
+            // Floating Text
+            floatingTexts.forEach(ft => {
+                ctx.save();
+                ctx.globalAlpha = ft.alpha;
+                ctx.font = '900 16px "Zen Maru Gothic"';
+                ctx.fillStyle = ft.color;
+                ctx.textAlign = 'center';
+                ctx.fillText(ft.text, ft.x, ft.y);
+                ctx.restore();
+            });
+        }
+
+        function drawAimGuide(startX, startY, angle) {
+            ctx.save();
+            ctx.strokeStyle = 'rgba(251, 191, 36, 0.6)';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([6, 6]);
+
+            const rad = (angle * Math.PI) / 180;
+            const length = 75;
+            const endX = startX + Math.cos(rad) * length;
+            const endY = startY - Math.sin(rad) * length;
+
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(endX, endY);
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        function gameLoop() {
+            updatePhysics();
+            render();
+            requestAnimationFrame(gameLoop);
+        }
+
+        const LEADERBOARD_KEY = 'pol_tycoons_leaderboard';
+
+        function getLeaderboard() {
+            try {
+                const data = localStorage.getItem(LEADERBOARD_KEY);
+                return data ? JSON.parse(data) : getDefaultLeaderboard();
+            } catch(e) {
+                return getDefaultLeaderboard();
+            }
+        }
+
+        function getDefaultLeaderboard() {
+            return [
+                { name: '柯阿北', hero: '柯文哲', score: 18500, stage: 10 },
+                { name: '馬斯克', hero: '馬斯克', score: 16200, stage: 9 },
+                { name: '黃教主', hero: '黃仁勳', score: 14100, stage: 8 },
+                { name: '威廉哥', hero: '賴清德', score: 12300, stage: 7 },
+                { name: '韓總裁', hero: '韓國瑜', score: 10500, stage: 6 },
+                { name: '貝佐斯', hero: '貝佐斯', score: 8800, stage: 5 },
+                { name: '小英姐', hero: '蔡英文', score: 7200, stage: 4 },
+                { name: '巴菲特', hero: '巴菲特', score: 5600, stage: 3 },
+                { name: '國昌老師', hero: '黃國昌', score: 3900, stage: 2 },
+                { name: '斐陶斐', hero: '高虹安', score: 2100, stage: 1 }
+            ];
+        }
+
+        function saveScoreToLeaderboard(name, heroName, finalScore, finalStage) {
+            let list = getLeaderboard();
+            list.push({
+                name: name || '政壇名嘴',
+                hero: heroName,
+                score: finalScore,
+                stage: finalStage
+            });
+            list.sort((a, b) => b.score - a.score);
+            list = list.slice(0, 10);
+            localStorage.setItem(LEADERBOARD_KEY, JSON.stringify(list));
+        }
+
+        function renderLeaderboardTable() {
+            const list = getLeaderboard();
+            const tbody = document.getElementById('leaderboard-table-body');
+            tbody.innerHTML = '';
+
+            list.forEach((item, idx) => {
+                const tr = document.createElement('tr');
+                const rankColor = idx === 0 ? 'text-yellow-400 font-black' : (idx === 1 ? 'text-slate-300 font-bold' : (idx === 2 ? 'text-amber-600 font-bold' : 'text-slate-400'));
+                tr.innerHTML = `
+                    <td class="p-2 text-center ${rankColor}">#${idx + 1}</td>
+                    <td class="p-2 font-bold text-white">${item.name}</td>
+                    <td class="p-2 text-amber-300">${item.hero}</td>
+                    <td class="p-2 text-right text-emerald-400 font-bold">St. ${item.stage}</td>
+                    <td class="p-2 text-right text-yellow-300 font-black">${item.score}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function triggerStageClear() {
+            audio.playWin();
+            const bonus = 1000 + level * 200;
+            score += bonus;
+
+            document.getElementById('clear-bonus-score').textContent = `+${bonus}`;
+            document.getElementById('clear-total-score').textContent = score;
+
+            if (level >= 10) {
+                saveScoreToLeaderboard(playerName, playerHero.name, score, 10);
+                document.getElementById('win-final-score').textContent = score;
+                document.getElementById('modal-win').classList.remove('hidden');
+            } else {
+                level++;
+                const enemyList = (selectedFaction === 'POL') ? TYCOONS : POLITICIANS;
+                const nextEnemy = enemyList[(level - 1) % enemyList.length];
+                document.getElementById('next-enemy-title').textContent = `Stage ${level}: ${nextEnemy.name} ${nextEnemy.avatar}`;
+                document.getElementById('modal-clear').classList.remove('hidden');
+            }
+        }
+
+        function triggerGameOver() {
+            saveScoreToLeaderboard(playerName, playerHero.name, score, level);
+            document.getElementById('gameover-final-score').textContent = score;
+            document.getElementById('modal-gameover').classList.remove('hidden');
+        }
+
+        document.getElementById('btn-start-game').addEventListener('click', () => {
+            const nameInput = document.getElementById('player-name-input').value.trim();
+            playerName = nameInput || '政壇巨擘';
+            
+            audio.init();
+            audio.startBGM();
+            document.getElementById('modal-select').classList.add('hidden');
+            level = 1;
+            score = 0;
+            initLevel();
+        });
+
+        document.getElementById('btn-next-level').addEventListener('click', () => {
+            audio.init();
+            document.getElementById('modal-clear').classList.add('hidden');
+            initLevel();
+        });
+
+        document.getElementById('btn-retry').addEventListener('click', () => {
+            audio.init();
+            document.getElementById('modal-gameover').classList.add('hidden');
+            initLevel();
+        });
+
+        document.getElementById('btn-win-restart').addEventListener('click', () => {
+            audio.init();
+            document.getElementById('modal-win').classList.add('hidden');
+            document.getElementById('modal-select').classList.remove('hidden');
+        });
+
+        document.getElementById('btn-restart').addEventListener('click', () => {
+            audio.init();
+            document.getElementById('modal-select').classList.remove('hidden');
+        });
+
+        // Leaderboard Modal Logic
+        const modalLeaderboard = document.getElementById('modal-leaderboard');
+        document.getElementById('btn-leaderboard').addEventListener('click', () => {
+            renderLeaderboardTable();
+            modalLeaderboard.classList.remove('hidden');
+        });
+        document.getElementById('btn-close-leaderboard').addEventListener('click', () => {
+            modalLeaderboard.classList.add('hidden');
+        });
+        document.getElementById('btn-clear-leaderboard').addEventListener('click', () => {
+            localStorage.removeItem(LEADERBOARD_KEY);
+            renderLeaderboardTable();
+        });
+
+        // Audio Controls
+        const btnBgm = document.getElementById('btn-bgm');
+        const labelBgm = document.getElementById('label-bgm');
+        btnBgm.addEventListener('click', () => {
+            audio.init();
+            const enabled = audio.toggleBGM();
+            labelBgm.textContent = enabled ? 'ON' : 'OFF';
+            btnBgm.classList.toggle('opacity-50', !enabled);
+        });
+
+        const btnSfx = document.getElementById('btn-sfx');
+        const labelSfx = document.getElementById('label-sfx');
+        btnSfx.addEventListener('click', () => {
+            audio.init();
+            const enabled = audio.toggleSFX();
+            labelSfx.textContent = enabled ? 'ON' : 'OFF';
+            btnSfx.classList.toggle('opacity-50', !enabled);
+        });
+
+        function initApp() {
+            if (!playerHero) playerHero = POLITICIANS[0];
+            if (!currentEnemyHero) currentEnemyHero = TYCOONS[0];
+            resizeCanvas();
+            renderCharacterSelection();
+            requestAnimationFrame(gameLoop);
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initApp);
+        } else {
+            initApp();
+        }
+    </script>
+</body>
+</html>
